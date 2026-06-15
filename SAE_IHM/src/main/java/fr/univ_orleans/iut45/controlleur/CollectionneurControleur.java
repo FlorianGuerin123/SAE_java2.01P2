@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import fr.univ_orleans.iut45.vue.Vue;
+
 public class CollectionneurControleur {
 
     @FXML private StackPane centerPane;
@@ -23,6 +25,7 @@ public class CollectionneurControleur {
     @FXML private Button btnPiecesManquantes;
     @FXML private Button btnComposer;
     @FXML private Button btnRetour;
+    private Vue vue;
 
     private static final String STYLE_ACTIF =
         "-fx-background-color: #FF4D6A; -fx-text-fill: white; " +
@@ -91,6 +94,9 @@ public class CollectionneurControleur {
         boutonActif = btn;
     }
 
+    public void setVue(Vue vue){
+        this.vue = vue;
+    }
 
     @FXML
     private void handleRechercher(ActionEvent event) {
@@ -142,16 +148,7 @@ public class CollectionneurControleur {
 
     @FXML
     private void handleRetour(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/MainMenu.fxml")
-            );
-            Scene scene = new Scene(loader.load(), 700, 400);
-            Stage stage = (Stage) btnRetour.getScene().getWindow();
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        vue.modeAcceuil();
     }
 
 
