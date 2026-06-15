@@ -24,21 +24,20 @@ public class CollectionneurControleur {
     @FXML private Button btnComposer;
     @FXML private Button btnRetour;
 
-    // Style actif (bouton sélectionné)
     private static final String STYLE_ACTIF =
         "-fx-background-color: #FF4D6A; -fx-text-fill: white; " +
         "-fx-font-size: 12; -fx-font-weight: bold; " +
         "-fx-alignment: CENTER_LEFT; -fx-padding: 10 16 10 16; " +
         "-fx-background-radius: 0; -fx-cursor: hand; -fx-border-width: 0;";
 
-    // Style inactif (bouton normal)
+   
     private static final String STYLE_INACTIF =
         "-fx-background-color: transparent; -fx-text-fill: #B0C8E0; " +
         "-fx-font-size: 12; -fx-alignment: CENTER_LEFT; " +
         "-fx-padding: 10 16 10 16; -fx-background-radius: 0; " +
         "-fx-cursor: hand; -fx-border-width: 0;";
 
-    // Style hover (survol souris)
+    
     private static final String STYLE_HOVER =
         "-fx-background-color: #1E3050; -fx-text-fill: white; " +
         "-fx-font-size: 12; -fx-alignment: CENTER_LEFT; " +
@@ -47,7 +46,7 @@ public class CollectionneurControleur {
 
     private Button boutonActif = null;
 
-    // ─── Gestion du hover ───────────────────────────────────────
+   
 
     @FXML
     private void onNavHover(javafx.scene.input.MouseEvent event) {
@@ -83,7 +82,6 @@ public class CollectionneurControleur {
                      "-fx-cursor: hand; -fx-border-width: 0;");
     }
 
-    // ─── Sélection active ────────────────────────────────────────
 
     private void setActif(Button btn) {
         if (boutonActif != null) {
@@ -93,13 +91,11 @@ public class CollectionneurControleur {
         boutonActif = btn;
     }
 
-    // ─── Handlers des boutons ────────────────────────────────────
 
     @FXML
     private void handleRechercher(ActionEvent event) {
         setActif(btnRechercher);
         // TODO : charger la vue Rechercher dans centerPane
-        // chargerVue("/fr/univ_orleans/iut45/vue/FXML/RechercherView.fxml");
     }
 
     @FXML
@@ -158,7 +154,7 @@ public class CollectionneurControleur {
         }
     }
 
-    // ─── Méthode utilitaire pour charger les sous-vues ──────────
+
 
     private void chargerVue(String cheminFxml) {
         try {
