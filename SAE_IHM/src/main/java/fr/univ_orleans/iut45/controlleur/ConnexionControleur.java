@@ -13,6 +13,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import fr.univ_orleans.iut45.modele.ConnexionMySQL;
+
 public class ConnexionControleur {
 
     @FXML private TextField champLogin;
@@ -21,6 +23,7 @@ public class ConnexionControleur {
     @FXML private Label labelMessage;
     @FXML private Button btnConnexion;
     @FXML private Button btnQuitter;
+    private ConnexionMySQL connexion;
 
     /**
      * Méthode appelée automatiquement après le chargement du FXML.
@@ -35,8 +38,6 @@ public class ConnexionControleur {
         String login = champLogin.getText();
         String motDePasse = champMotDePasse.getText();
         String baseDeDonnees = champBaseDeDonnees.getText();
-
-        
     }
 
     @FXML
