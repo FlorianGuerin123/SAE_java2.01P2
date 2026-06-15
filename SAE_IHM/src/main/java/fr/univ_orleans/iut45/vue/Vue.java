@@ -74,13 +74,15 @@ public class Vue extends Application {
     }
 
     public void modeCollectionneur() {
-        try {
-            VBox vb = FXMLLoader.load(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
-            this.panelCentral.setLeft(vb);
-        } catch (Exception e) {
-            e.printStackTrace();
+    try {
+        VBox vb = FXMLLoader.load(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
+        this.panelCentral.setLeft(vb);
+        this.panelCentral.setCenter(null); 
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-        
-    }
-
 }
+}
+
+        
+
