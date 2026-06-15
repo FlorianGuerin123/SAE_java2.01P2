@@ -1,5 +1,6 @@
 package fr.univ_orleans.iut45.vue;
  
+import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 import fr.univ_orleans.iut45.controleur.ConnexionControleur;
 import fr.univ_orleans.iut45.controleur.MainMenuControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
@@ -46,6 +47,7 @@ public class Vue extends Application {
     }
  
     public void modeAcceuil() {
+        this.panelCentral.setLeft(null);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/Menu.fxml"));
             BorderPane root = loader.load();
@@ -75,9 +77,14 @@ public class Vue extends Application {
 
     public void modeCollectionneur() {
     try {
-        VBox vb = FXMLLoader.load(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
-        this.panelCentral.setLeft(vb);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
+        VBox vb = loader.load();
+
+        CollectionneurControleur controleur = loader.getController();
+        controleur.setVue(this);
+
         this.panelCentral.setCenter(null); 
+        this.panelCentral.setLeft(vb);
     } catch (Exception e) {
         e.printStackTrace();
     }
