@@ -22,7 +22,7 @@ public class MainMenuControleur {
     @FXML
     private void handleCollectionneur(ActionEvent event) {
         System.out.println("Espace Collectionneur cliqué");
-        // TODO : charger la vue Collectionneur
+        this.vue.modeCollectionneur();
     }
 
     @FXML
