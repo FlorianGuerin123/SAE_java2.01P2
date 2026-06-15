@@ -28,7 +28,7 @@ public class MainMenuControleur {
     @FXML
     private void handleAdministrateur(ActionEvent event) {
         System.out.println("Espace Administrateur cliqué");
-        // TODO : charger la vue Administrateur
+        this.vue.modeAdministrateur();
     }
 
     @FXML
