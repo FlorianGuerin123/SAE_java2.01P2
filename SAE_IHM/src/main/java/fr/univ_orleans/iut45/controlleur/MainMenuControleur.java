@@ -1,0 +1,37 @@
+package fr.univ_orleans.iut45.controleur;
+
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+
+public class MainMenuControleur {
+
+    @FXML private Button btnCollectionneur;
+    @FXML private Button btnAdministrateur;
+    @FXML private Button btnQuitter;
+    @FXML private Button btnParNumero;
+
+    @FXML
+    private void handleCollectionneur(ActionEvent event) {
+        System.out.println("Espace Collectionneur cliqué");
+        // TODO : charger la vue Collectionneur
+    }
+
+    @FXML
+    private void handleAdministrateur(ActionEvent event) {
+        System.out.println("Espace Administrateur cliqué");
+        // TODO : charger la vue Administrateur
+    }
+
+    @FXML
+    private void handleQuitter(ActionEvent event) {
+        Platform.exit();
+    }
+
+    @FXML
+    private void handleParNumero(ActionEvent event) {
+        System.out.println("Par numéro cliqué");
+        // TODO : charger la vue Par numéro
+    }
+}
