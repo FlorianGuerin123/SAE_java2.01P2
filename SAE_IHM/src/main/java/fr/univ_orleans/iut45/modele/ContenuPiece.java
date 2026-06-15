@@ -1,3 +1,5 @@
+package fr.univ_orleans.iut45.modele;
+
 public class ContenuPiece{
     private Piece piece;
     private int quantite;

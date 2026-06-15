@@ -1,3 +1,5 @@
+package fr.univ_orleans.iut45.modele;
+
 public class MenuConsole {
 
     private  String SEPARATEUR = "-".repeat(55);

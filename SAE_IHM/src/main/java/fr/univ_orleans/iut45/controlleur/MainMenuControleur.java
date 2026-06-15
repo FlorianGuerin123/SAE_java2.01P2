@@ -1,5 +1,6 @@
 package fr.univ_orleans.iut45.controleur;
 
+import fr.univ_orleans.iut45.vue.Vue;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +12,12 @@ public class MainMenuControleur {
     @FXML private Button btnAdministrateur;
     @FXML private Button btnQuitter;
     @FXML private Button btnParNumero;
+    private Vue vue;
+ 
+    public void setVue(Vue vue) {
+        this.vue = vue;
+    }
+
 
     @FXML
     private void handleCollectionneur(ActionEvent event) {

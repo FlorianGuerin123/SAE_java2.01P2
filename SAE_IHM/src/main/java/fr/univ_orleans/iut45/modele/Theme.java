@@ -1,3 +1,5 @@
+package fr.univ_orleans.iut45.modele;
+
 import java.util.ArrayList;
 import java.util.List;
 

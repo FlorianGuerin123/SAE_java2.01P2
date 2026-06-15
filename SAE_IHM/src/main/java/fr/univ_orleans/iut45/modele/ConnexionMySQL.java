@@ -1,3 +1,5 @@
+package fr.univ_orleans.iut45.modele;
+
 import java.sql.*;
 
 public class ConnexionMySQL {

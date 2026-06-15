@@ -1,3 +1,5 @@
+package fr.univ_orleans.iut45.modele;
+
 import com.google.gson.*;
 import java.io.*;
 import java.sql.SQLException;

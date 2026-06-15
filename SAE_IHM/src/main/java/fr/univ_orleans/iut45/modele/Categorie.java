@@ -1,3 +1,5 @@
+package fr.univ_orleans.iut45.modele;
+
 public class Categorie {
     private int idCat;
     private String nomCat;
