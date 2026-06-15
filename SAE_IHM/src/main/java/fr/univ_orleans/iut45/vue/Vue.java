@@ -72,4 +72,13 @@ public class Vue extends Application {
             e.printStackTrace();
         }
     }
+
+    public void modeCollectionneur() {
+        try {
+            BorderPane root = FXMLLoader.load(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/Collectionneur.fxml"));
+            panelCentral.setLeft(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
