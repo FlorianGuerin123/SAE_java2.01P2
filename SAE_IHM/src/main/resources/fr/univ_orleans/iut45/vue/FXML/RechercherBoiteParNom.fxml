@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -38,16 +40,19 @@
     <Label fx:id="labelMessage" text="" wrapText="true"
            style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"/>
 
-    
     <ScrollPane fx:id="scrollResultats"
                 visible="false"
                 fitToWidth="true"
-                style="-fx-background-color: transparent; -fx-background: transparent;
-                       -fx-border-color: transparent;"
+                style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;"
                 VBox.vgrow="ALWAYS">
 
-        <VBox fx:id="listeResultats" spacing="12"
-              style="-fx-background-color: transparent; -fx-padding: 4 4 4 4;"/>
+        <GridPane fx:id="grilleResultats" hgap="14" vgap="14"
+                  style="-fx-background-color: transparent; -fx-padding: 4 4 4 4;">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50.0" hgrow="ALWAYS" />
+                <ColumnConstraints percentWidth="50.0" hgrow="ALWAYS" />
+            </columnConstraints>
+        </GridPane>
 
     </ScrollPane>
 

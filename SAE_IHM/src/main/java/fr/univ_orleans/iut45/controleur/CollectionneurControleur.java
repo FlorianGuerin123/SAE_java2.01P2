@@ -120,7 +120,7 @@ public class CollectionneurControleur {
     private void handleDetail(ActionEvent event) {
         setActif(btnDetail);
         vue.setTitrePage("Espace Collectionneur  |  Détail d'une boîte");
-        // TODO : vue.modeDetailBoite();
+        vue.modeDetail();
     }
 
     @FXML
