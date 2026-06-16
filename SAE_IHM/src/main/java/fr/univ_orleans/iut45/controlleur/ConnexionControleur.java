@@ -15,6 +15,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.prefs.Preferences;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
  
 import java.sql.SQLException;
  
@@ -51,6 +55,15 @@ public class ConnexionControleur {
         champLogin.setOnKeyReleased(event -> verifierMajuscule());
         champMotDePasse.setOnKeyReleased(event -> verifierMajuscule());
         champBaseDeDonnees.setOnKeyReleased(event -> verifierMajuscule());
+
+        Preferences prefs = Preferences.userNodeForPackage(ConnexionControleur.class);
+        String loginSauve = prefs.get("login_briqu", "");
+        String mdpSauve = prefs.get("mdp_briqu", "");
+        String bdSauve = prefs.get("bd_briqu", "");
+
+        if (!loginSauve.isEmpty()) champLogin.setText(loginSauve);
+        if (!mdpSauve.isEmpty()) champMotDePasse.setText(mdpSauve);
+        if (!bdSauve.isEmpty()) champBaseDeDonnees.setText(bdSauve);
     }
 
     public void setVue(Vue vue) {
@@ -73,7 +86,24 @@ public class ConnexionControleur {
         try {
             connexion.connecter(SERVEUR, baseDeDonnees, login, motDePasse);
             if (connexion.isConnecte()) {
-                vue.modeAcceuil();
+                Preferences prefs = Preferences.userNodeForPackage(ConnexionControleur.class);
+                
+                if (!login.equals(prefs.get("login_briqu", "")) || !baseDeDonnees.equals(prefs.get("bd_briqu", ""))) {
+                    
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Sauvegarde des identifiants");
+                    alert.setHeaderText("Connexion réussie !");
+                    alert.setContentText("Voulez-vous enregistrer ces informations pour la prochaine fois ?");
+
+                    Optional<ButtonType> resultat = alert.showAndWait();
+                    if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
+                        prefs.put("login_briqu", login);
+                        prefs.put("mdp_briqu", motDePasse);
+                        prefs.put("bd_briqu", baseDeDonnees);
+                    }
+                }
+                
+                vue.modeAcceuil(); 
             } else {
                 labelMessage.setText("Connexion échouée.");
             }
