@@ -73,23 +73,21 @@ public class ConnexionControleur {
         champBaseDeDonnees.setOnKeyReleased(event -> verifierMajuscule());
 
         try {
-            Path fichier = Paths.get("config.json");
-            if (Files.exists(fichier)) {
-                String json = Files.readString(fichier);
-                
-                String loginSauve = json.split("\"login\": \"")[1].split("\"")[0];
-                String mdpMasque = json.split("\"mdp\": \"")[1].split("\"")[0];
-                String bdSauve = json.split("\"bd\": \"")[1].split("\"")[0];
+            java.util.Properties props = new java.util.Properties();
+            java.io.File file = new java.io.File("config.properties");
+            if (file.exists()) {
+                java.io.FileInputStream in = new java.io.FileInputStream(file);
+                props.load(in);
+                in.close();
 
-                byte[] mdpDecodé = Base64.getDecoder().decode(mdpMasque);
-                String mdpSauve = new String(mdpDecodé);
-
-                champLogin.setText(loginSauve);
-                champMotDePasse.setText(mdpSauve);
-                champBaseDeDonnees.setText(bdSauve);
+                champLogin.setText(props.getProperty("login", ""));
+                String mdpBase64 = props.getProperty("mdp", "");
+                if (!mdpBase64.isEmpty()) {
+                    champMotDePasse.setText(new String(java.util.Base64.getDecoder().decode(mdpBase64)));
+                }
+                champBaseDeDonnees.setText(props.getProperty("bd", ""));
             }
         } catch (Exception e) {
-            System.out.println("Aucun fichier de configuration trouvé ou erreur de lecture.");
         }
     }
 
@@ -116,17 +114,20 @@ public class ConnexionControleur {
                 
                 boolean aChange = true; 
                 try {
-                    Path fichier = Paths.get("config.json");
-                    if (Files.exists(fichier)) {
-                        String json = Files.readString(fichier);
+                    java.util.Properties props = new java.util.Properties();
+                    java.io.File file = new java.io.File("config.properties");
+                    if (file.exists()) {
+                        java.io.FileInputStream in = new java.io.FileInputStream(file);
+                        props.load(in);
+                        in.close();
                         
-                        String loginSauve = json.split("\"login\": \"")[1].split("\"")[0];
-                        String mdpMasque = json.split("\"mdp\": \"")[1].split("\"")[0];
-                        String bdSauve = json.split("\"bd\": \"")[1].split("\"")[0];
-                        
-                        String mdpSauve = new String(Base64.getDecoder().decode(mdpMasque));
+                        String mdpSauve = "";
+                        String mdpBase64 = props.getProperty("mdp", "");
+                        if (!mdpBase64.isEmpty()) {
+                            mdpSauve = new String(java.util.Base64.getDecoder().decode(mdpBase64));
+                        }
 
-                        if (login.equals(loginSauve) && motDePasse.equals(mdpSauve) && baseDeDonnees.equals(bdSauve)) {
+                        if (login.equals(props.getProperty("login", "")) && motDePasse.equals(mdpSauve) && baseDeDonnees.equals(props.getProperty("bd", ""))) {
                             aChange = false;
                         }
                     }
@@ -134,23 +135,23 @@ public class ConnexionControleur {
                 }
 
                 if (aChange) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Sauvegarde locale");
                     alert.setHeaderText("Connexion réussie !");
-                    alert.setContentText("Voulez-vous sauvegarder ces nouveaux identifiants dans config.json ?");
+                    alert.setContentText("Voulez-vous sauvegarder ces identifiants ?");
 
-                    Optional<ButtonType> resultat = alert.showAndWait();
-                    if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
+                    java.util.Optional<javafx.scene.control.ButtonType> resultat = alert.showAndWait();
+                    if (resultat.isPresent() && resultat.get() == javafx.scene.control.ButtonType.OK) {
                         try {
-                            String mdpMasque = Base64.getEncoder().encodeToString(motDePasse.getBytes());
-                            String json = "{\n" +
-                                          "  \"login\": \"" + login + "\",\n" +
-                                          "  \"mdp\": \"" + mdpMasque + "\",\n" +
-                                          "  \"bd\": \"" + baseDeDonnees + "\"\n" +
-                                          "}";
-                            Files.writeString(Paths.get("config.json"), json);
+                            java.util.Properties props = new java.util.Properties();
+                            props.setProperty("login", login);
+                            props.setProperty("mdp", java.util.Base64.getEncoder().encodeToString(motDePasse.getBytes()));
+                            props.setProperty("bd", baseDeDonnees);
+
+                            java.io.FileOutputStream out = new java.io.FileOutputStream("config.properties");
+                            props.store(out, null);
+                            out.close();
                         } catch (Exception e) {
-                            System.out.println("Erreur lors de la sauvegarde du fichier.");
                         }
                     }
                 }
