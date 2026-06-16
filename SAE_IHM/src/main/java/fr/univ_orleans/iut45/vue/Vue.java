@@ -4,6 +4,7 @@ import fr.univ_orleans.iut45.controleur.AdministrateurControleur;
 import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 import fr.univ_orleans.iut45.controleur.ConnexionControleur;
 import fr.univ_orleans.iut45.controleur.MainMenuControleur;
+import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
  
 import javafx.fxml.FXMLLoader;
@@ -112,20 +113,20 @@ public void start(Stage primaryStage) {
 
     public void modeCollectionneur() {
         try {
-            setTitrePage("Espace Collectionneur  | Rechercher une boîte");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
             VBox vb = loader.load();
 
             CollectionneurControleur controleur = loader.getController();
             controleur.setVue(this);
 
-            this.panelCentral.setCenter(null); 
             this.panelCentral.setLeft(vb);
+            this.modeRechercherBoite(); // ← charge le center par défaut
+            this.setTitrePage("Espace Collectionneur  |  Rechercher une boîte");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public void modeAdministrateur() {
         try {
@@ -144,6 +145,20 @@ public void start(Stage primaryStage) {
     public void setTitrePage(String titre) {
         if (labelSection != null) {
             labelSection.setText(titre);
+        }
+    }
+
+    public void modeRechercherBoite() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/RechercherBoite.fxml"));
+            VBox contenu = loader.load();
+
+            RechercherBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

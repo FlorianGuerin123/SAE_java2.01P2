@@ -10,7 +10,7 @@ import java.util.*;
 public class BoiteBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	BoiteBD(ConnexionMySQL laConnexion){
+	public BoiteBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
@@ -76,7 +76,7 @@ public class BoiteBD {
         }
     }
 
-    BoiteSimple rechercherBoite(String num) throws SQLException {
+    public BoiteSimple rechercherBoite(String num) throws SQLException {
         PreparedStatement ps=laConnexion.prepareStatement("SELECT * FROM BOITE WHERE numboite = ?");
         ps.setString(1,num);
         ResultSet rs=ps.executeQuery();

@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 
 import fr.univ_orleans.iut45.vue.Vue;
 
@@ -102,11 +103,11 @@ public class CollectionneurControleur {
     private void handleRechercher(ActionEvent event) {
         setActif(btnRechercher);
         vue.setTitrePage("Espace Collectionneur  |  Rechercher une boîte");
-        // TODO : charger la vue Rechercher dans centerPane
+        vue.modeRechercherBoite();
     }
 
     @FXML
-    private void handleDetail(ActionEvent event) {
+    private void handleDetail(ActionEvent event) {  
         setActif(btnDetail);
         vue.setTitrePage("Espace Collectionneur  |  Détail d'une boîte");
         // TODO : charger la vue Détail
