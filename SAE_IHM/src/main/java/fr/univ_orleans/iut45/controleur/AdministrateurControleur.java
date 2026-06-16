@@ -115,11 +115,9 @@ public class AdministrateurControleur {
  
     @FXML
     private void handleAjouterPiece(ActionEvent event) {
-        System.out.println("Ajouter une pièce cliqué");
-        vue.setTitrePage("Espace Administrateur  |  Ajouter une pièce");
-        // TODO : charger la vue ajouter une pièce (équivalent partieAdmin.ajouterPiece())
         setActif(btnAjouterPiece);
-        // TODO : charger la vue ajouter une pièce
+        vue.modeAjouterPiece();
+
     }
  
     @FXML
@@ -133,15 +131,14 @@ public class AdministrateurControleur {
  
     @FXML
     private void handleCreerTheme(ActionEvent event) {
-        System.out.println("Créer un thème cliqué");
-        vue.setTitrePage("Espace Administrateur  |  Créer un thème");
-        // TODO : charger la vue créer un thème (équivalent partieAdmin.creerTheme())
         setActif(btnCreerTheme);
-        // TODO : charger la vue créer un thème
+        vue.modeCreerTheme();
     }
  
     @FXML
     private void handleRetour(ActionEvent event) {
         vue.modeAcceuil();
     }
+
+    
 }

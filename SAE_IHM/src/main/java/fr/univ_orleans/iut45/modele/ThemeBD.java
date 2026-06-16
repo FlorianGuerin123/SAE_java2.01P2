@@ -8,11 +8,11 @@ import java.sql.Statement;
 public class ThemeBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	ThemeBD(ConnexionMySQL laConnexion){
+	public ThemeBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-    boolean themeEstDansBD(int numTheme) throws SQLException {
+    public boolean themeEstDansBD(int numTheme) throws SQLException {
         st = laConnexion.createStatement();
         String sql = "SELECT COUNT(*) FROM THEME WHERE numTheme = " + numTheme;
         ResultSet rs = this.st.executeQuery(sql);
@@ -22,7 +22,7 @@ public class ThemeBD {
         return false; 
     }
 
-    int getIdThemeAvecNom(String nomTheme) throws SQLException {
+    public int getIdThemeAvecNom(String nomTheme) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("SELECT idtheme FROM THEME WHERE nomtheme = ?");
         ps.setString(1, nomTheme);
         ResultSet rs = ps.executeQuery();
@@ -44,7 +44,7 @@ public class ThemeBD {
         }
     }
 
-    void ajouterTheme(int idTheme, String nomTheme, String themeParent) throws SQLException {
+    public void ajouterTheme(int idTheme, String nomTheme, String themeParent) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("insert into THEME (idtheme, nomtheme, idtheme_pere) values (?, ?, ?)");
         ps.setInt(1, idTheme);
         ps.setString(2, nomTheme);
