@@ -53,36 +53,42 @@ public class AdministrateurControleur {
     @FXML
     private void handleAjouterBoite(ActionEvent event) {
         System.out.println("Ajouter une boîte cliqué");
+        vue.setTitrePage("Espace Administrateur  |  Ajouter une boîte");
         // TODO : charger la vue ajouter une boîte (équivalent partieAdmin.ajouterBoite())
     }
 
     @FXML
     private void handleSupprimerBoite(ActionEvent event) {
         System.out.println("Supprimer une boîte cliqué");
+        vue.setTitrePage("Espace Administrateur  |  Supprimer une boîte");
         // TODO : charger la vue supprimer une boîte (équivalent partieAdmin.supprimerBoite())
     }
 
     @FXML
     private void handleMajContenuBoite(ActionEvent event) {
         System.out.println("Modifier le contenu d'une boîte cliqué");
+        vue.setTitrePage("Espace Administrateur  |  Modifier le contenu d'une boîte");
         // TODO : charger la vue maj contenu boîte (équivalent partieAdmin.majContenuBoite())
     }
 
     @FXML
     private void handleAjouterPiece(ActionEvent event) {
         System.out.println("Ajouter une pièce cliqué");
+        vue.setTitrePage("Espace Administrateur  |  Ajouter une pièce");
         // TODO : charger la vue ajouter une pièce (équivalent partieAdmin.ajouterPiece())
     }
 
     @FXML
     private void handleSupprimerPiece(ActionEvent event) {
         System.out.println("Supprimer une pièce cliqué");
+        vue.setTitrePage("Espace Administrateur  |  Supprimer une pièce");
         // TODO : charger la vue supprimer une pièce (équivalent partieAdmin.supprimerPiece())
     }
 
     @FXML
     private void handleCreerTheme(ActionEvent event) {
         System.out.println("Créer un thème cliqué");
+        vue.setTitrePage("Espace Administrateur  |  Créer un thème");
         // TODO : charger la vue créer un thème (équivalent partieAdmin.creerTheme())
     }
 

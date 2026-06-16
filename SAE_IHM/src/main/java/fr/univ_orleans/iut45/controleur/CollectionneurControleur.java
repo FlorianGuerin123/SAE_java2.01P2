@@ -101,48 +101,56 @@ public class CollectionneurControleur {
     @FXML
     private void handleRechercher(ActionEvent event) {
         setActif(btnRechercher);
+        vue.setTitrePage("Espace Collectionneur  |  Rechercher une boîte");
         // TODO : charger la vue Rechercher dans centerPane
     }
 
     @FXML
     private void handleDetail(ActionEvent event) {
         setActif(btnDetail);
+        vue.setTitrePage("Espace Collectionneur  |  Détail d'une boîte");
         // TODO : charger la vue Détail
     }
 
     @FXML
     private void handleTheme(ActionEvent event) {
         setActif(btnTheme);
+        vue.setTitrePage("Espace Collectionneur  |  Thème");
         // TODO : charger la vue Thème
     }
 
     @FXML
     private void handleStatistiques(ActionEvent event) {
         setActif(btnStatistiques);
+        vue.setTitrePage("Espace Collectionneur  |  Statistiques");
         // TODO : charger la vue Statistiques
     }
 
     @FXML
     private void handleBoitesPiece(ActionEvent event) {
         setActif(btnBoitesPiece);
+        vue.setTitrePage("Espace Collectionneur  |  Boîtes par pièce");
         // TODO : charger la vue Boîtes par pièce
     }
 
     @FXML
     private void handleMaCollection(ActionEvent event) {
         setActif(btnMaCollection);
+        vue.setTitrePage("Espace Collectionneur  |  Ma collection");
         // TODO : charger la vue Ma collection
     }
 
     @FXML
     private void handlePiecesManquantes(ActionEvent event) {
         setActif(btnPiecesManquantes);
+        vue.setTitrePage("Espace Collectionneur  |  Pièces manquantes");
         // TODO : charger la vue Pièces manquantes
     }
 
     @FXML
     private void handleComposer(ActionEvent event) {
         setActif(btnComposer);
+        vue.setTitrePage("Espace Collectionneur  |  Composer une boîte");
         // TODO : charger la vue Composer une boîte
     }
 
