@@ -240,4 +240,25 @@ public class BoiteBD {
             System.out.println("Erreur lors de la suppression : " + ex.getMessage());
         }
     }
+    public List<BoiteSimple> getBoitesParNom(String nomBoite) throws SQLException{
+    PreparedStatement ps = laConnexion.prepareStatement("SELECT b.numboite, b.nomboite, b.annee, b.nbpieces, " +"       t.idtheme, t.nomtheme " +"FROM BOITE b JOIN THEME t ON b.idtheme = t.idtheme " +"WHERE b.nomboite = ?"
+    );
+    ps.setString(1, nomBoite);
+    ResultSet rs = ps.executeQuery();
+ 
+    List<BoiteSimple> boites = new ArrayList<>();
+    while (rs.next()) {
+        Theme theme = new Theme(rs.getInt("idtheme"), rs.getString("nomtheme"));
+        boites.add(new BoiteSimple(
+            rs.getString("numboite"),
+            rs.getString("nomboite"),
+            rs.getInt("annee"),
+            rs.getInt("nbpieces"),
+            theme,
+            true
+        ));
+    }
+    return boites;
+}
+
 }

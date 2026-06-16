@@ -7,6 +7,7 @@ import fr.univ_orleans.iut45.controleur.MainMenuControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
+import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
  
 import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
@@ -176,6 +177,20 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
+    public void modeRechercherBoiteParNom() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/RechercherBoiteParNom.fxml"));
+            VBox contenu = loader.load();
+    
+            RechercherBoiteParNomControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+    
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
 
