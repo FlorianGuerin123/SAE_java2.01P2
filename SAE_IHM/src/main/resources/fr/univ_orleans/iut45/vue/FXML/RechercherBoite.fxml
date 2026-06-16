@@ -10,139 +10,105 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-        <VBox spacing="20" style="-fx-background-color: #0D1B2A;"
-    xmlns="http://javafx.com/javafx/21"
-    xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="fr.univ_orleans.iut45.controleur.RechercherBoiteControleur">
+<VBox spacing="24" style="-fx-background-color: #C8D8E8; -fx-padding: 36 48 36 48;"
+      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+      fx:controller="fr.univ_orleans.iut45.controleur.RechercherBoiteControleur">
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="champNumero"
-                           promptText="Numéro de boîte  (ex: 75192)"
-                           prefWidth="320"
-                           style="-fx-background-color: #162032;
-                                  -fx-text-fill: white;
-                                  -fx-prompt-text-fill: #5A7A9A;
-                                  -fx-border-color: #2A3F58;
-                                  -fx-border-width: 1;
-                                  -fx-border-radius: 4;
-                                  -fx-background-radius: 4;
-                                  -fx-font-size: 13;
-                                  -fx-padding: 9 14 9 14;"/>
+    <Label text="Rechercher une boîte"
+           style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1E1E2E;"/>
 
-                <Button fx:id="btnRechercher"
-                        text="🔍  Rechercher"
-                        onAction="#handleRechercher"
-                        style="-fx-background-color: #FF4D6A;
-                               -fx-text-fill: white;
-                               -fx-font-size: 13;
-                               -fx-font-weight: bold;
-                               -fx-background-radius: 4;
-                               -fx-cursor: hand;
-                               -fx-padding: 9 22 9 22;"/>
-            </HBox>
+    <Separator style="-fx-background-color: #AAAACC;"/>
 
-            <Label fx:id="labelMessage"
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="champNumero"
+                   promptText="Numéro de boîte  (ex: 75192)"
+                   prefWidth="320"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"/>
+
+        <Button fx:id="btnRechercher"
+                text="🔍  Rechercher"
+                onAction="#handleRechercher"
+                style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-background-radius: 5; -fx-cursor: hand;
+                       -fx-padding: 9 22 9 22;"/>
+    </HBox>
+
+    <Label fx:id="labelMessage" text="" wrapText="true"
+           style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"/>
+
+    <VBox fx:id="carteResultat"
+          visible="false"
+          spacing="0"
+          style="-fx-background-color: #F0F4F8; -fx-border-color: #AAAACC;
+                 -fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;"
+          maxWidth="640">
+
+        <HBox alignment="CENTER_LEFT" spacing="12"
+              style="-fx-background-color: #DDE6F0; -fx-background-radius: 6 6 0 0;
+                     -fx-padding: 14 18 14 18;">
+
+            <Label fx:id="labelNumBoite"
+                   text="N° —"
+                   style="-fx-text-fill: #FF4D6A; -fx-font-size: 13; -fx-font-weight: bold;"/>
+
+            <Label fx:id="labelNomBoite"
                    text=""
-                   style="-fx-text-fill: #FF4D6A; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                   style="-fx-text-fill: #1E1E2E; -fx-font-size: 15; -fx-font-weight: bold;"/>
 
-            <VBox fx:id="carteResultat"
-                  visible="false"
-                  spacing="0"
-                  style="-fx-background-color: #162032;
-                         -fx-border-color: #2A3F58;
-                         -fx-border-width: 1;
-                         -fx-border-radius: 6;
-                         -fx-background-radius: 6;"
-                  maxWidth="640">
+            <Region HBox.hgrow="ALWAYS"/>
 
-                <HBox alignment="CENTER_LEFT" spacing="12"
-                      style="-fx-background-color: #1E3050;
-                             -fx-background-radius: 6 6 0 0;
-                             -fx-padding: 14 18 14 18;">
+            <Label fx:id="labelStatut"
+                   text="Complète"
+                   style="-fx-background-color: #1A6B3C; -fx-text-fill: #6EFFA8;
+                          -fx-font-size: 11; -fx-font-weight: bold;
+                          -fx-background-radius: 4; -fx-padding: 3 10 3 10;"/>
+        </HBox>
 
-                    <Label fx:id="labelNumBoite"
-                           text="N° —"
-                           style="-fx-text-fill: #FF4D6A;
-                                  -fx-font-size: 13;
-                                  -fx-font-weight: bold;"/>
+        <HBox spacing="0" style="-fx-padding: 18 18 18 18;">
 
-                    <Label fx:id="labelNomBoite"
-                           text=""
-                           style="-fx-text-fill: white;
-                                  -fx-font-size: 15;
-                                  -fx-font-weight: bold;"/>
-
-                    <Region HBox.hgrow="ALWAYS"/>
-
-                
-                    <Label fx:id="labelStatut"
-                           text="Complète"
-                           style="-fx-background-color: #1A6B3C;
-                                  -fx-text-fill: #6EFFA8;
-                                  -fx-font-size: 11;
-                                  -fx-font-weight: bold;
-                                  -fx-background-radius: 4;
-                                  -fx-padding: 3 10 3 10;"/>
-                </HBox>
-
-        
-                <HBox spacing="0"
-                      style="-fx-padding: 18 18 18 18;">
-
-
-                    <VBox spacing="4" HBox.hgrow="ALWAYS" alignment="CENTER">
-                        <Label text="Année de sortie"
-                               style="-fx-text-fill: #5A7A9A; -fx-font-size: 10;"/>
-                        <Label fx:id="labelAnnee"
-                               text="—"
-                               style="-fx-text-fill: #FF4D6A;
-                                      -fx-font-size: 20;
-                                      -fx-font-weight: bold;"/>
-                    </VBox>
-
-                    <Separator orientation="VERTICAL"
-                               style="-fx-background-color: #2A3F58;"/>
-
-                    <VBox spacing="4" HBox.hgrow="ALWAYS" alignment="CENTER">
-                        <Label text="Nombre de pièces"
-                               style="-fx-text-fill: #5A7A9A; -fx-font-size: 10;"/>
-                        <Label fx:id="labelNbPieces"
-                               text="—"
-                               style="-fx-text-fill: #B0C8E0;
-                                      -fx-font-size: 20;
-                                      -fx-font-weight: bold;"/>
-                    </VBox>
-
-                    <Separator orientation="VERTICAL"
-                               style="-fx-background-color: #2A3F58;"/>
-
-                    <VBox spacing="4" HBox.hgrow="ALWAYS" alignment="CENTER">
-                        <Label text="Thème"
-                               style="-fx-text-fill: #5A7A9A; -fx-font-size: 10;"/>
-                        <Label fx:id="labelTheme"
-                               text="—"
-                               style="-fx-text-fill: #FFD166;
-                                      -fx-font-size: 15;
-                                      -fx-font-weight: bold;"/>
-                    </VBox>
-                </HBox>
-
-                <Separator style="-fx-background-color: #2A3F58;"/>
-
-                <HBox alignment="CENTER_RIGHT"
-                      style="-fx-padding: 12 18 12 18;">
-                    <Button fx:id="btnVoirDetail"
-                            text="Voir le détail →"
-                            onAction="#handleVoirDetail"
-                            style="-fx-background-color: #FF4D6A;
-                                   -fx-text-fill: white;
-                                   -fx-font-size: 12;
-                                   -fx-font-weight: bold;
-                                   -fx-background-radius: 4;
-                                   -fx-cursor: hand;
-                                   -fx-padding: 8 18 8 18;"/>
-                </HBox>
+            <VBox spacing="4" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label text="Année de sortie"
+                       style="-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                <Label fx:id="labelAnnee"
+                       text="—"
+                       style="-fx-text-fill: #FF4D6A; -fx-font-size: 20; -fx-font-weight: bold;"/>
             </VBox>
 
-        </VBox>
- 
+            <Separator orientation="VERTICAL" style="-fx-background-color: #AAAACC;"/>
+
+            <VBox spacing="4" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label text="Nombre de pièces"
+                       style="-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                <Label fx:id="labelNbPieces"
+                       text="—"
+                       style="-fx-text-fill: #1E1E2E; -fx-font-size: 20; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <Separator orientation="VERTICAL" style="-fx-background-color: #AAAACC;"/>
+
+            <VBox spacing="4" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label text="Thème"
+                       style="-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;"/>
+                <Label fx:id="labelTheme"
+                       text="—"
+                       style="-fx-text-fill: #333344; -fx-font-size: 15; -fx-font-weight: bold;"/>
+            </VBox>
+        </HBox>
+
+        <Separator style="-fx-background-color: #AAAACC;"/>
+
+        <HBox alignment="CENTER_RIGHT" style="-fx-padding: 12 18 12 18;">
+            <Button fx:id="btnVoirDetail"
+                    text="Voir le détail →"
+                    onAction="#handleVoirDetail"
+                    style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                           -fx-font-size: 12; -fx-font-weight: bold;
+                           -fx-background-radius: 5; -fx-cursor: hand;
+                           -fx-padding: 8 18 8 18;"/>
+        </HBox>
+    </VBox>
+
+</VBox>

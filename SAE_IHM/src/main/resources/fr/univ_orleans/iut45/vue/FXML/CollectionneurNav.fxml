@@ -8,8 +8,8 @@
 
 <VBox prefHeight="600.0" prefWidth="228.0" style="-fx-background-color: #162032;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.univ_orleans.iut45.controleur.CollectionneurControleur">
 
-    <!-- Section : Recherche -->
-    <Label style="-fx-text-fill: #5A7A9A; -fx-font-size: 9; -fx-font-weight: bold; -fx-padding: 16 16 6 16;" text="RECHERCHE" />
+    
+    <Label style="-fx-text-fill: #5A7A9A; -fx-font-size: 9; -fx-font-weight: bold; -fx-padding: 16 16 6 16;" text="Collectionneur" />
 
     <Button fx:id="btnRechercher" maxWidth="Infinity" onAction="#handleRechercher" onMouseEntered="#onNavHover" onMouseExited="#onNavExit"
             style="-fx-background-color: #FF4D6A; -fx-text-fill: white; -fx-font-size: 12; -fx-font-weight: bold; -fx-alignment: CENTER_LEFT; -fx-padding: 10 16 10 16; -fx-background-radius: 0; -fx-cursor: hand; -fx-border-width: 0;"
@@ -37,7 +37,7 @@
 
     <Separator style="-fx-background-color: #2A3F58; -fx-padding: 4 0 4 0;" />
 
-    <!-- Section : Ma collection -->
+    
     <Label style="-fx-text-fill: #5A7A9A; -fx-font-size: 9; -fx-font-weight: bold; -fx-padding: 10 16 6 16;" text="MA COLLECTION" />
 
     <Button fx:id="btnMaCollection" maxWidth="Infinity" onAction="#handleMaCollection" onMouseEntered="#onNavHover" onMouseExited="#onNavExit"
