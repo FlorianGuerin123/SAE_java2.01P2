@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="24"
+      style="-fx-background-color: #C8D8E8; -fx-padding: 36 48 36 48;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.univ_orleans.iut45.controleur.AjouterBoiteControleur">
+
+    <Label text="Ajouter une boîte"
+           style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1E1E2E;"/>
+
+    <Separator style="-fx-background-color: #AAAACC;"/>
+
+    <GridPane hgap="20" vgap="14">
+        <columnConstraints>
+            <ColumnConstraints minWidth="160" prefWidth="160"/>
+            <ColumnConstraints prefWidth="320" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Numéro de boîte *"
+               style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"
+               GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="champNum" promptText="ex: 75001"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Nom de la boîte *"
+               style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"
+               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="champNom" promptText="ex: Millennium Falcon"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Année *"
+               style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"
+               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="champAnnee" promptText="ex: 2024"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"
+                   GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Nombre de pièces *"
+               style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"
+               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="champNbPieces" promptText="ex: 7541"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"
+                   GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="ID Thème *"
+               style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"
+               GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="champIdTheme" promptText="ex: 3"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"
+                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Label fx:id="labelMessage" text="" wrapText="true"
+           style="-fx-font-size: 12; -fx-font-weight: bold;"/>
+
+    <HBox spacing="12">
+        <Button fx:id="btnAjouter" text="✚  Ajouter la boîte"
+                onAction="#handleAjouter"
+                style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-background-radius: 5; -fx-cursor: hand;
+                       -fx-padding: 10 24 10 24;"/>
+        <Button fx:id="btnReset" text="↺  Réinitialiser"
+                onAction="#handleReset"
+                style="-fx-background-color: transparent; -fx-border-color: #AAAACC;
+                       -fx-border-width: 1; -fx-border-radius: 4;
+                       -fx-text-fill: #555566; -fx-font-size: 12;
+                       -fx-cursor: hand; -fx-padding: 10 18 10 18;"/>
+    </HBox>
+
+</VBox>
