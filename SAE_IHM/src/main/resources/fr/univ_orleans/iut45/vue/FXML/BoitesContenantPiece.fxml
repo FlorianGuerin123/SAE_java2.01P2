@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="24" style="-fx-background-color: #C8D8E8; -fx-padding: 36 48 36 48;"
+      xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+      fx:controller="fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur">
+
+    <Label text="Boîtes contenant une pièce"
+           style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1E1E2E;"/>
+
+    <Separator style="-fx-background-color: #AAAACC;"/>
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="champNumPiece"
+                   promptText="Numéro de pièce  (ex: 3001)"
+                   prefWidth="320"
+                   style="-fx-background-color: white; -fx-border-color: #AAAACC;
+                          -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                          -fx-font-size: 12; -fx-padding: 7 10 7 10;"/>
+
+        <Button text="🔍  Rechercher"
+                onAction="#handleRechercher"
+                style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-background-radius: 5; -fx-cursor: hand;
+                       -fx-padding: 9 22 9 22;"/>
+    </HBox>
+
+    <Label fx:id="labelMessage" text="" wrapText="true"
+           style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"/>
+
+    
+    <ScrollPane fx:id="scrollResultats"
+                visible="false"
+                fitToWidth="true"
+                style="-fx-background-color: transparent; -fx-background: transparent;
+                       -fx-border-color: transparent;"
+                VBox.vgrow="ALWAYS">
+
+        <VBox fx:id="listeResultats" spacing="12"
+              style="-fx-background-color: transparent; -fx-padding: 4 4 4 4;"/>
+
+    </ScrollPane>
+
+</VBox>

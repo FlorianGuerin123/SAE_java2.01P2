@@ -10,6 +10,7 @@ import fr.univ_orleans.iut45.controleur.AjouterPieceControleur;
 import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
+import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
  
 import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
@@ -236,6 +237,20 @@ public void start(Stage primaryStage) {
         }
     }
 
+     
+    public void modeBoitesContenantPiece() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/BoitesContenantPiece.fxml"));
+            VBox contenu = loader.load();
+ 
+            BoitesContenantPieceControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+ 
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
