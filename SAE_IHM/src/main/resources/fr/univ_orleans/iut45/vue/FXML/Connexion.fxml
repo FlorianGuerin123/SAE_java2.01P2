@@ -72,6 +72,8 @@
             <Button onAction="#lancerJeuDeLaVie" text="Jeu de la Vie" style="-fx-background-color: transparent; -fx-font-size: 11; -fx-text-fill: #FF4D6A; -fx-font-weight: bold; -fx-cursor: hand; -fx-underline: true;" />
 
             <Button onAction="#lancerDino" text="T-Rex Run" style="-fx-background-color: transparent; -fx-font-size: 11; -fx-text-fill: #FF4D6A; -fx-font-weight: bold; -fx-cursor: hand; -fx-underline: true;" />
+
+            <Button onAction="#lancerBenchmark" text="Human Benchmark" style="-fx-background-color: transparent; -fx-font-size: 11; -fx-text-fill: #FF4D6A; -fx-font-weight: bold; -fx-cursor: hand; -fx-underline: true;" />
         </HBox>
     </bottom>
 

@@ -42,6 +42,7 @@ import javafx.animation.Animation;
 import javafx.util.Duration;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
@@ -1121,5 +1122,338 @@ public class ConnexionControleur {
         
         zoneJeu.getChildren().add(mur);
         obstacles.add(mur);
+    }
+
+    @FXML
+    private void lancerBenchmark(ActionEvent event) {
+        Stage fenetreBench = new Stage();
+        fenetreBench.setTitle("Human Benchmark");
+
+        VBox racine = new VBox(15);
+        racine.setPrefSize(400, 500);
+        racine.setStyle("-fx-background-color: #2b2b2b; -fx-alignment: center;");
+
+        Label titre = new Label("HUMAN BENCHMARK");
+        titre.setStyle("-fx-text-fill: white; -fx-font-size: 24; -fx-font-weight: bold;");
+
+        String styleBtn = "-fx-background-color: #2b87d1; -fx-text-fill: white; -fx-font-size: 16; -fx-pref-width: 200; -fx-cursor: hand;";
+        
+        Button btnReaction = new Button("Reaction Time");
+        Button btnAim = new Button("Aim Trainer");
+        Button btnChimp = new Button("Chimp Test");
+        Button btnNumber = new Button("Number Memory");
+        Button btnSequence = new Button("Sequence Memory");
+
+        btnReaction.setStyle(styleBtn);
+        btnAim.setStyle(styleBtn);
+        btnChimp.setStyle(styleBtn);
+        btnNumber.setStyle(styleBtn);
+        btnSequence.setStyle(styleBtn);
+
+        btnReaction.setOnAction(e -> jouerReactionTime());
+        btnAim.setOnAction(e -> jouerAimTrainer());
+        btnChimp.setOnAction(e -> jouerChimpTest());
+        btnNumber.setOnAction(e -> jouerNumberMemory());
+        btnSequence.setOnAction(e -> jouerSequenceMemory());
+
+        racine.getChildren().addAll(titre, btnReaction, btnAim, btnChimp, btnNumber, btnSequence);
+        fenetreBench.setScene(new Scene(racine));
+        fenetreBench.show();
+    }
+
+    private void jouerReactionTime() {
+        Stage stage = new Stage();
+        stage.setTitle("Reaction Time");
+        StackPane racine = new StackPane();
+        racine.setPrefSize(600, 400);
+
+        Label texte = new Label("Clique pour commencer");
+        texte.setStyle("-fx-text-fill: white; -fx-font-size: 30; -fx-font-weight: bold; -fx-text-alignment: center;");
+        racine.getChildren().add(texte);
+
+        final int[] etat = {0};
+        final long[] tempsDebut = {0};
+        javafx.animation.Timeline[] timeline = {null};
+
+        racine.setStyle("-fx-background-color: #2b87d1;");
+
+        racine.setOnMousePressed(e -> {
+            if (etat[0] == 0) {
+                etat[0] = 1;
+                racine.setStyle("-fx-background-color: #ce2636;");
+                texte.setText("Attends le vert...");
+
+                timeline[0] = new javafx.animation.Timeline(new javafx.animation.KeyFrame(
+                    javafx.util.Duration.millis(1000 + Math.random() * 3000),
+                    ev -> {
+                        etat[0] = 2;
+                        racine.setStyle("-fx-background-color: #4bdb6a;");
+                        texte.setText("CLIQUE !");
+                        tempsDebut[0] = System.currentTimeMillis();
+                    }
+                ));
+                timeline[0].play();
+            } else if (etat[0] == 1) {
+                if (timeline[0] != null) timeline[0].stop();
+                racine.setStyle("-fx-background-color: #2b87d1;");
+                texte.setText("Trop tôt !\nClique pour réessayer.");
+                etat[0] = 0;
+            } else if (etat[0] == 2) {
+                long temps = System.currentTimeMillis() - tempsDebut[0];
+                racine.setStyle("-fx-background-color: #2b87d1;");
+                texte.setText(temps + " ms\nClique pour rejouer");
+                etat[0] = 0;
+            }
+        });
+
+        stage.setScene(new Scene(racine));
+        stage.show();
+    }
+
+    private void jouerAimTrainer() {
+        Stage stage = new Stage();
+        stage.setTitle("Aim Trainer");
+        Pane racine = new Pane();
+        racine.setPrefSize(800, 600);
+        racine.setStyle("-fx-background-color: #2b2b2b;");
+
+        final int[] ciblesRestantes = {30};
+        final long[] tempsDebut = {System.currentTimeMillis()};
+
+        javafx.scene.shape.Circle cible = new javafx.scene.shape.Circle(25, javafx.scene.paint.Color.web("#4bdb6a"));
+        cible.setCenterX(400);
+        cible.setCenterY(300);
+
+        Label score = new Label("Restant: 30");
+        score.setStyle("-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;");
+        score.setLayoutX(10);
+        score.setLayoutY(10);
+
+        racine.getChildren().addAll(score, cible);
+
+        cible.setOnMousePressed(e -> {
+            ciblesRestantes[0]--;
+            if (ciblesRestantes[0] > 0) {
+                score.setText("Restant: " + ciblesRestantes[0]);
+                cible.setCenterX(50 + Math.random() * 700);
+                cible.setCenterY(50 + Math.random() * 500);
+            } else {
+                long tempsTotal = System.currentTimeMillis() - tempsDebut[0];
+                double moyenne = (double) tempsTotal / 30;
+                racine.getChildren().clear();
+                Label fin = new Label("Cible moyenne : " + Math.round(moyenne) + " ms");
+                fin.setStyle("-fx-text-fill: white; -fx-font-size: 35; -fx-font-weight: bold;");
+                fin.setLayoutX(200);
+                fin.setLayoutY(270);
+                racine.getChildren().add(fin);
+            }
+        });
+
+        stage.setScene(new Scene(racine));
+        stage.show();
+    }
+
+    private void jouerChimpTest() {
+        Stage stage = new Stage();
+        stage.setTitle("Chimp Test");
+        Pane racine = new Pane();
+        racine.setPrefSize(800, 600);
+        racine.setStyle("-fx-background-color: #2b87d1;");
+
+        final int[] nbCases = {4};
+        final int[] numActuel = {1};
+        final boolean[] cache = {false};
+
+        genererGrilleChimp(racine, nbCases, numActuel, cache, stage);
+
+        stage.setScene(new Scene(racine));
+        stage.show();
+    }
+
+    private void genererGrilleChimp(Pane racine, int[] nbCases, int[] numActuel, boolean[] cache, Stage stage) {
+        racine.getChildren().clear();
+        numActuel[0] = 1;
+        cache[0] = false;
+
+        java.util.List<Integer> positions = new java.util.ArrayList<>();
+        for (int i = 0; i < 40; i++) positions.add(i);
+        java.util.Collections.shuffle(positions);
+
+        for (int i = 1; i <= nbCases[0]; i++) {
+            Button btn = new Button(String.valueOf(i));
+            btn.setPrefSize(60, 60);
+            btn.setStyle("-fx-background-color: white; -fx-font-size: 20; -fx-font-weight: bold; -fx-border-color: #2b87d1; -fx-border-width: 2;");
+            
+            int pos = positions.get(i - 1);
+            btn.setLayoutX(100 + (pos % 8) * 70);
+            btn.setLayoutY(50 + (pos / 8) * 70);
+
+            final int val = i;
+            btn.setOnAction(e -> {
+                if (val == numActuel[0]) {
+                    btn.setVisible(false);
+                    numActuel[0]++;
+                    if (val == 1) {
+                        cache[0] = true;
+                        for (javafx.scene.Node n : racine.getChildren()) {
+                            if (n instanceof Button && n.isVisible()) {
+                                ((Button) n).setText("");
+                            }
+                        }
+                    }
+                    if (val == nbCases[0]) {
+                        nbCases[0]++;
+                        genererGrilleChimp(racine, nbCases, numActuel, cache, stage);
+                    }
+                } else {
+                    racine.getChildren().clear();
+                    Label fin = new Label("Score : " + (nbCases[0] - 1));
+                    fin.setStyle("-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;");
+                    fin.setLayoutX(330);
+                    fin.setLayoutY(250);
+                    racine.getChildren().add(fin);
+                }
+            });
+            racine.getChildren().add(btn);
+        }
+    }
+
+    private void jouerNumberMemory() {
+        Stage stage = new Stage();
+        stage.setTitle("Number Memory");
+        VBox racine = new VBox(20);
+        racine.setPrefSize(600, 400);
+        racine.setStyle("-fx-background-color: #2b87d1; -fx-alignment: center;");
+
+        final int[] niveau = {1};
+        final String[] nombreActuel = {""};
+        
+        Label affichage = new Label();
+        affichage.setStyle("-fx-text-fill: white; -fx-font-size: 50; -fx-font-weight: bold;");
+        
+        TextField input = new TextField();
+        input.setMaxWidth(300);
+        input.setStyle("-fx-font-size: 20;");
+        input.setVisible(false);
+
+        Button btnSubmit = new Button("Valider");
+        btnSubmit.setStyle("-fx-font-size: 20; -fx-background-color: #1e6096; -fx-text-fill: white;");
+        btnSubmit.setVisible(false);
+
+        javafx.scene.control.ProgressBar barre = new javafx.scene.control.ProgressBar(1.0);
+        barre.setPrefWidth(300);
+        
+        racine.getChildren().addAll(affichage, barre, input, btnSubmit);
+
+        Runnable lancerNiveau = new Runnable() {
+            @Override
+            public void run() {
+                input.setVisible(false);
+                btnSubmit.setVisible(false);
+                input.clear();
+                barre.setVisible(true);
+                
+                StringBuilder sb = new StringBuilder();
+                for(int i=0; i<niveau[0]; i++) sb.append((int)(Math.random() * 10));
+                nombreActuel[0] = sb.toString();
+                affichage.setText(nombreActuel[0]);
+
+                javafx.animation.Timeline timeline = new javafx.animation.Timeline(
+                    new javafx.animation.KeyFrame(javafx.util.Duration.ZERO, new javafx.animation.KeyValue(barre.progressProperty(), 1)),
+                    new javafx.animation.KeyFrame(javafx.util.Duration.seconds(2 + niveau[0]*0.5), new javafx.animation.KeyValue(barre.progressProperty(), 0))
+                );
+                
+                timeline.setOnFinished(e -> {
+                    affichage.setText("Quel était le nombre ?");
+                    barre.setVisible(false);
+                    input.setVisible(true);
+                    btnSubmit.setVisible(true);
+                    input.requestFocus();
+                });
+                timeline.play();
+            }
+        };
+
+        btnSubmit.setOnAction(e -> {
+            if (input.getText().equals(nombreActuel[0])) {
+                niveau[0]++;
+                lancerNiveau.run();
+            } else {
+                affichage.setText("Perdu ! C'était " + nombreActuel[0] + "\nNiveau : " + niveau[0]);
+                input.setVisible(false);
+                btnSubmit.setVisible(false);
+            }
+        });
+
+        lancerNiveau.run();
+        stage.setScene(new Scene(racine));
+        stage.show();
+    }
+
+    private void jouerSequenceMemory() {
+        Stage stage = new Stage();
+        stage.setTitle("Sequence Memory");
+        javafx.scene.layout.GridPane racine = new javafx.scene.layout.GridPane();
+        racine.setPrefSize(500, 500);
+        racine.setStyle("-fx-background-color: #2b2b2b; -fx-alignment: center; -fx-hgap: 10; -fx-vgap: 10;");
+
+        java.util.List<Button> boutons = new java.util.ArrayList<>();
+        java.util.List<Integer> sequence = new java.util.ArrayList<>();
+        final int[] indexJoueur = {0};
+        final int[] niveau = {1};
+
+        for (int i = 0; i < 9; i++) {
+            Button btn = new Button();
+            btn.setPrefSize(100, 100);
+            btn.setStyle("-fx-background-color: #2b87d1; -fx-background-radius: 10;");
+            final int id = i;
+            btn.setOnAction(e -> {
+                if (sequence.isEmpty()) return;
+                
+                btn.setStyle("-fx-background-color: white; -fx-background-radius: 10;");
+                javafx.animation.PauseTransition pt = new javafx.animation.PauseTransition(javafx.util.Duration.millis(200));
+                pt.setOnFinished(ev -> btn.setStyle("-fx-background-color: #2b87d1; -fx-background-radius: 10;"));
+                pt.play();
+
+                if (id == sequence.get(indexJoueur[0])) {
+                    indexJoueur[0]++;
+                    if (indexJoueur[0] == sequence.size()) {
+                        niveau[0]++;
+                        indexJoueur[0] = 0;
+                        sequence.add((int)(Math.random() * 9));
+                        jouerSequenceAnimation(boutons, sequence);
+                    }
+                } else {
+                    racine.getChildren().clear();
+                    Label fin = new Label("Score : " + (niveau[0] - 1));
+                    fin.setStyle("-fx-text-fill: white; -fx-font-size: 40; -fx-font-weight: bold;");
+                    racine.add(fin, 0, 0);
+                }
+            });
+            boutons.add(btn);
+            racine.add(btn, i % 3, i / 3);
+        }
+
+        sequence.add((int)(Math.random() * 9));
+        
+        Scene scene = new Scene(racine);
+        stage.setScene(scene);
+        stage.show();
+        
+        javafx.animation.PauseTransition initPause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(1));
+        initPause.setOnFinished(e -> jouerSequenceAnimation(boutons, sequence));
+        initPause.play();
+    }
+
+    private void jouerSequenceAnimation(java.util.List<Button> boutons, java.util.List<Integer> sequence) {
+        javafx.animation.SequentialTransition st = new javafx.animation.SequentialTransition();
+        for (int id : sequence) {
+            javafx.animation.PauseTransition p1 = new javafx.animation.PauseTransition(javafx.util.Duration.millis(300));
+            p1.setOnFinished(e -> boutons.get(id).setStyle("-fx-background-color: white; -fx-background-radius: 10;"));
+            javafx.animation.PauseTransition p2 = new javafx.animation.PauseTransition(javafx.util.Duration.millis(300));
+            p2.setOnFinished(e -> boutons.get(id).setStyle("-fx-background-color: #2b87d1; -fx-background-radius: 10;"));
+            st.getChildren().addAll(p1, p2);
+        }
+        st.play();
     }
 }
