@@ -10,11 +10,11 @@ import java.util.*;
 public class PieceBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	PieceBD(ConnexionMySQL laConnexion){
+	public PieceBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
     }
 
-    void ajouterPiece(String  numPiece, String nomPiece, String nomCat) throws SQLException {
+    public void ajouterPiece(String  numPiece, String nomPiece, String nomCat) throws SQLException {
         st = laConnexion.createStatement();
         PreparedStatement ps = laConnexion.prepareStatement("SELECT idcat FROM CATEGORIE WHERE nomcat = ?");
         ps.setString(1, nomCat);
