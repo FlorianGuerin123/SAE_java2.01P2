@@ -82,7 +82,7 @@ public class PieceBD {
         }
     }
 
-    List<Piece> getPiecesBoite(String numBoite) throws SQLException {
+    public List<Piece> getPiecesBoite(String numBoite) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("select numpiece, nompiece, idcoul, nomcat, idcat, quantitep FROM BOITE natural join CONTENU natural join CONTENIRP natural join PIECE natural join CATEGORIE natural join COULEUR WHERE numboite = ?");
         ps.setString(1, numBoite);
         ResultSet rs = ps.executeQuery();
