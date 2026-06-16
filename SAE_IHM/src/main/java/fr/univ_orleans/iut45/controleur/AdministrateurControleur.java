@@ -91,11 +91,8 @@ public class AdministrateurControleur {
  
     @FXML
     private void handleAjouterBoite(ActionEvent event) {
-        System.out.println("Ajouter une boîte cliqué");
-        vue.setTitrePage("Espace Administrateur  |  Ajouter une boîte");
-        // TODO : charger la vue ajouter une boîte (équivalent partieAdmin.ajouterBoite())
         setActif(btnAjouterBoite);
-        // TODO : charger la vue ajouter une boîte
+        vue.modeAjouterBoite();
     }
  
     @FXML
