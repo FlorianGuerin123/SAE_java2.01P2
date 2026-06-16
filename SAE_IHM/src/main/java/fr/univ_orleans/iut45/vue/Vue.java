@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
+import fr.univ_orleans.iut45.controleur.SupprimerBoiteControleur;
 
  
  
@@ -214,6 +215,21 @@ public void start(Stage primaryStage) {
             VBox contenu = loader.load();
             CreerThemeControleur ctrl = loader.getController();
             ctrl.setVue(this);
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void modeSupprimerBoite() {
+        setTitrePage("Administrateur  |  Supprimer une boîte");
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/SupprimerBoite.fxml"));
+            VBox contenu = loader.load();
+            
+            SupprimerBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            
             this.panelCentral.setCenter(contenu);
         } catch (Exception e) {
             e.printStackTrace();

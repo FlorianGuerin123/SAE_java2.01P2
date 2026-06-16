@@ -99,9 +99,8 @@ public class AdministrateurControleur {
     private void handleSupprimerBoite(ActionEvent event) {
         System.out.println("Supprimer une boîte cliqué");
         vue.setTitrePage("Espace Administrateur  |  Supprimer une boîte");
-        // TODO : charger la vue supprimer une boîte (équivalent partieAdmin.supprimerBoite())
         setActif(btnSupprimerBoite);
-        // TODO : charger la vue supprimer une boîte
+        vue.modeSupprimerBoite(); 
     }
  
     @FXML
