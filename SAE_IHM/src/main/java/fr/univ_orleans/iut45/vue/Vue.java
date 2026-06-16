@@ -9,6 +9,7 @@ import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterPieceControleur;
 import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
+import fr.univ_orleans.iut45.controleur.SupprimerPieceControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
 import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
@@ -235,6 +236,7 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
+
     public void modeSupprimerBoite() {
         setTitrePage("Administrateur  |  Supprimer une boîte");
         try {
@@ -265,6 +267,7 @@ public void start(Stage primaryStage) {
         }
     }
 
+<<<<<<< HEAD
      
     public void modeBoitesContenantPiece() {
         try {
@@ -273,12 +276,25 @@ public void start(Stage primaryStage) {
  
             BoitesContenantPieceControleur ctrl = loader.getController();
             ctrl.setVue(this);
- 
+
+=======
+    public void modeSupprimerPiece() {
+        setTitrePage("Administrateur  |  Supprimer une pièce");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/SupprimerPiece.fxml"));
+            VBox contenu = loader.load();
+            SupprimerPieceControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+>>>>>>> florian
             this.panelCentral.setCenter(contenu);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> florian
 
 }
 

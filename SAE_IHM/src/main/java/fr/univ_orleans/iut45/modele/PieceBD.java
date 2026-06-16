@@ -44,7 +44,7 @@ public class PieceBD {
         }
     }
 
-    void supprimerPiece(String numPiece) throws SQLException {
+    public void supprimerPiece(String numPiece) throws SQLException {
         ContenirPieceBD contenirPieceBD = new ContenirPieceBD(laConnexion);
         contenirPieceBD.supprimerPieceContenue(numPiece);
         PreparedStatement ps = laConnexion.prepareStatement("DELETE FROM PIECE WHERE numpiece = ?");
@@ -57,7 +57,7 @@ public class PieceBD {
         }
     }
 
-    int getNumPieceAvecNom(String nomPiece) throws SQLException{
+    public int getNumPieceAvecNom(String nomPiece) throws SQLException{
         PreparedStatement ps = laConnexion.prepareStatement("select numpiece from PIECE where nompiece = ?");
         ps.setString(1, nomPiece);
         ResultSet rs = ps.executeQuery();
@@ -70,7 +70,7 @@ public class PieceBD {
         }
     }
     
-    String getIdPiece(String nomPiece) throws SQLException {
+    public String getIdPiece(String nomPiece) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("SELECT numpiece FROM PIECE WHERE nomPiece = ?");
         ps.setString(1, nomPiece);
         ResultSet rs = ps.executeQuery();
@@ -118,4 +118,23 @@ public class PieceBD {
         }
         return stats;
     }
+
+    public List<Piece> rechercherPiecesDynamique(String recherche) throws SQLException {
+        List<Piece> listeResultats = new ArrayList<>();
+        String requete = "SELECT p.numpiece, p.nompiece, c.idcat, c.nomcat FROM PIECE p JOIN CATEGORIE c ON p.idcat = c.idcat WHERE p.numpiece LIKE ? OR p.nompiece LIKE ? LIMIT 5";
+ 
+        PreparedStatement ps = laConnexion.prepareStatement(requete);
+        ps.setString(1, recherche + "%");
+        ps.setString(2, "%" + recherche + "%");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Categorie cat = new Categorie(rs.getInt("idcat"), rs.getString("nomcat"));
+            Piece piece = new Piece(rs.getString("numpiece"), rs.getString("nompiece"), cat, null);
+            listeResultats.add(piece);
+        }
+        rs.close();
+        ps.close();
+        return listeResultats;
+    }
+
 }
