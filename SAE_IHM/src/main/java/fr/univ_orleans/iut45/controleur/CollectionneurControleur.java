@@ -4,13 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
-
-
 
 import fr.univ_orleans.iut45.vue.Vue;
 
@@ -18,16 +14,19 @@ public class CollectionneurControleur {
 
     @FXML private StackPane centerPane;
 
-    // Boutons de navigation
     @FXML private Button btnRechercher;
+    @FXML private Button btnRechercherNom;
     @FXML private Button btnDetail;
     @FXML private Button btnTheme;
     @FXML private Button btnStatistiques;
     @FXML private Button btnBoitesPiece;
     @FXML private Button btnMaCollection;
+    @FXML private Button btnAjouterCollection;
+    @FXML private Button btnRetirerCollection;
     @FXML private Button btnPiecesManquantes;
     @FXML private Button btnComposer;
     @FXML private Button btnRetour;
+
     private Vue vue;
 
     private static final String STYLE_ACTIF =
@@ -36,14 +35,12 @@ public class CollectionneurControleur {
         "-fx-alignment: CENTER_LEFT; -fx-padding: 10 16 10 16; " +
         "-fx-background-radius: 0; -fx-cursor: hand; -fx-border-width: 0;";
 
-   
     private static final String STYLE_INACTIF =
         "-fx-background-color: transparent; -fx-text-fill: #B0C8E0; " +
         "-fx-font-size: 12; -fx-alignment: CENTER_LEFT; " +
         "-fx-padding: 10 16 10 16; -fx-background-radius: 0; " +
         "-fx-cursor: hand; -fx-border-width: 0;";
 
-    
     private static final String STYLE_HOVER =
         "-fx-background-color: #1E3050; -fx-text-fill: white; " +
         "-fx-font-size: 12; -fx-alignment: CENTER_LEFT; " +
@@ -54,9 +51,8 @@ public class CollectionneurControleur {
 
     @FXML
     private void initialize() {
-        boutonActif = btnRechercher; 
+        boutonActif = btnRechercher;
     }
-   
 
     @FXML
     private void onNavHover(javafx.scene.input.MouseEvent event) {
@@ -92,7 +88,6 @@ public class CollectionneurControleur {
                      "-fx-cursor: hand; -fx-border-width: 0;");
     }
 
-
     private void setActif(Button btn) {
         if (boutonActif != null) {
             boutonActif.setStyle(STYLE_INACTIF);
@@ -101,64 +96,86 @@ public class CollectionneurControleur {
         boutonActif = btn;
     }
 
-    public void setVue(Vue vue){
+    public void setVue(Vue vue) {
         this.vue = vue;
     }
+
 
     @FXML
     private void handleRechercher(ActionEvent event) {
         setActif(btnRechercher);
-        vue.setTitrePage("Espace Collectionneur  |  Rechercher une boîte");
+        vue.setTitrePage("Espace Collectionneur  |  Rechercher par numéro");
         vue.modeRechercherBoite();
     }
 
     @FXML
-    private void handleDetail(ActionEvent event) {  
+    private void handleRechercherNom(ActionEvent event) {
+        setActif(btnRechercherNom);
+        vue.setTitrePage("Espace Collectionneur  |  Rechercher par nom");
+        // TODO : vue.modeRechercherBoiteParNom();
+    }
+
+    @FXML
+    private void handleDetail(ActionEvent event) {
         setActif(btnDetail);
         vue.setTitrePage("Espace Collectionneur  |  Détail d'une boîte");
-        // TODO : charger la vue Détail
+        // TODO : vue.modeDetailBoite();
     }
 
     @FXML
     private void handleTheme(ActionEvent event) {
         setActif(btnTheme);
-        vue.setTitrePage("Espace Collectionneur  |  Thème");
-        // TODO : charger la vue Thème
+        vue.setTitrePage("Espace Collectionneur  |  Boîtes par thème");
+        // TODO : vue.modeBoitesParTheme();
     }
 
     @FXML
     private void handleStatistiques(ActionEvent event) {
         setActif(btnStatistiques);
-        vue.setTitrePage("Espace Collectionneur  |  Statistiques");
-        // TODO : charger la vue Statistiques
+        vue.setTitrePage("Espace Collectionneur  |  Statistiques d'une boîte");
+        // TODO : vue.modeStatistiquesBoite();
     }
 
     @FXML
     private void handleBoitesPiece(ActionEvent event) {
         setActif(btnBoitesPiece);
-        vue.setTitrePage("Espace Collectionneur  |  Boîtes par pièce");
-        // TODO : charger la vue Boîtes par pièce
+        vue.setTitrePage("Espace Collectionneur  |  Boîtes contenant une pièce");
+        // TODO : vue.modeBoitesContenantPiece();
     }
 
     @FXML
     private void handleMaCollection(ActionEvent event) {
         setActif(btnMaCollection);
         vue.setTitrePage("Espace Collectionneur  |  Ma collection");
-        // TODO : charger la vue Ma collection
+        // TODO : vue.modeMaCollection();
+    }
+
+    @FXML
+    private void handleAjouterCollection(ActionEvent event) {
+        setActif(btnAjouterCollection);
+        vue.setTitrePage("Espace Collectionneur  |  Ajouter à ma collection");
+        // TODO : vue.modeAjouterCollection();
+    }
+
+    @FXML
+    private void handleRetirerCollection(ActionEvent event) {
+        setActif(btnRetirerCollection);
+        vue.setTitrePage("Espace Collectionneur  |  Retirer de ma collection");
+        // TODO : vue.modeRetirerCollection();
     }
 
     @FXML
     private void handlePiecesManquantes(ActionEvent event) {
         setActif(btnPiecesManquantes);
         vue.setTitrePage("Espace Collectionneur  |  Pièces manquantes");
-        // TODO : charger la vue Pièces manquantes
+        // TODO : vue.modePiecesManquantes();
     }
 
     @FXML
     private void handleComposer(ActionEvent event) {
         setActif(btnComposer);
         vue.setTitrePage("Espace Collectionneur  |  Composer une boîte");
-        // TODO : charger la vue Composer une boîte
+        // TODO : vue.modeComposerBoite();
     }
 
     @FXML
@@ -166,15 +183,5 @@ public class CollectionneurControleur {
         vue.modeAcceuil();
     }
 
-
-
-    private void chargerVue(String cheminFxml) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(cheminFxml));
-            Node vue = loader.load();
-            centerPane.getChildren().setAll(vue);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
 }
