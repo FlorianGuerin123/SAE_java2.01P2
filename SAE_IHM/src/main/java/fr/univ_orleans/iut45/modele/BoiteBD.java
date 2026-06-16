@@ -241,14 +241,14 @@ public class BoiteBD {
         }
     }
 
-    public java.util.List<BoiteSimple> rechercherBoitesDynamique(String recherche) throws java.sql.SQLException {
-        java.util.List<BoiteSimple> listeResultats = new java.util.ArrayList<>();
+    public List<BoiteSimple> rechercherBoitesDynamique(String recherche) throws SQLException {
+        List<BoiteSimple> listeResultats = new java.util.ArrayList<>();
         
         String query = "SELECT b.numboite, b.nomboite, b.annee, b.nbpieces, b.idtheme, t.nomtheme " +
                        "FROM BOITE b JOIN THEME t ON b.idtheme = t.idtheme " +
                        "WHERE b.numboite LIKE ? OR b.nomboite LIKE ? LIMIT 5";
         
-        java.sql.PreparedStatement ps = laConnexion.prepareStatement(query);
+        PreparedStatement ps = laConnexion.prepareStatement(query);
         ps.setString(1, recherche + "%"); 
         ps.setString(2, recherche + "%");
         

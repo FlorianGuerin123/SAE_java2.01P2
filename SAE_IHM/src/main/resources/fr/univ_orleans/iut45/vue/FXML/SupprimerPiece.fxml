@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="0" style="-fx-background-color: #EEF2F7; -fx-padding: 32 40 32 40;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.univ_orleans.iut45.controleur.SupprimerPieceControleur">
+
+    <Label text="Supprimer une pièce"
+           style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #1A2B3C; -fx-padding: 0 0 20 0;" />
+
+    <Label text="Rechercher la pièce à supprimer :"
+           style="-fx-font-size: 13; -fx-text-fill: #2C3E50; -fx-padding: 0 0 8 0;" />
+
+    <StackPane>
+        <VBox>
+            <TextField fx:id="champRecherche"
+                       promptText="Numéro ou nom de la pièce..."
+                       style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                              -fx-background-color: white;
+                              -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                              -fx-background-radius: 4; -fx-border-radius: 4;" />
+
+            <VBox fx:id="menuDeroulant" visible="false" managed="false"
+                  style="-fx-background-color: white;
+                         -fx-border-color: #CCCCCC; -fx-border-width: 0 1 1 1;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 3);" />
+        </VBox>
+    </StackPane>
+
+    <VBox fx:id="carteResultat" visible="false" managed="false"
+          spacing="10"
+          style="-fx-background-color: white;
+                 -fx-border-color: #FF4D6A; -fx-border-width: 2;
+                 -fx-background-radius: 6; -fx-border-radius: 6;
+                 -fx-padding: 20;">
+          <VBox.margin>
+            <Insets top="20" />
+        </VBox.margin>
+
+        <Label fx:id="labelNumNom"
+               style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #1A2B3C;" />
+
+        <Label fx:id="labelCategorie"
+               style="-fx-font-size: 13; -fx-text-fill: #4A5568;" />
+
+        <Button text="🗑️ Supprimer définitivement cette pièce"
+                maxWidth="Infinity"
+                onAction="#handleSupprimer"
+                style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-padding: 12; -fx-background-radius: 4;
+                       -fx-cursor: hand; -fx-border-width: 0;" />
+    </VBox>
+
+    <Label fx:id="labelMessage" text=""
+           style="-fx-font-size: 13; -fx-padding: 12 0 0 0;" />
+
+</VBox>

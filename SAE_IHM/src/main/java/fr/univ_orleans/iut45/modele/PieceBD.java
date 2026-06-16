@@ -44,7 +44,7 @@ public class PieceBD {
         }
     }
 
-    void supprimerPiece(String numPiece) throws SQLException {
+    public void supprimerPiece(String numPiece) throws SQLException {
         ContenirPieceBD contenirPieceBD = new ContenirPieceBD(laConnexion);
         contenirPieceBD.supprimerPieceContenue(numPiece);
         PreparedStatement ps = laConnexion.prepareStatement("DELETE FROM PIECE WHERE numpiece = ?");
@@ -57,7 +57,7 @@ public class PieceBD {
         }
     }
 
-    int getNumPieceAvecNom(String nomPiece) throws SQLException{
+    public int getNumPieceAvecNom(String nomPiece) throws SQLException{
         PreparedStatement ps = laConnexion.prepareStatement("select numpiece from PIECE where nompiece = ?");
         ps.setString(1, nomPiece);
         ResultSet rs = ps.executeQuery();
@@ -70,7 +70,7 @@ public class PieceBD {
         }
     }
     
-    String getIdPiece(String nomPiece) throws SQLException {
+    public String getIdPiece(String nomPiece) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("SELECT numpiece FROM PIECE WHERE nomPiece = ?");
         ps.setString(1, nomPiece);
         ResultSet rs = ps.executeQuery();
@@ -82,7 +82,7 @@ public class PieceBD {
         }
     }
 
-    List<Piece> getPiecesBoite(String numBoite) throws SQLException {
+    public List<Piece> getPiecesBoite(String numBoite) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("select numpiece, nompiece, idcoul, nomcat, idcat, quantitep FROM BOITE natural join CONTENU natural join CONTENIRP natural join PIECE natural join CATEGORIE natural join COULEUR WHERE numboite = ?");
         ps.setString(1, numBoite);
         ResultSet rs = ps.executeQuery();
@@ -103,7 +103,7 @@ public class PieceBD {
      * Retourne le nombre de types de pièces différentes et le total de pièces
      * pour une boîte donnée. Tableau : [nb_pieces_differentes, total_pieces].
     */
-    List<Integer> statsPieces(String numboite) throws SQLException{
+    public List<Integer> statsPieces(String numboite) throws SQLException{
         PreparedStatement ps = laConnexion.prepareStatement("SELECT COUNT(*) AS nb_pieces_differentes, SUM(quantitep) AS total_pieces FROM BOITE natural join CONTENU natural join CONTENIRP natural join PIECE natural join COULEUR WHERE numboite = ?");
         ps.setString(1, numboite);
         ResultSet rs = ps.executeQuery();
@@ -118,4 +118,23 @@ public class PieceBD {
         }
         return stats;
     }
+
+    public List<Piece> rechercherPiecesDynamique(String recherche) throws SQLException {
+        List<Piece> listeResultats = new ArrayList<>();
+        String requete = "SELECT p.numpiece, p.nompiece, c.idcat, c.nomcat FROM PIECE p JOIN CATEGORIE c ON p.idcat = c.idcat WHERE p.numpiece LIKE ? OR p.nompiece LIKE ? LIMIT 5";
+ 
+        PreparedStatement ps = laConnexion.prepareStatement(requete);
+        ps.setString(1, recherche + "%");
+        ps.setString(2, "%" + recherche + "%");
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Categorie cat = new Categorie(rs.getInt("idcat"), rs.getString("nomcat"));
+            Piece piece = new Piece(rs.getString("numpiece"), rs.getString("nompiece"), cat, null);
+            listeResultats.add(piece);
+        }
+        rs.close();
+        ps.close();
+        return listeResultats;
+    }
+
 }

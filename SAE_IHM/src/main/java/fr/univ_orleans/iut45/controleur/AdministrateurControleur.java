@@ -121,11 +121,8 @@ public class AdministrateurControleur {
  
     @FXML
     private void handleSupprimerPiece(ActionEvent event) {
-        System.out.println("Supprimer une pièce cliqué");
-        vue.setTitrePage("Espace Administrateur  |  Supprimer une pièce");
-        // TODO : charger la vue supprimer une pièce (équivalent partieAdmin.supprimerPiece())
         setActif(btnSupprimerPiece);
-        // TODO : charger la vue supprimer une pièce
+        vue.modeSupprimerPiece();
     }
  
     @FXML
