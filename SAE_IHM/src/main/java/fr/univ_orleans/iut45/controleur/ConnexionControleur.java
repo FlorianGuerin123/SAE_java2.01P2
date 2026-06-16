@@ -19,6 +19,14 @@ import java.util.prefs.Preferences;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Base64;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import java.util.Optional;
  
 import java.sql.SQLException;
  
@@ -32,6 +40,14 @@ import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.animation.Animation;
 import javafx.util.Duration;
+import javafx.animation.AnimationTimer;
+import javafx.scene.layout.Pane;
+import javafx.scene.input.KeyCode;
+
+import java.util.ArrayList;
+import java.util.List;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -56,14 +72,25 @@ public class ConnexionControleur {
         champMotDePasse.setOnKeyReleased(event -> verifierMajuscule());
         champBaseDeDonnees.setOnKeyReleased(event -> verifierMajuscule());
 
-        Preferences prefs = Preferences.userNodeForPackage(ConnexionControleur.class);
-        String loginSauve = prefs.get("login_briqu", "");
-        String mdpSauve = prefs.get("mdp_briqu", "");
-        String bdSauve = prefs.get("bd_briqu", "");
+        try {
+            Path fichier = Paths.get("config.json");
+            if (Files.exists(fichier)) {
+                String json = Files.readString(fichier);
+                
+                String loginSauve = json.split("\"login\": \"")[1].split("\"")[0];
+                String mdpMasque = json.split("\"mdp\": \"")[1].split("\"")[0];
+                String bdSauve = json.split("\"bd\": \"")[1].split("\"")[0];
 
-        if (!loginSauve.isEmpty()) champLogin.setText(loginSauve);
-        if (!mdpSauve.isEmpty()) champMotDePasse.setText(mdpSauve);
-        if (!bdSauve.isEmpty()) champBaseDeDonnees.setText(bdSauve);
+                byte[] mdpDecodé = Base64.getDecoder().decode(mdpMasque);
+                String mdpSauve = new String(mdpDecodé);
+
+                champLogin.setText(loginSauve);
+                champMotDePasse.setText(mdpSauve);
+                champBaseDeDonnees.setText(bdSauve);
+            }
+        } catch (Exception e) {
+            System.out.println("Aucun fichier de configuration trouvé ou erreur de lecture.");
+        }
     }
 
     public void setVue(Vue vue) {
@@ -86,20 +113,45 @@ public class ConnexionControleur {
         try {
             connexion.connecter(SERVEUR, baseDeDonnees, login, motDePasse);
             if (connexion.isConnecte()) {
-                Preferences prefs = Preferences.userNodeForPackage(ConnexionControleur.class);
                 
-                if (!login.equals(prefs.get("login_briqu", "")) || !baseDeDonnees.equals(prefs.get("bd_briqu", ""))) {
-                    
+                boolean aChange = true; 
+                try {
+                    Path fichier = Paths.get("config.json");
+                    if (Files.exists(fichier)) {
+                        String json = Files.readString(fichier);
+                        
+                        String loginSauve = json.split("\"login\": \"")[1].split("\"")[0];
+                        String mdpMasque = json.split("\"mdp\": \"")[1].split("\"")[0];
+                        String bdSauve = json.split("\"bd\": \"")[1].split("\"")[0];
+                        
+                        String mdpSauve = new String(Base64.getDecoder().decode(mdpMasque));
+
+                        if (login.equals(loginSauve) && motDePasse.equals(mdpSauve) && baseDeDonnees.equals(bdSauve)) {
+                            aChange = false;
+                        }
+                    }
+                } catch (Exception e) {
+                }
+
+                if (aChange) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setTitle("Sauvegarde des identifiants");
+                    alert.setTitle("Sauvegarde locale");
                     alert.setHeaderText("Connexion réussie !");
-                    alert.setContentText("Voulez-vous enregistrer ces informations pour la prochaine fois ?");
+                    alert.setContentText("Voulez-vous sauvegarder ces nouveaux identifiants dans config.json ?");
 
                     Optional<ButtonType> resultat = alert.showAndWait();
                     if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
-                        prefs.put("login_briqu", login);
-                        prefs.put("mdp_briqu", motDePasse);
-                        prefs.put("bd_briqu", baseDeDonnees);
+                        try {
+                            String mdpMasque = Base64.getEncoder().encodeToString(motDePasse.getBytes());
+                            String json = "{\n" +
+                                          "  \"login\": \"" + login + "\",\n" +
+                                          "  \"mdp\": \"" + mdpMasque + "\",\n" +
+                                          "  \"bd\": \"" + baseDeDonnees + "\"\n" +
+                                          "}";
+                            Files.writeString(Paths.get("config.json"), json);
+                        } catch (Exception e) {
+                            System.out.println("Erreur lors de la sauvegarde du fichier.");
+                        }
                     }
                 }
                 
@@ -141,6 +193,8 @@ public class ConnexionControleur {
         Button btnMorpion = new Button("2. Morpion (Tic-Tac-Toe)");
         Button btnJusteNombre = new Button("3. Le Juste Nombre de pièces");
         Button btnBriqueDoree = new Button("4. Trouver la Brique Dorée");
+        Button btnGeoDash = new Button("5. Geo Dash (Infini)");        
+
 
         String styleBouton = "-fx-background-color: #FF4D6A; " + 
                              "-fx-text-fill: white; " +           
@@ -160,8 +214,10 @@ public class ConnexionControleur {
         btnMorpion.setOnAction(e -> lancerMorpion());
         btnJusteNombre.setOnAction(e -> lancerJusteNombre());
         btnBriqueDoree.setOnAction(e -> lancerBriqueDoree());
+        btnGeoDash.setOnAction(e -> lancerGeometryDash());
 
-        VBox racine = new VBox(15, titre, btnPFC, btnMorpion, btnJusteNombre, btnBriqueDoree);
+
+        VBox racine = new VBox(15, titre, btnPFC, btnMorpion, btnJusteNombre, btnBriqueDoree,btnGeoDash);
         racine.setAlignment(Pos.CENTER);
         racine.setPadding(new Insets(30));
         racine.setStyle("-fx-background-color: #1E1E2E;"); 
@@ -536,5 +592,321 @@ public class ConnexionControleur {
             }
         }
         return nb;
+    }
+
+    @FXML
+    private void lancerDino(ActionEvent event) {
+        Stage fenetreDino = new Stage();
+        fenetreDino.setTitle("Dino Run !");
+
+        Pane zoneJeu = new Pane();
+        zoneJeu.setPrefSize(600, 300);
+        zoneJeu.setStyle("-fx-background-color: #1E1E2E;"); 
+
+
+        javafx.scene.shape.Line sol = new javafx.scene.shape.Line(0, 250, 600, 250);
+        sol.setStroke(Color.WHITE);
+        sol.setStrokeWidth(3);
+
+        Rectangle dino = new Rectangle(40, 40, Color.web("#ff4b69"));
+        dino.setX(50);
+        dino.setY(210); 
+
+        Rectangle cactus = new Rectangle(20, 50, Color.web("#28a745"));
+        cactus.setX(600); 
+        cactus.setY(200); 
+
+        Label labelScore = new Label("Score: 0");
+        labelScore.setStyle("-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;");
+        labelScore.setLayoutX(20);
+        labelScore.setLayoutY(20);
+
+        Label labelGameOver = new Label("GAME OVER\nAppuie sur Haut pour rejouer");
+        labelGameOver.setStyle("-fx-text-fill: #FF4D6A; -fx-font-size: 30; -fx-font-weight: bold; -fx-text-alignment: center;");
+        labelGameOver.setLayoutX(130);
+        labelGameOver.setLayoutY(100);
+        labelGameOver.setVisible(false); 
+
+        zoneJeu.getChildren().addAll(sol, dino, cactus, labelScore, labelGameOver);
+        Scene scene = new Scene(zoneJeu);
+
+        final double[] velociteY = {0}; 
+        final double gravite = 0.6;
+        final double forceSaut = -12;
+        final boolean[] enSaut = {false};
+        
+        final double[] vitesseCactus = {6};
+        final int[] score = {0};
+        final boolean[] jeuFini = {false};
+
+        scene.setOnKeyPressed(e -> {
+            if ((e.getCode() == KeyCode.SPACE || e.getCode() == KeyCode.UP)) {
+                if (jeuFini[0]) {
+                    jeuFini[0] = false;
+                    labelGameOver.setVisible(false);
+                    cactus.setX(600);
+                    score[0] = 0;
+                    vitesseCactus[0] = 6;
+                } else if (!enSaut[0]) {
+                    velociteY[0] = forceSaut;
+                    enSaut[0] = true;
+                }
+            }
+        });
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (jeuFini[0]) return; 
+
+                velociteY[0] += gravite; 
+                dino.setY(dino.getY() + velociteY[0]);
+
+                if (dino.getY() >= 210) {
+                    dino.setY(210);
+                    enSaut[0] = false;
+                    velociteY[0] = 0;
+                }
+
+                cactus.setX(cactus.getX() - vitesseCactus[0]);
+
+                if (cactus.getX() < -20) {
+                    cactus.setX(600 + Math.random() * 200); 
+                    score[0]++;
+                    labelScore.setText("Score: " + score[0]);
+                    
+                    if (score[0] % 5 == 0) {
+                        vitesseCactus[0] += 1;
+                    }
+                }
+
+                if (dino.getBoundsInParent().intersects(cactus.getBoundsInParent())) {
+                    jeuFini[0] = true;
+                    labelGameOver.setVisible(true);
+                }
+            }
+        };
+
+        timer.start(); 
+
+        fenetreDino.setScene(scene);
+        fenetreDino.show();
+
+        fenetreDino.setOnCloseRequest(e -> timer.stop());
+    }
+    @FXML
+    private void lancerGeometryDash() {
+        Stage fenetreGeo = new Stage();
+        fenetreGeo.setTitle("Geo Dash LEGO");
+
+        Pane zoneJeu = new Pane();
+        zoneJeu.setPrefSize(800, 400);
+        zoneJeu.setStyle("-fx-background-color: #2b2b2b;");
+
+        javafx.scene.shape.Line sol = new javafx.scene.shape.Line(0, 300, 800, 300);
+        sol.setStroke(Color.WHITE);
+        sol.setStrokeWidth(4);
+
+        Rectangle joueur = new Rectangle(30, 30, Color.web("#00ffcc"));
+        joueur.setX(100);
+        joueur.setY(270);
+
+        java.util.prefs.Preferences prefs = java.util.prefs.Preferences.userNodeForPackage(ConnexionControleur.class);
+        final int[] recordGeo = {prefs.getInt("record_geodash", 0)};
+        final int[] score = {0};
+
+        Label labelScore = new Label("Score: 0 | Record: " + recordGeo[0]);
+        labelScore.setStyle("-fx-text-fill: white; -fx-font-size: 18; -fx-font-weight: bold;");
+        labelScore.setLayoutX(20);
+        labelScore.setLayoutY(20);
+
+        Label labelGameOver = new Label("CRASH !\nAppuie sur Haut pour recommencer");
+        labelGameOver.setStyle("-fx-text-fill: #FF4D6A; -fx-font-size: 30; -fx-font-weight: bold; -fx-text-alignment: center;");
+        labelGameOver.setLayoutX(200);
+        labelGameOver.setLayoutY(120);
+        labelGameOver.setVisible(false);
+
+        zoneJeu.getChildren().addAll(sol, joueur, labelScore, labelGameOver);
+        Scene scene = new Scene(zoneJeu);
+
+        final double[] velociteY = {0}; 
+        final double gravite = 0.8;
+        final double forceSaut = -13.5;
+        final boolean[] enSaut = {false};
+        final boolean[] jeuFini = {false};
+        
+        final double[] vitesseJeu = {7.0}; 
+        
+        List<Shape> obstacles = new ArrayList<>();
+        final double[] distanceProchainPattern = {800}; 
+
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.SPACE || e.getCode() == javafx.scene.input.KeyCode.UP) {
+                if (jeuFini[0]) {
+                    jeuFini[0] = false;
+                    labelGameOver.setVisible(false);
+                    score[0] = 0;
+                    vitesseJeu[0] = 7.0; 
+                    joueur.setY(270);
+                    joueur.setRotate(0);
+                    distanceProchainPattern[0] = 800;
+                    
+                    zoneJeu.getChildren().removeAll(obstacles);
+                    obstacles.clear();
+                } else if (!enSaut[0]) {
+                    velociteY[0] = forceSaut;
+                    enSaut[0] = true;
+                }
+            }
+        });
+
+        javafx.animation.AnimationTimer timer = new javafx.animation.AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (jeuFini[0]) return;
+
+                velociteY[0] += gravite;
+                joueur.setY(joueur.getY() + velociteY[0]);
+
+                if (enSaut[0]) {
+                    joueur.setRotate(joueur.getRotate() + 6);
+                }
+
+                if (joueur.getY() >= 270) {
+                    joueur.setY(270);
+                    velociteY[0] = 0;
+                    enSaut[0] = false;
+                    double rotation = joueur.getRotate() % 90;
+                    if (rotation != 0) {
+                        joueur.setRotate(Math.round(joueur.getRotate() / 90.0) * 90);
+                    }
+                }
+
+                if (score[0] > 0 && score[0] % 500 == 0) {
+                    vitesseJeu[0] += 0.3; 
+                }
+
+                distanceProchainPattern[0] -= vitesseJeu[0];
+                if (distanceProchainPattern[0] <= 0) {
+                    double longueurPattern = genererPatternAleatoire(zoneJeu, obstacles);
+                    distanceProchainPattern[0] = longueurPattern + (300 + Math.random() * 200) * (vitesseJeu[0] / 7.0); 
+                }
+
+                List<Shape> obstaclesASupprimer = new ArrayList<>();
+                for (Shape obs : obstacles) {
+                    obs.setLayoutX(obs.getLayoutX() - vitesseJeu[0]); 
+
+                    if (obs.getLayoutX() < -200) {
+                        obstaclesASupprimer.add(obs);
+                    }
+
+                    if (joueur.getBoundsInParent().intersects(obs.getBoundsInParent())) {
+                        jeuFini[0] = true;
+                        labelGameOver.setVisible(true);
+                        
+                        if (score[0] > recordGeo[0]) {
+                            recordGeo[0] = score[0];
+                            prefs.putInt("record_geodash", recordGeo[0]);
+                        }
+                    }
+                }
+
+                zoneJeu.getChildren().removeAll(obstaclesASupprimer);
+                obstacles.removeAll(obstaclesASupprimer);
+
+                score[0]++;
+                labelScore.setText("Score: " + (score[0] / 10) + " | Record: " + (recordGeo[0] / 10));
+            }
+        };
+
+        timer.start();
+        fenetreGeo.setScene(scene);
+        fenetreGeo.show();
+        fenetreGeo.setOnCloseRequest(e -> timer.stop());
+    }
+
+    private double genererPatternAleatoire(Pane zoneJeu, List<Shape> obstacles) {
+        int choix = (int) (Math.random() * 10); 
+        double startX = 850; 
+        double longueur = 0;
+
+        switch (choix) {
+            case 0: 
+                creerPic(startX, 300, 1.0, zoneJeu, obstacles);
+                longueur = 30;
+                break;
+            case 1: 
+                creerPic(startX, 300, 1.0, zoneJeu, obstacles);
+                creerPic(startX + 30, 300, 1.0, zoneJeu, obstacles);
+                longueur = 60;
+                break;
+            case 2: 
+                creerPic(startX, 300, 1.0, zoneJeu, obstacles);
+                creerPic(startX + 30, 300, 1.0, zoneJeu, obstacles);
+                creerPic(startX + 60, 300, 1.0, zoneJeu, obstacles);
+                longueur = 90;
+                break;
+            case 3: 
+                creerPic(startX, 300, 1.0, zoneJeu, obstacles);
+                creerPic(startX + 140, 300, 1.0, zoneJeu, obstacles);
+                longueur = 170;
+                break;
+            case 4: 
+                creerMur(startX, 270, 140, 30, zoneJeu, obstacles);
+                longueur = 140;
+                break;
+            case 5: 
+                creerMur(startX, 270, 60, 30, zoneJeu, obstacles);
+                creerMur(startX + 180, 270, 60, 30, zoneJeu, obstacles);
+                longueur = 240;
+                break;
+            case 6: 
+                creerMur(startX, 100, 150, 100, zoneJeu, obstacles);
+                longueur = 150;
+                break;
+            case 7: 
+                creerMur(startX, 100, 100, 100, zoneJeu, obstacles);
+                creerPic(startX + 150, 300, 1.0, zoneJeu, obstacles);
+                longueur = 180;
+                break;
+            case 8: 
+                creerPic(startX, 300, 1.0, zoneJeu, obstacles);
+                creerPic(startX + 180, 300, 1.0, zoneJeu, obstacles);
+                creerPic(startX + 360, 300, 1.0, zoneJeu, obstacles);
+                creerMur(startX + 540, 270, 120, 30, zoneJeu, obstacles);
+                longueur = 660;
+                break;
+            case 9: 
+                creerMur(startX, 270, 80, 30, zoneJeu, obstacles);
+                creerMur(startX + 200, 100, 100, 100, zoneJeu, obstacles);
+                creerMur(startX + 400, 270, 80, 30, zoneJeu, obstacles);
+                longueur = 480;
+                break;
+        }
+        return longueur;
+    }
+
+    private void creerPic(double x, double y, double echelle, Pane zoneJeu, List<Shape> obstacles) {
+        javafx.scene.shape.Polygon pic = new javafx.scene.shape.Polygon();
+        pic.getPoints().addAll(new Double[]{
+            0.0, 0.0,
+            15.0 * echelle, -30.0 * echelle,
+            30.0 * echelle, 0.0
+        });
+        pic.setFill(Color.web("#ff4b69")); 
+        pic.setLayoutX(x);
+        pic.setLayoutY(y); 
+        
+        zoneJeu.getChildren().add(pic);
+        obstacles.add(pic);
+    }
+
+    private void creerMur(double x, double y, double largeur, double hauteur, Pane zoneJeu, List<Shape> obstacles) {
+        Rectangle mur = new Rectangle(largeur, hauteur, Color.web("#ff4b69"));
+        mur.setLayoutX(x);
+        mur.setLayoutY(y);
+        
+        zoneJeu.getChildren().add(mur);
+        obstacles.add(mur);
     }
 }
