@@ -68,9 +68,19 @@ public class ConnexionControleur {
     private void initialize() {
         labelMessage.setText("");
         btnConnexion.setDefaultButton(true);
-        champLogin.setOnKeyReleased(event -> verifierMajuscule());
-        champMotDePasse.setOnKeyReleased(event -> verifierMajuscule());
-        champBaseDeDonnees.setOnKeyReleased(event -> verifierMajuscule());
+        
+        champLogin.setOnKeyReleased(event -> {
+            verifierMajuscule();
+            verifierEasterEggs();
+        });
+        champMotDePasse.setOnKeyReleased(event -> {
+            verifierMajuscule();
+            verifierEasterEggs();
+        });
+        champBaseDeDonnees.setOnKeyReleased(event -> {
+            verifierMajuscule();
+            verifierEasterEggs();
+        });
 
         try {
             java.util.Properties props = new java.util.Properties();
@@ -89,6 +99,208 @@ public class ConnexionControleur {
             }
         } catch (Exception e) {
         }
+    }
+
+    private void verifierEasterEggs() {
+        String login = champLogin.getText().toLowerCase();
+        String mdp = champMotDePasse.getText().toLowerCase();
+        String bd = champBaseDeDonnees.getText().toLowerCase();
+
+        boolean modifie = false;
+
+        if (bd.equals("rgb")) {
+            if (btnConnexion.getScene() != null && btnConnexion.getScene().getRoot().getEffect() == null) {
+                javafx.scene.effect.ColorAdjust colorAdjust = new javafx.scene.effect.ColorAdjust();
+                btnConnexion.getScene().getRoot().setEffect(colorAdjust);
+                
+                javafx.animation.Timeline rgb = new javafx.animation.Timeline(
+                    new javafx.animation.KeyFrame(javafx.util.Duration.millis(50), e -> {
+                        double hue = colorAdjust.getHue() + 0.05;
+                        if (hue > 1.0) hue = -1.0;
+                        colorAdjust.setHue(hue);
+                    })
+                );
+                rgb.setCycleCount(javafx.animation.Animation.INDEFINITE);
+                rgb.play();
+            }
+        }
+
+        if (login.equals("isagi")) {
+            btnConnexion.setText("Tirer le penalty !");
+            btnConnexion.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 0 10 0;");
+            btnConnexion.setOnAction(e -> lancerPenaltyIsagi());
+            modifie = true;
+        }
+
+        if (mdp.equals("esquive")) {
+            btnConnexion.setOnMouseEntered(e -> {
+                btnConnexion.setTranslateX((Math.random() - 0.5) * 400);
+                btnConnexion.setTranslateY((Math.random() - 0.5) * 400);
+            });
+            modifie = true;
+        } else {
+            btnConnexion.setOnMouseEntered(null);
+            btnConnexion.setTranslateX(0);
+            btnConnexion.setTranslateY(0);
+        }
+
+        if (login.equals("nerfthis")) {
+            btnConnexion.setStyle("-fx-background-color: #ff4be6; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 0 10 0;");
+            btnConnexion.setOnAction(e -> {
+                Stage stage = (Stage) btnConnexion.getScene().getWindow();
+                javafx.animation.Timeline shake = new javafx.animation.Timeline(
+                    new javafx.animation.KeyFrame(javafx.util.Duration.millis(50), ev -> stage.setX(stage.getX() + 20)),
+                    new javafx.animation.KeyFrame(javafx.util.Duration.millis(100), ev -> stage.setX(stage.getX() - 40)),
+                    new javafx.animation.KeyFrame(javafx.util.Duration.millis(150), ev -> stage.setX(stage.getX() + 20))
+                );
+                shake.setCycleCount(15);
+                shake.setOnFinished(ev -> javafx.application.Platform.exit());
+                shake.play();
+            });
+            modifie = true;
+        }
+
+        if (mdp.equals("chute")) {
+            if (btnConnexion.getScene() != null && btnConnexion.getScene().getRoot().getUserData() == null) {
+                btnConnexion.getScene().getRoot().setUserData("actif");
+                
+                java.util.List<javafx.scene.Node> pieces = new java.util.ArrayList<>();
+                recupPieces(btnConnexion.getScene().getRoot(), pieces);
+                
+                java.util.Map<javafx.scene.Node, double[]> physique = new java.util.HashMap<>();
+                for (javafx.scene.Node n : pieces) {
+                    physique.put(n, new double[]{
+                        (Math.random() - 0.5) * 15,
+                        -(Math.random() * 15 + 5),
+                        (Math.random() - 0.5) * 20
+                    });
+                }
+                
+                javafx.animation.AnimationTimer chute = new javafx.animation.AnimationTimer() {
+                    @Override
+                    public void handle(long now) {
+                        for (javafx.scene.Node n : pieces) {
+                            double[] p = physique.get(n);
+                            p[1] += 0.8;
+                            n.setTranslateX(n.getTranslateX() + p[0]);
+                            n.setTranslateY(n.getTranslateY() + p[1]);
+                            n.setRotate(n.getRotate() + p[2]);
+                        }
+                    }
+                };
+                chute.start();
+            }
+            modifie = true;
+        }
+
+        if (!modifie) {
+            btnConnexion.setText("Se connecter");
+            btnConnexion.setStyle("-fx-background-color: #FF4D6A; -fx-text-fill: white; -fx-font-size: 13; -fx-font-weight: bold; -fx-background-radius: 5; -fx-padding: 10 0 10 0;");
+            btnConnexion.setOnAction(this::handleConnexion);
+        }
+    }
+
+    private void recupPieces(javafx.scene.Node noeud, java.util.List<javafx.scene.Node> liste) {
+        if (noeud instanceof javafx.scene.control.Control || noeud instanceof javafx.scene.shape.Shape) {
+            liste.add(noeud);
+        } else if (noeud instanceof javafx.scene.layout.Pane) {
+            for (javafx.scene.Node enfant : ((javafx.scene.layout.Pane) noeud).getChildren()) {
+                recupPieces(enfant, liste);
+            }
+        }
+    }
+
+    private void lancerPenaltyIsagi() {
+        Stage fenetrePenalty = new Stage();
+        fenetrePenalty.setTitle("Blue Lock - Penalty");
+
+        Pane zoneJeu = new Pane();
+        zoneJeu.setPrefSize(600, 400);
+        zoneJeu.setStyle("-fx-background-color: #2e7d32;");
+
+        javafx.scene.shape.Rectangle cage = new javafx.scene.shape.Rectangle(400, 200, Color.TRANSPARENT);
+        cage.setStroke(Color.WHITE);
+        cage.setStrokeWidth(8);
+        cage.setX(100);
+        cage.setY(50);
+
+        javafx.scene.shape.Rectangle gardien = new javafx.scene.shape.Rectangle(40, 80, Color.web("#1565c0"));
+        gardien.setX(280);
+        gardien.setY(170);
+
+        Label ballon = new Label("⚽");
+        ballon.setStyle("-fx-font-size: 40;");
+        ballon.setLayoutX(270);
+        ballon.setLayoutY(320);
+
+        Label message = new Label("Choisis ta zone de tir !");
+        message.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: white;");
+        message.setLayoutX(165);
+        message.setLayoutY(10);
+
+        zoneJeu.getChildren().addAll(cage, gardien, ballon, message);
+
+        double[][] cibles = {
+            {150, 80}, {280, 80}, {410, 80},
+            {150, 180}, {280, 180}, {410, 180}
+        };
+
+        List<Button> boutonsZone = new ArrayList<>();
+
+        for (int i = 0; i < 6; i++) {
+            Button btnZone = new Button();
+            btnZone.setPrefSize(130, 95);
+            btnZone.setLayoutX(105 + (i % 3) * 132);
+            btnZone.setLayoutY(55 + (i / 3) * 98);
+            btnZone.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+            
+            final int index = i;
+            btnZone.setOnAction(e -> {
+                for (Button b : boutonsZone) {
+                    b.setDisable(true);
+                }
+                
+                message.setText("TIR !");
+                
+                int choixGardien = (int) (Math.random() * 6);
+                
+                javafx.animation.TranslateTransition tir = new javafx.animation.TranslateTransition(javafx.util.Duration.seconds(0.4), ballon);
+                tir.setToX(cibles[index][0] - 270);
+                tir.setToY(cibles[index][1] - 320);
+                
+                javafx.animation.TranslateTransition plongeon = new javafx.animation.TranslateTransition(javafx.util.Duration.seconds(0.4), gardien);
+                plongeon.setToX(cibles[choixGardien][0] - 280);
+                plongeon.setToY(cibles[choixGardien][1] - 170);
+                
+                tir.setOnFinished(ev -> {
+                    if (index == choixGardien) {
+                        message.setText("ARRÊT DU GARDIEN !");
+                        message.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #FF4D6A;");
+                    } else {
+                        message.setText("BUUUUUUT ! ÉGOÏSTE !");
+                        message.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: gold;");
+                    }
+                });
+                
+                plongeon.play();
+                tir.play();
+            });
+            boutonsZone.add(btnZone);
+            zoneJeu.getChildren().add(btnZone);
+        }
+
+        Button btnRejouer = new Button("Rejouer");
+        btnRejouer.setLayoutX(260);
+        btnRejouer.setLayoutY(360);
+        btnRejouer.setOnAction(e -> {
+            fenetrePenalty.close();
+            lancerPenaltyIsagi();
+        });
+        zoneJeu.getChildren().add(btnRejouer);
+
+        Scene scene = new Scene(zoneJeu);
+        fenetrePenalty.setScene(scene);
+        fenetrePenalty.show();
     }
 
     public void setVue(Vue vue) {
