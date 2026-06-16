@@ -3,6 +3,7 @@ package fr.univ_orleans.iut45.vue;
 import fr.univ_orleans.iut45.controleur.AdministrateurControleur;
 import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 import fr.univ_orleans.iut45.controleur.ConnexionControleur;
+import fr.univ_orleans.iut45.controleur.DetailBoiteControleur;
 import fr.univ_orleans.iut45.controleur.MainMenuControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
@@ -191,6 +192,19 @@ public void start(Stage primaryStage) {
         }
     }
 
+    public void modeDetail() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/DetailBoite.fxml"));
+            VBox contenu = loader.load();
+    
+            DetailBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+    
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 

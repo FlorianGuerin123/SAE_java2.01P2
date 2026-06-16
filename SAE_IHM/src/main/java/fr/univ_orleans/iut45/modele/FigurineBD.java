@@ -10,7 +10,7 @@ import java.util.List;
 public class FigurineBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	FigurineBD(ConnexionMySQL laConnexion){
+	public FigurineBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
     }
 
@@ -30,7 +30,7 @@ public class FigurineBD {
         throw new SQLException("Aucune figurine trouvée avec l'ID : " + idFigurine);
     }
 
-    List<Figurine> getFigurinesDansBoite(String numBoite) throws SQLException {
+    public List<Figurine> getFigurinesDansBoite(String numBoite) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement(
             "select idfig, nomfig, nbparties from BOITE natural join CONTENU natural join CONTENIRF natural join FIGURINE where numboite = ?"
         );

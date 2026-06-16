@@ -1,4 +1,6 @@
+
 package fr.univ_orleans.iut45.controleur;
+
 
 import fr.univ_orleans.iut45.modele.BoiteBD;
 import fr.univ_orleans.iut45.modele.BoiteSimple;
@@ -10,28 +12,34 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import java.util.List;
 import javafx.scene.control.Separator;
+
+
+import java.util.List;
 
 public class RechercherBoiteParNomControleur {
 
-    @FXML private TextField champNom;
-    @FXML private Label labelMessage;
+    @FXML private TextField  champNom;
+    @FXML private Label      labelMessage;
     @FXML private ScrollPane scrollResultats;
-    @FXML private VBox listeResultats;
+    @FXML private GridPane   grilleResultats;
 
     private Vue vue;
 
-    public void setVue(Vue vue){
+    public void setVue(Vue vue) {
         this.vue = vue;
     }
 
     @FXML
-    private void handleRechercher(ActionEvent event){
+    private void handleRechercher(ActionEvent event) {
         String nom = champNom.getText().trim();
 
         if (nom.isEmpty()) {
@@ -44,7 +52,7 @@ public class RechercherBoiteParNomControleur {
             BoiteBD boiteBD = new BoiteBD(vue.getConnexionMySQL());
             List<BoiteSimple> boites = boiteBD.getBoitesParNom(nom);
 
-            listeResultats.getChildren().clear();
+            grilleResultats.getChildren().clear();
 
             if (boites == null || boites.isEmpty()) {
                 afficherErreur("Aucune boîte trouvée avec le nom « " + nom + " ».");
@@ -52,12 +60,15 @@ public class RechercherBoiteParNomControleur {
                 return;
             }
 
-            
             labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
             labelMessage.setText(boites.size() + " boîte(s) trouvée(s) pour « " + nom + " »");
 
-            for (BoiteSimple boite : boites) {
-                listeResultats.getChildren().add(creerCarte(boite));
+            
+            for (int i = 0; i < boites.size(); i++) {
+                VBox carte = creerCarte(boites.get(i));
+                int colone = i % 2;
+                int ligne = i / 2;
+                grilleResultats.add(carte, colone, ligne);
             }
 
             scrollResultats.setVisible(true);
@@ -70,11 +81,11 @@ public class RechercherBoiteParNomControleur {
         }
     }
 
-    
     private VBox creerCarte(BoiteSimple boite){
         VBox carte = new VBox();
         carte.setSpacing(0);
-        carte.setMaxWidth(640);
+        
+        carte.setMaxWidth(Double.MAX_VALUE);
         carte.setStyle(
             "-fx-background-color: #F0F4F8; -fx-border-color: #AAAACC; " +
             "-fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;"
@@ -89,17 +100,13 @@ public class RechercherBoiteParNomControleur {
         );
 
         Label labelNum = new Label("N° " + boite.getNumBoite());
-        labelNum.setStyle(
-            "-fx-text-fill: #FF4D6A; -fx-font-size: 13; -fx-font-weight: bold;"
-        );
+        labelNum.setStyle("-fx-text-fill: #FF4D6A; -fx-font-size: 13; -fx-font-weight: bold;");
 
         Label labelNom = new Label(boite.getNomBoite());
-        labelNom.setStyle(
-            "-fx-text-fill: #1E1E2E; -fx-font-size: 15; -fx-font-weight: bold;"
-        );
+        labelNom.setStyle("-fx-text-fill: #1E1E2E; -fx-font-size: 15; -fx-font-weight: bold;");
 
         Region spacer = new Region();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         Label labelStatut = new Label();
         if (boite.estComplete()) {
@@ -117,16 +124,15 @@ public class RechercherBoiteParNomControleur {
                 "-fx-background-radius: 4; -fx-padding: 3 10 3 10;"
             );
         }
-
         entete.getChildren().addAll(labelNum, labelNom, spacer, labelStatut);
 
-
+        
         HBox corps = new HBox(0);
         corps.setStyle("-fx-padding: 18 18 18 18;");
 
         VBox colAnnee = new VBox(4);
         colAnnee.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colAnnee, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(colAnnee, Priority.ALWAYS);
         Label titreAnnee = new Label("Année de sortie");
         titreAnnee.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
         Label valAnnee = new Label(String.valueOf(boite.getAnnee()));
@@ -138,7 +144,7 @@ public class RechercherBoiteParNomControleur {
 
         VBox colPieces = new VBox(4);
         colPieces.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colPieces, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(colPieces, Priority.ALWAYS);
         Label titrePieces = new Label("Nombre de pièces");
         titrePieces.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
         Label valPieces = new Label(String.valueOf(boite.getNbPieces()));
@@ -150,18 +156,16 @@ public class RechercherBoiteParNomControleur {
 
         VBox colTheme = new VBox(4);
         colTheme.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colTheme, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(colTheme, Priority.ALWAYS);
         Label titreTheme = new Label("Thème");
         titreTheme.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
-        Label valTheme = new Label(
-            boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—"
-        );
+        Label valTheme = new Label(boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—");
         valTheme.setStyle("-fx-text-fill: #333344; -fx-font-size: 15; -fx-font-weight: bold;");
         colTheme.getChildren().addAll(titreTheme, valTheme);
 
         corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colTheme);
 
-        
+        // --- Pied de carte ---
         Separator sepBas = new Separator();
         sepBas.setStyle("-fx-background-color: #AAAACC;");
 
@@ -181,7 +185,6 @@ public class RechercherBoiteParNomControleur {
             // TODO : vue.modeDetail(numBoite);
             System.out.println("Voir détail de : " + numBoite);
         });
-
         piedCarte.getChildren().add(btnDetail);
 
         carte.getChildren().addAll(entete, corps, sepBas, piedCarte);
@@ -191,7 +194,7 @@ public class RechercherBoiteParNomControleur {
     private void cacherResultats() {
         scrollResultats.setVisible(false);
         scrollResultats.setManaged(false);
-        listeResultats.getChildren().clear();
+        grilleResultats.getChildren().clear();
     }
 
     private void afficherErreur(String msg) {
