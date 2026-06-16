@@ -8,7 +8,9 @@ import fr.univ_orleans.iut45.controleur.MainMenuControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterPieceControleur;
+import fr.univ_orleans.iut45.controleur.CollectionControleur;
 import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
+import fr.univ_orleans.iut45.modele.CollectionPersonnelle;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
  
@@ -29,6 +31,7 @@ public class Vue extends Application {
     private BorderPane panelCentral;
     private ConnexionMySQL connexionMySQL;
     private Label labelSection;
+    private CollectionPersonnelle collection;
 
  
     public static void main(String[] args) {
@@ -39,7 +42,7 @@ public void start(Stage primaryStage) {
     try {
         connexionMySQL = new ConnexionMySQL();
         panelCentral = new BorderPane();
-
+        
         // --- BARRE TOP GLOBALE ---
         HBox topBar = new HBox(12);
         topBar.setStyle("-fx-background-color: #1E1E2E; -fx-padding: 6 12 6 12;");
@@ -95,6 +98,8 @@ public void start(Stage primaryStage) {
             controleur.setVue(this);
             if (connexionMySQL.isConnecte()) {
                 panelCentral.setCenter(root);
+                this.collection = new CollectionPersonnelle(connexionMySQL);
+                collection.charger();
             }
             
         } catch (Exception e) {
@@ -249,6 +254,26 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
+
+    public void modeCollection() {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/collection.fxml"));
+            VBox contenu = loader.load();
+            
+            CollectionControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public CollectionPersonnelle getCollectionPersonnelle(){
+        return this.collection;
+    }
+
 
 
 }
