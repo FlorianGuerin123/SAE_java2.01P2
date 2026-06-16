@@ -134,7 +134,7 @@ public class CollectionneurControleur {
     private void handleBoitesPiece(ActionEvent event) {
         setActif(btnBoitesPiece);
         vue.setTitrePage("Espace Collectionneur  |  Boîtes contenant une pièce");
-        // TODO : vue.modeBoitesContenantPiece();
+        vue.modeBoitesContenantPiece();
     }
 
     @FXML
