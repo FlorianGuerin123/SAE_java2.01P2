@@ -193,7 +193,7 @@ public class ConnexionControleur {
         Button btnMorpion = new Button("2. Morpion (Tic-Tac-Toe)");
         Button btnJusteNombre = new Button("3. Le Juste Nombre de pièces");
         Button btnBriqueDoree = new Button("4. Trouver la Brique Dorée");
-        Button btnGeoDash = new Button("5. Geo Dash (Infini)");        
+        Button btnGeoDash = new Button("5. Geo Dash (Infini)");       
 
 
         String styleBouton = "-fx-background-color: #FF4D6A; " + 
@@ -204,7 +204,7 @@ public class ConnexionControleur {
                              "-fx-cursor: hand; " +               
                              "-fx-padding: 10 0 10 0;";           
 
-        Button[] lesBoutons = {btnPFC, btnMorpion, btnJusteNombre, btnBriqueDoree};
+        Button[] lesBoutons = {btnPFC, btnMorpion, btnJusteNombre, btnBriqueDoree,btnGeoDash};
         for (Button btn : lesBoutons) {
             btn.setStyle(styleBouton);
             btn.setPrefWidth(220);
