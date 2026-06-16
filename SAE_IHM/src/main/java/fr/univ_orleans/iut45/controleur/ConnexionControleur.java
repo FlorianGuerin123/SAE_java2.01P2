@@ -1130,7 +1130,7 @@ public class ConnexionControleur {
         fenetreBench.setTitle("Human Benchmark");
 
         VBox racine = new VBox(15);
-        racine.setPrefSize(400, 500);
+        racine.setPrefSize(400, 550);
         racine.setStyle("-fx-background-color: #2b2b2b; -fx-alignment: center;");
 
         Label titre = new Label("HUMAN BENCHMARK");
@@ -1143,20 +1143,23 @@ public class ConnexionControleur {
         Button btnChimp = new Button("Chimp Test");
         Button btnNumber = new Button("Number Memory");
         Button btnSequence = new Button("Sequence Memory");
+        Button btnDropper = new Button("Dropper 2D");
 
         btnReaction.setStyle(styleBtn);
         btnAim.setStyle(styleBtn);
         btnChimp.setStyle(styleBtn);
         btnNumber.setStyle(styleBtn);
         btnSequence.setStyle(styleBtn);
+        btnDropper.setStyle(styleBtn);
 
         btnReaction.setOnAction(e -> jouerReactionTime());
         btnAim.setOnAction(e -> jouerAimTrainer());
         btnChimp.setOnAction(e -> jouerChimpTest());
         btnNumber.setOnAction(e -> jouerNumberMemory());
         btnSequence.setOnAction(e -> jouerSequenceMemory());
+        btnDropper.setOnAction(e -> lancerDropper());
 
-        racine.getChildren().addAll(titre, btnReaction, btnAim, btnChimp, btnNumber, btnSequence);
+        racine.getChildren().addAll(titre, btnReaction, btnAim, btnChimp, btnNumber, btnSequence, btnDropper);
         fenetreBench.setScene(new Scene(racine));
         fenetreBench.show();
     }
@@ -1455,5 +1458,122 @@ public class ConnexionControleur {
             st.getChildren().addAll(p1, p2);
         }
         st.play();
+    }
+
+    @FXML
+    private void lancerDropper() {
+        Stage fenetre = new Stage();
+        fenetre.setTitle("Dropper 2D");
+        
+        Pane zoneJeu = new Pane();
+        zoneJeu.setPrefSize(400, 600);
+        zoneJeu.setStyle("-fx-background-color: #1a1a2e;");
+
+        Rectangle joueur = new Rectangle(20, 20, javafx.scene.paint.Color.web("#e94560"));
+        joueur.setX(190);
+        joueur.setY(100);
+
+        Label scoreLabel = new Label("Score: 0");
+        scoreLabel.setStyle("-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;");
+        scoreLabel.setLayoutX(10);
+        scoreLabel.setLayoutY(10);
+
+        zoneJeu.getChildren().addAll(joueur, scoreLabel);
+        Scene scene = new Scene(zoneJeu);
+
+        final double[] vitesseX = {0};
+        final double[] vitesseChute = {5.0};
+        final int[] score = {0};
+        final boolean[] jeuFini = {false};
+        
+        java.util.List<Rectangle> obstacles = new java.util.ArrayList<>();
+        final double[] distanceProchainObstacle = {0};
+
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.LEFT || e.getCode() == javafx.scene.input.KeyCode.Q) {
+                vitesseX[0] = -6;
+            }
+            if (e.getCode() == javafx.scene.input.KeyCode.RIGHT || e.getCode() == javafx.scene.input.KeyCode.D) {
+                vitesseX[0] = 6;
+            }
+        });
+
+        scene.setOnKeyReleased(e -> {
+            if (e.getCode() == javafx.scene.input.KeyCode.LEFT || e.getCode() == javafx.scene.input.KeyCode.Q ||
+                e.getCode() == javafx.scene.input.KeyCode.RIGHT || e.getCode() == javafx.scene.input.KeyCode.D) {
+                vitesseX[0] = 0;
+            }
+        });
+
+        javafx.animation.AnimationTimer timer = new javafx.animation.AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (jeuFini[0]) return;
+
+                joueur.setX(joueur.getX() + vitesseX[0]);
+
+                if (joueur.getX() < 0) joueur.setX(0);
+                if (joueur.getX() > 380) joueur.setX(380);
+
+                distanceProchainObstacle[0] -= vitesseChute[0];
+                if (distanceProchainObstacle[0] <= 0) {
+                    genererLigneDropper(zoneJeu, obstacles);
+                    distanceProchainObstacle[0] = 180;
+                    score[0]++;
+                    scoreLabel.setText("Score: " + score[0]);
+                    
+                    if (score[0] % 10 == 0) {
+                        vitesseChute[0] += 0.5;
+                    }
+                }
+
+                java.util.List<Rectangle> aSupprimer = new java.util.ArrayList<>();
+                for (Rectangle obs : obstacles) {
+                    obs.setY(obs.getY() - vitesseChute[0]);
+
+                    if (obs.getY() < -50) {
+                        aSupprimer.add(obs);
+                    }
+
+                    if (joueur.getBoundsInParent().intersects(obs.getBoundsInParent())) {
+                        jeuFini[0] = true;
+                        Label gameOver = new Label("SPLAT !\nScore: " + score[0]);
+                        gameOver.setStyle("-fx-text-fill: #e94560; -fx-font-size: 40; -fx-font-weight: bold; -fx-text-alignment: center;");
+                        gameOver.setLayoutX(110);
+                        gameOver.setLayoutY(250);
+                        zoneJeu.getChildren().add(gameOver);
+                    }
+                }
+
+                zoneJeu.getChildren().removeAll(aSupprimer);
+                obstacles.removeAll(aSupprimer);
+            }
+        };
+
+        timer.start();
+        fenetre.setScene(scene);
+        fenetre.show();
+        fenetre.setOnCloseRequest(e -> timer.stop());
+    }
+
+    private void genererLigneDropper(Pane zoneJeu, java.util.List<Rectangle> obstacles) {
+        int trouX = (int)(Math.random() * 320); 
+        int largeurTrou = 80;
+
+        if (trouX > 0) {
+            Rectangle murGauche = new Rectangle(trouX, 30, javafx.scene.paint.Color.web("#0f3460"));
+            murGauche.setX(0);
+            murGauche.setY(600);
+            zoneJeu.getChildren().add(murGauche);
+            obstacles.add(murGauche);
+        }
+
+        if (trouX + largeurTrou < 400) {
+            Rectangle murDroite = new Rectangle(400 - (trouX + largeurTrou), 30, javafx.scene.paint.Color.web("#0f3460"));
+            murDroite.setX(trouX + largeurTrou);
+            murDroite.setY(600);
+            zoneJeu.getChildren().add(murDroite);
+            obstacles.add(murDroite);
+        }
     }
 }
