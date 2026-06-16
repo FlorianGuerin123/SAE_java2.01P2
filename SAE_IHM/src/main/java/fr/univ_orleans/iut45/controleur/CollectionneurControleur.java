@@ -112,8 +112,9 @@ public class CollectionneurControleur {
     private void handleRechercherNom(ActionEvent event) {
         setActif(btnRechercherNom);
         vue.setTitrePage("Espace Collectionneur  |  Rechercher par nom");
-        // TODO : vue.modeRechercherBoiteParNom();
+        vue.modeRechercherBoiteParNom();   
     }
+
 
     @FXML
     private void handleDetail(ActionEvent event) {
