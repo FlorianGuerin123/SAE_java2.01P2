@@ -29,7 +29,7 @@ public class BoiteBD {
         return false; 
     }
 
-    void ajouterBoite(String num, String nomboite, int anneeInt, int nbpiecesInt, int idTheme) throws SQLException{
+    public void ajouterBoite(String num, String nomboite, int anneeInt, int nbpiecesInt, int idTheme) throws SQLException{
         st = laConnexion.createStatement();
         String ps = "INSERT INTO BOITE (numboite, nomboite, annee, nbpieces, idTheme) VALUES ("+num+", '"+nomboite+"', "+anneeInt+", "+nbpiecesInt+", "+idTheme+")";
         try{
@@ -41,11 +41,11 @@ public class BoiteBD {
             String message = e.getMessage().toLowerCase();
 
             if (message.contains("duplicate entry")) {
-                System.err.println("Erreur : le numéro de boîte " + num + " existe déjà.");
+                throw new SQLException("Erreur : le numéro de boîte " + num + " existe déjà.");
             } else if (message.contains("foreign key constraint")) {
-                System.err.println("Erreur : l'idThème " + idTheme + " n'existe pas dans la base.");
+                throw new SQLException("Erreur : l'idThème " + idTheme + " n'existe pas dans la base.");
             } else {
-                System.err.println("Violation de contrainte : " + e.getMessage());
+                throw new SQLException("Violation de contrainte : " + e.getMessage());
             }
         }
     }

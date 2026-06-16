@@ -5,6 +5,7 @@ import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 import fr.univ_orleans.iut45.controleur.ConnexionControleur;
 import fr.univ_orleans.iut45.controleur.MainMenuControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
+import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
  
 import javafx.fxml.FXMLLoader;
@@ -121,7 +122,7 @@ public void start(Stage primaryStage) {
             controleur.setVue(this);
 
             this.panelCentral.setLeft(vb);
-            this.modeRechercherBoite(); // ← charge le center par défaut
+            this.modeRechercherBoite(); 
             this.setTitrePage("Espace Collectionneur  |  Rechercher une boîte");
         } catch (Exception e) {
             e.printStackTrace();
@@ -137,6 +138,7 @@ public void start(Stage primaryStage) {
 
             this.panelCentral.setCenter(null); 
             panelCentral.setLeft(root);
+            this.modeAjouterBoite();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -156,6 +158,19 @@ public void start(Stage primaryStage) {
             RechercherBoiteControleur ctrl = loader.getController();
             ctrl.setVue(this);
 
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void modeAjouterBoite() {
+        setTitrePage("Administrateur  |  Ajouter une boîte");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/AjouterBoite.fxml"));
+            VBox contenu = loader.load();
+            AjouterBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
             this.panelCentral.setCenter(contenu);
         } catch (Exception e) {
             e.printStackTrace();
