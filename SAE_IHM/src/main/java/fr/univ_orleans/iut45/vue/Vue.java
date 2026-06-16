@@ -8,8 +8,8 @@ import fr.univ_orleans.iut45.controleur.MainMenuControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterPieceControleur;
+import fr.univ_orleans.iut45.controleur.CollectionControleur;
 import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
-import fr.univ_orleans.iut45.controleur.SupprimerPieceControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
 import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
@@ -31,6 +31,7 @@ public class Vue extends Application {
     private BorderPane panelCentral;
     private ConnexionMySQL connexionMySQL;
     private Label labelSection;
+    private CollectionPersonnelle collection;
 
  
     public static void main(String[] args) {
@@ -41,7 +42,7 @@ public void start(Stage primaryStage) {
     try {
         connexionMySQL = new ConnexionMySQL();
         panelCentral = new BorderPane();
-
+        
         // --- BARRE TOP GLOBALE ---
         HBox topBar = new HBox(12);
         topBar.setStyle("-fx-background-color: #1E1E2E; -fx-padding: 6 12 6 12;");
@@ -97,6 +98,8 @@ public void start(Stage primaryStage) {
             controleur.setVue(this);
             if (connexionMySQL.isConnecte()) {
                 panelCentral.setCenter(root);
+                this.collection = new CollectionPersonnelle(connexionMySQL);
+                collection.charger();
             }
             
         } catch (Exception e) {
@@ -252,54 +255,7 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
-    public void modeStatistiquesBoite() {
-        setTitrePage("Espace Collectionneur  |  Statistiques d'une boîte");
-        try {
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/StatistiquesBoite.fxml"));
-            javafx.scene.layout.VBox contenu = loader.load();
-            
-            fr.univ_orleans.iut45.controleur.StatistiquesBoiteControleur ctrl = loader.getController();
-            ctrl.setVue(this);
-            
-            this.panelCentral.setCenter(contenu);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-<<<<<<< HEAD
-     
-    public void modeBoitesContenantPiece() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/BoitesContenantPiece.fxml"));
-            VBox contenu = loader.load();
- 
-            BoitesContenantPieceControleur ctrl = loader.getController();
-            ctrl.setVue(this);
-            this.panelCentral.setCenter(contenu);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-=======
-    public void modeSupprimerPiece() {
-        setTitrePage("Administrateur  |  Supprimer une pièce");
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/SupprimerPiece.fxml"));
-            VBox contenu = loader.load();
-            SupprimerPieceControleur ctrl = loader.getController();
-            ctrl.setVue(this);
->>>>>>> florian
-            this.panelCentral.setCenter(contenu);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-<<<<<<< HEAD
-=======
-
->>>>>>> florian
 
 }
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="24" style="-fx-background-color: #C8D8E8; -fx-padding: 36 48 36 48;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.univ_orleans.iut45.controleur.CollectionControleur">
+
+    <Label style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #1E1E2E;" text="Affichage de la Collection Personnelle " />
+
+    <Separator style="-fx-background-color: #AAAACC;" />
+
+    <HBox alignment="CENTER_LEFT" spacing="12" />
+
+    <Label fx:id="labelMessage" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;" text="" wrapText="true" />
+
+    <ScrollPane fx:id="scrollResultats" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;" visible="false" VBox.vgrow="ALWAYS">
+        <GridPane fx:id="grilleResultats" hgap="20" vgap="20">
+            <padding>
+                <Insets bottom="4" left="4" right="4" top="4" />
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50.0" />
+                <ColumnConstraints percentWidth="50.0" />
+            </columnConstraints>
+        </GridPane>
+    </ScrollPane>
+
+</VBox>

@@ -141,7 +141,7 @@ public class CollectionneurControleur {
     private void handleMaCollection(ActionEvent event) {
         setActif(btnMaCollection);
         vue.setTitrePage("Espace Collectionneur  |  Ma collection");
-        // TODO : vue.modeMaCollection();
+        vue.modeCollection();
     }
 
     @FXML
