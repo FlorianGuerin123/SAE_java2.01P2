@@ -103,7 +103,7 @@ public class PieceBD {
      * Retourne le nombre de types de pièces différentes et le total de pièces
      * pour une boîte donnée. Tableau : [nb_pieces_differentes, total_pieces].
     */
-    List<Integer> statsPieces(String numboite) throws SQLException{
+    public List<Integer> statsPieces(String numboite) throws SQLException{
         PreparedStatement ps = laConnexion.prepareStatement("SELECT COUNT(*) AS nb_pieces_differentes, SUM(quantitep) AS total_pieces FROM BOITE natural join CONTENU natural join CONTENIRP natural join PIECE natural join COULEUR WHERE numboite = ?");
         ps.setString(1, numboite);
         ResultSet rs = ps.executeQuery();

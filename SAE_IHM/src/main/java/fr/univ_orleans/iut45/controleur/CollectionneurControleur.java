@@ -1,14 +1,10 @@
 package fr.univ_orleans.iut45.controleur;
 
+import fr.univ_orleans.iut45.vue.Vue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-
-import fr.univ_orleans.iut45.vue.Vue;
 
 public class CollectionneurControleur {
 
@@ -100,7 +96,6 @@ public class CollectionneurControleur {
         this.vue = vue;
     }
 
-
     @FXML
     private void handleRechercher(ActionEvent event) {
         setActif(btnRechercher);
@@ -115,6 +110,11 @@ public class CollectionneurControleur {
         vue.modeRechercherBoiteParNom();   
     }
 
+    @FXML
+    private void handleStatistiques(ActionEvent event) {
+        setActif(btnStatistiques);
+        vue.modeStatistiquesBoite(); 
+    }
 
     @FXML
     private void handleDetail(ActionEvent event) {
@@ -128,13 +128,6 @@ public class CollectionneurControleur {
         setActif(btnTheme);
         vue.setTitrePage("Espace Collectionneur  |  Boîtes par thème");
         // TODO : vue.modeBoitesParTheme();
-    }
-
-    @FXML
-    private void handleStatistiques(ActionEvent event) {
-        setActif(btnStatistiques);
-        vue.setTitrePage("Espace Collectionneur  |  Statistiques d'une boîte");
-        // TODO : vue.modeStatistiquesBoite();
     }
 
     @FXML
@@ -183,6 +176,4 @@ public class CollectionneurControleur {
     private void handleRetour(ActionEvent event) {
         vue.modeAcceuil();
     }
-
-    
 }
