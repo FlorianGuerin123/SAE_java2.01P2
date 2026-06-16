@@ -13,25 +13,6 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #C8D8E8;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.univ_orleans.iut45.controleur.ConnexionControleur">
-
-    <top>
-        <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-background-color: #1E1E2E; -fx-padding: 6 12 6 12;">
-
-            <Label style="-fx-text-fill: #FF4D6A; -fx-font-weight: bold; -fx-font-size: 13;" text="🧱 BRIQU'IUTO">
-            </Label>
-
-            <Label style="-fx-text-fill: #AAAACC; -fx-font-size: 11;" text="Collection Manager">
-            </Label>
-            <Region HBox.hgrow="ALWAYS">
-            <HBox.margin>
-               <Insets />
-            </HBox.margin>
-            <padding>
-               <Insets bottom="15.0" />
-            </padding></Region>
-        </HBox>
-    </top>
-
     <center>
         <StackPane>
 

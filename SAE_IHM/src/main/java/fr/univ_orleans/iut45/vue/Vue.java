@@ -1,5 +1,6 @@
 package fr.univ_orleans.iut45.vue;
  
+import fr.univ_orleans.iut45.controleur.AdministrateurControleur;
 import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 import fr.univ_orleans.iut45.controleur.ConnexionControleur;
 import fr.univ_orleans.iut45.controleur.MainMenuControleur;
@@ -9,59 +10,93 @@ import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.*;
+import javafx.scene.control.Label;
+import javafx.geometry.Pos;
+
  
  
 public class Vue extends Application {
  
     private BorderPane panelCentral;
     private ConnexionMySQL connexionMySQL;
+    private Label labelSection;
+
  
     public static void main(String[] args) {
         launch(args);
     }
- 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            connexionMySQL = new ConnexionMySQL();
- 
-            panelCentral = new BorderPane();
-            this.modeConnexion();
- 
-            Scene scene = new Scene(panelCentral, 800, 600);
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("Application JavaFX");
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+ @Override
+public void start(Stage primaryStage) {
+    try {
+        connexionMySQL = new ConnexionMySQL();
+        panelCentral = new BorderPane();
+
+        // --- BARRE TOP GLOBALE ---
+        HBox topBar = new HBox(12);
+        topBar.setStyle("-fx-background-color: #1E1E2E; -fx-padding: 6 12 6 12;");
+        topBar.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        Button btnAccueil = new Button("🧱 BRIQU'IUTO");
+        btnAccueil.setStyle(
+            "-fx-background-color: transparent; -fx-text-fill: #FF4D6A; " +
+            "-fx-font-weight: bold; -fx-font-size: 13; -fx-cursor: hand; " +
+            "-fx-border-width: 0; -fx-padding: 0;"
+        );
+        btnAccueil.setOnAction(e -> this.modeAcceuil());
+
+        Label labelAppli = new Label("Collection Manager");
+        labelAppli.setStyle("-fx-text-fill: #AAAACC; -fx-font-size: 11;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+
+        labelSection = new Label("");
+        labelSection.setStyle(
+            "-fx-text-fill: #B0C8E0; -fx-font-size: 12; " +
+            "-fx-font-weight: bold; -fx-padding: 0 8 0 0;"
+        );
+
+        topBar.getChildren().addAll(btnAccueil, labelAppli, spacer, labelSection);
+        panelCentral.setTop(topBar);
+        
+
+        this.modeConnexion();
+
+        Scene scene = new Scene(panelCentral, 1000, 650);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("BRIQU'IUTO");
+        primaryStage.show();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
- 
-    /**
-     * Permet aux contrôleurs (Connexion, MainMenu, ...) d'accéder
-     * à la connexion à la base de données.
-     */
+}
+
     public ConnexionMySQL getConnexionMySQL() {
         return connexionMySQL;
     }
  
     public void modeAcceuil() {
+        setTitrePage("");
         this.panelCentral.setLeft(null);
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/Menu.fxml"));
             BorderPane root = loader.load();
- 
+            
             MainMenuControleur controleur = loader.getController();
             controleur.setVue(this);
- 
-            panelCentral.setCenter(root);
+            if (connexionMySQL.isConnecte()) {
+                panelCentral.setCenter(root);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
  
     public void modeConnexion() {
+        setTitrePage(""); 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/Connexion.fxml"));
             BorderPane root = loader.load();
@@ -76,19 +111,42 @@ public class Vue extends Application {
     }
 
     public void modeCollectionneur() {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
-        VBox vb = loader.load();
+        try {
+            setTitrePage("Espace Collectionneur  | Rechercher une boîte");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/CollectionneurNav.fxml"));
+            VBox vb = loader.load();
 
-        CollectionneurControleur controleur = loader.getController();
-        controleur.setVue(this);
+            CollectionneurControleur controleur = loader.getController();
+            controleur.setVue(this);
 
-        this.panelCentral.setCenter(null); 
-        this.panelCentral.setLeft(vb);
-    } catch (Exception e) {
-        e.printStackTrace();
+            this.panelCentral.setCenter(null); 
+            this.panelCentral.setLeft(vb);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
+
+
+    public void modeAdministrateur() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/AdministrateurNav.fxml"));
+            VBox root = loader.load();
+            AdministrateurControleur controleur = loader.getController();
+            controleur.setVue(this);
+
+            this.panelCentral.setCenter(null); 
+            panelCentral.setLeft(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setTitrePage(String titre) {
+        if (labelSection != null) {
+            labelSection.setText(titre);
+        }
+    }
+
 }
 
         
