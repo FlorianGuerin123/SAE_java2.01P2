@@ -52,6 +52,10 @@ public class CollectionneurControleur {
 
     private Button boutonActif = null;
 
+    @FXML
+    private void initialize() {
+        boutonActif = btnRechercher; 
+    }
    
 
     @FXML

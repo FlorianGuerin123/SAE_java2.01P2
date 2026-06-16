@@ -1,13 +1,13 @@
 package fr.univ_orleans.iut45.controleur;
-
+ 
 import fr.univ_orleans.iut45.vue.Vue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-
+ 
 public class AdministrateurControleur {
-
+ 
     @FXML private Button btnAjouterBoite;
     @FXML private Button btnSupprimerBoite;
     @FXML private Button btnMajContenuBoite;
@@ -15,83 +15,134 @@ public class AdministrateurControleur {
     @FXML private Button btnSupprimerPiece;
     @FXML private Button btnCreerTheme;
     @FXML private Button btnRetour;
-
+ 
     private Vue vue;
-
-    public void setVue(Vue vue) {
-        this.vue = vue;
+ 
+    private static final String STYLE_ACTIF =
+        "-fx-background-color: #FF4D6A; -fx-text-fill: white; " +
+        "-fx-font-size: 12; -fx-font-weight: bold; " +
+        "-fx-alignment: CENTER_LEFT; -fx-padding: 10 16 10 16; " +
+        "-fx-background-radius: 0; -fx-cursor: hand; -fx-border-width: 0;";
+ 
+    private static final String STYLE_INACTIF =
+        "-fx-background-color: transparent; -fx-text-fill: #B0C8E0; " +
+        "-fx-font-size: 12; -fx-alignment: CENTER_LEFT; " +
+        "-fx-padding: 10 16 10 16; -fx-background-radius: 0; " +
+        "-fx-cursor: hand; -fx-border-width: 0;";
+ 
+    private static final String STYLE_HOVER =
+        "-fx-background-color: #1E3050; -fx-text-fill: white; " +
+        "-fx-font-size: 12; -fx-alignment: CENTER_LEFT; " +
+        "-fx-padding: 10 16 10 16; -fx-background-radius: 0; " +
+        "-fx-cursor: hand; -fx-border-width: 0;";
+ 
+    private Button boutonActif = null;
+    
+    @FXML
+    private void initialize() {
+        boutonActif = btnAjouterBoite; 
     }
-
+ 
     @FXML
     private void onNavHover(MouseEvent event) {
         Button btn = (Button) event.getSource();
-        if (!btn.getStyle().contains("#FF4D6A")) {
-            btn.setStyle(btn.getStyle() + "-fx-background-color: #2A3F58;");
+        if (btn != boutonActif) {
+            btn.setStyle(STYLE_HOVER);
         }
     }
-
+ 
     @FXML
     private void onNavExit(MouseEvent event) {
         Button btn = (Button) event.getSource();
-        if (!btn.getStyle().contains("#FF4D6A")) {
-            btn.setStyle(btn.getStyle().replace("-fx-background-color: #2A3F58;", "-fx-background-color: transparent;"));
+        if (btn != boutonActif) {
+            btn.setStyle(STYLE_INACTIF);
         }
     }
-
+ 
     @FXML
     private void onRetourHover(MouseEvent event) {
         Button btn = (Button) event.getSource();
-        btn.setStyle(btn.getStyle() + "-fx-text-fill: #B0C8E0;");
+        btn.setStyle("-fx-background-color: #1E3050; -fx-text-fill: #B0C8E0; " +
+                     "-fx-font-size: 11; -fx-alignment: CENTER_LEFT; " +
+                     "-fx-padding: 12 16 12 16; -fx-background-radius: 0; " +
+                     "-fx-cursor: hand; -fx-border-width: 0;");
     }
-
+ 
     @FXML
     private void onRetourExit(MouseEvent event) {
         Button btn = (Button) event.getSource();
-        btn.setStyle(btn.getStyle().replace("-fx-text-fill: #B0C8E0;", "-fx-text-fill: #5A7A9A;"));
+        btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #5A7A9A; " +
+                     "-fx-font-size: 11; -fx-alignment: CENTER_LEFT; " +
+                     "-fx-padding: 12 16 12 16; -fx-background-radius: 0; " +
+                     "-fx-cursor: hand; -fx-border-width: 0;");
     }
 
+    private void setActif(Button btn) {
+        if (boutonActif != null) {
+            boutonActif.setStyle(STYLE_INACTIF);
+        }
+        btn.setStyle(STYLE_ACTIF);
+        boutonActif = btn;
+    }
+ 
+    public void setVue(Vue vue) {
+        this.vue = vue;
+    }
+ 
     @FXML
     private void handleAjouterBoite(ActionEvent event) {
         System.out.println("Ajouter une boîte cliqué");
         vue.setTitrePage("Espace Administrateur  |  Ajouter une boîte");
         // TODO : charger la vue ajouter une boîte (équivalent partieAdmin.ajouterBoite())
+        setActif(btnAjouterBoite);
+        // TODO : charger la vue ajouter une boîte
     }
-
+ 
     @FXML
     private void handleSupprimerBoite(ActionEvent event) {
         System.out.println("Supprimer une boîte cliqué");
         vue.setTitrePage("Espace Administrateur  |  Supprimer une boîte");
         // TODO : charger la vue supprimer une boîte (équivalent partieAdmin.supprimerBoite())
+        setActif(btnSupprimerBoite);
+        // TODO : charger la vue supprimer une boîte
     }
-
+ 
     @FXML
     private void handleMajContenuBoite(ActionEvent event) {
         System.out.println("Modifier le contenu d'une boîte cliqué");
         vue.setTitrePage("Espace Administrateur  |  Modifier le contenu d'une boîte");
         // TODO : charger la vue maj contenu boîte (équivalent partieAdmin.majContenuBoite())
+        setActif(btnMajContenuBoite);
+        // TODO : charger la vue maj contenu boîte
     }
-
+ 
     @FXML
     private void handleAjouterPiece(ActionEvent event) {
         System.out.println("Ajouter une pièce cliqué");
         vue.setTitrePage("Espace Administrateur  |  Ajouter une pièce");
         // TODO : charger la vue ajouter une pièce (équivalent partieAdmin.ajouterPiece())
+        setActif(btnAjouterPiece);
+        // TODO : charger la vue ajouter une pièce
     }
-
+ 
     @FXML
     private void handleSupprimerPiece(ActionEvent event) {
         System.out.println("Supprimer une pièce cliqué");
         vue.setTitrePage("Espace Administrateur  |  Supprimer une pièce");
         // TODO : charger la vue supprimer une pièce (équivalent partieAdmin.supprimerPiece())
+        setActif(btnSupprimerPiece);
+        // TODO : charger la vue supprimer une pièce
     }
-
+ 
     @FXML
     private void handleCreerTheme(ActionEvent event) {
         System.out.println("Créer un thème cliqué");
         vue.setTitrePage("Espace Administrateur  |  Créer un thème");
         // TODO : charger la vue créer un thème (équivalent partieAdmin.creerTheme())
+        setActif(btnCreerTheme);
+        // TODO : charger la vue créer un thème
     }
-
+ 
     @FXML
     private void handleRetour(ActionEvent event) {
         vue.modeAcceuil();
