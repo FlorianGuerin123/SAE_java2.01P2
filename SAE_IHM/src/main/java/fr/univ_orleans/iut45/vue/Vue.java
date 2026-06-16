@@ -83,11 +83,13 @@ public void start(Stage primaryStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/Menu.fxml"));
             BorderPane root = loader.load();
- 
+            
             MainMenuControleur controleur = loader.getController();
             controleur.setVue(this);
- 
-            panelCentral.setCenter(root);
+            if (connexionMySQL.isConnecte()) {
+                panelCentral.setCenter(root);
+            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
