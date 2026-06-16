@@ -276,6 +276,11 @@ public void start(Stage primaryStage) {
  
             BoitesContenantPieceControleur ctrl = loader.getController();
             ctrl.setVue(this);
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 =======
     public void modeSupprimerPiece() {
