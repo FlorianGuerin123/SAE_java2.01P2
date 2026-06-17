@@ -12,6 +12,7 @@ import fr.univ_orleans.iut45.controleur.CollectionControleur;
 import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
+import fr.univ_orleans.iut45.controleur.RechercherBoiteParThemeControleur;
 import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
 import fr.univ_orleans.iut45.modele.CollectionPersonnelle;
 import fr.univ_orleans.iut45.controleur.SupprimerDeCollectionControleur;
@@ -363,6 +364,20 @@ public void start(Stage primaryStage) {
             VBox contenu = loader.load();
     
             PiecesManquantesControleur ctrl = loader.getController();
+            ctrl.setVue(this);   
+    
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void modeRechercherTheme() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/RechercherBoiteParTheme.fxml"));
+            VBox contenu = loader.load();
+    
+            RechercherBoiteParThemeControleur ctrl = loader.getController();
             ctrl.setVue(this);   
     
             this.panelCentral.setCenter(contenu);

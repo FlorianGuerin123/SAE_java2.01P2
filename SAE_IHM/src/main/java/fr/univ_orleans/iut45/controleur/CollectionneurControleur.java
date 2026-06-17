@@ -127,7 +127,7 @@ public class CollectionneurControleur {
     private void handleTheme(ActionEvent event) {
         setActif(btnTheme);
         vue.setTitrePage("Espace Collectionneur  |  Boîtes par thème");
-        // TODO : vue.modeBoitesParTheme();
+        vue.modeRechercherTheme();
     }
 
     @FXML
