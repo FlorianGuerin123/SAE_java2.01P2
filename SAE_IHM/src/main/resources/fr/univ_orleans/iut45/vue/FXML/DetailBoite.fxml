@@ -36,6 +36,8 @@
                        -fx-padding: 9 22 9 22;"/>
     </HBox>
 
+    <VBox fx:id="menuDeroulant" managed="false" visible="false" maxWidth="320" style="-fx-background-color: white; -fx-border-color: #AAAACC; -fx-border-radius: 4; -fx-background-radius: 4;" />
+
     <Label fx:id="labelMessage" text="" wrapText="true"
            style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"/>
 

@@ -17,6 +17,8 @@ public class DetailBoiteControleur {
 
     @FXML private TextField champNumero;
     @FXML private Label labelMessage;
+    @FXML private VBox menuDeroulant;
+
     @FXML private ScrollPane scrollResultats;
     @FXML private VBox contenuDetail;
     @FXML private VBox carteInfo;
@@ -39,8 +41,74 @@ public class DetailBoiteControleur {
     }
 
     @FXML
+    private void initialize() {
+        champNumero.textProperty().addListener((observable, ancienneValeur, nouvelleValeur) -> {
+            labelMessage.setText("");
+            cacherContenu();
+            
+            if (nouvelleValeur.trim().isEmpty()) {
+                cacherMenu();
+                return;
+            }
+
+            try {
+                if (vue != null && vue.getConnexionMySQL() != null) {
+                    BoiteBD boiteBD = new BoiteBD(vue.getConnexionMySQL());
+                    List<BoiteSimple> resultats = boiteBD.rechercherBoitesDynamique(nouvelleValeur.trim());
+
+                    if (resultats.isEmpty()) {
+                        cacherMenu();
+                    } else {
+                        afficherMenu(resultats);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void afficherMenu(List<BoiteSimple> resultats) {
+        menuDeroulant.getChildren().clear(); 
+        
+        for (BoiteSimple boite : resultats) {
+            Label item = new Label("📦 " + boite.getNumBoite() + " - " + boite.getNomBoite());
+            item.setMaxWidth(Double.MAX_VALUE);
+            item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
+            
+            item.setOnMouseEntered(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: #E8F0F8;"));
+            item.setOnMouseExited(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;"));
+            
+            item.setOnMouseClicked(e -> {
+                champNumero.setText(boite.getNumBoite()); 
+                cacherMenu();
+                handleAfficher(null);
+            });
+            
+            menuDeroulant.getChildren().add(item);
+        }
+        
+        menuDeroulant.setVisible(true);
+        menuDeroulant.setManaged(true);
+    }
+
+    private void cacherMenu() {
+        menuDeroulant.setVisible(false);
+        menuDeroulant.setManaged(false);
+        menuDeroulant.getChildren().clear();
+    }
+
+    @FXML
     private void handleAfficher(ActionEvent event) {
-        String numero = champNumero.getText().trim();
+        afficherDetail(champNumero.getText().trim());
+    }
+
+    public void chargerBoite(String numero) {
+        champNumero.setText(numero);
+        afficherDetail(numero);
+    }
+
+    private void afficherDetail(String numero) {
 
         if (numero.isEmpty()) {
             labelMessage.setStyle("-fx-text-fill: #FF4D6A; -fx-font-weight: bold;");
@@ -60,19 +128,16 @@ public class DetailBoiteControleur {
                 return;
             }
 
-            
             labelNomBoite.setText(boite.getNomBoite());
             labelNumBoite.setText("N° " + boite.getNumBoite());
             labelAnnee.setText("Année : " + boite.getAnnee());
             labelTheme.setText("Thème : " + (boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—"));
             labelNbPieces.setText("Pièces : " + boite.getNbPieces());
 
-            
             flowPieces.getChildren().clear();
             flowFigurines.getChildren().clear();
             flowSousBoites.getChildren().clear();
 
-            
             PieceBD pieceBD = new PieceBD(vue.getConnexionMySQL());
             List<Piece> pieces = pieceBD.getPiecesBoite(numero);
             
@@ -81,18 +146,15 @@ public class DetailBoiteControleur {
             
             List<BoiteSimple> boitesIncluses = boiteBD.getBoitesIncluses(numero);
 
-            
             if (pieces == null || pieces.isEmpty()) {
                 flowPieces.getChildren().add(new Label("Aucune pièce enregistrée pour cette boîte."));
             } else {
-                
                 for (Piece p : pieces)  {
-                    String textePiece = "Nom : " + p.obtenirNomPiece() +  "- Couleur : "  + p.obtenirCouleur().getNomCouleur();
+                    String textePiece = "Nom : " + p.obtenirNomPiece() +  " - Couleur : "  + p.obtenirCouleur().getNomCouleur();
                     flowPieces.getChildren().add(creerText(textePiece, "#F0F4F8", "#1E1E2E"));
                 }
             }
 
-            
             if (figurines == null || figurines.isEmpty()) {
                 flowFigurines.getChildren().add(new Label("Aucune figurine dans cette boîte."));
             } else {
@@ -102,7 +164,6 @@ public class DetailBoiteControleur {
                 }
             }
 
-            
             if (boitesIncluses == null || boitesIncluses.isEmpty()) {
                 flowSousBoites.getChildren().add(new Label("Cette boîte ne contient aucune sous-boîte."));
             } else {
@@ -112,9 +173,9 @@ public class DetailBoiteControleur {
                 }
             }
 
-            
             labelMessage.setText(""); 
             afficherContenu();
+            cacherMenu();
 
         } catch (Exception e) {
             labelMessage.setStyle("-fx-text-fill: #FF4D6A; -fx-font-weight: bold;");
@@ -123,6 +184,7 @@ public class DetailBoiteControleur {
             e.printStackTrace();
         }
     }
+
     private Label creerText(String texte, String couleurFond, String couleurTexte) {
         Label text = new Label(texte);
         text.setStyle(
@@ -137,6 +199,7 @@ public class DetailBoiteControleur {
         );
         return text;
     }
+
     private void afficherContenu() {
         contenuDetail.setVisible(true);
         contenuDetail.setManaged(true);

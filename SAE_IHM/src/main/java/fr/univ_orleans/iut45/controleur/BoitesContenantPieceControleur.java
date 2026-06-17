@@ -2,7 +2,10 @@ package fr.univ_orleans.iut45.controleur;
 
 import fr.univ_orleans.iut45.modele.BoiteBD;
 import fr.univ_orleans.iut45.modele.BoiteSimple;
+import fr.univ_orleans.iut45.modele.PieceBD;
+import fr.univ_orleans.iut45.modele.Piece;
 import fr.univ_orleans.iut45.vue.Vue;
+import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +24,8 @@ public class BoitesContenantPieceControleur {
 
     @FXML private TextField champNumPiece;
     @FXML private Label labelMessage;
+    @FXML private VBox menuDeroulant;
+
     @FXML private ScrollPane scrollResultats;
     @FXML private VBox listeResultats;
 
@@ -28,6 +33,70 @@ public class BoitesContenantPieceControleur {
 
     public void setVue(Vue vue){
         this.vue = vue;
+    }
+
+    @FXML
+    private void initialize() {
+        champNumPiece.textProperty().addListener((observable, ancienneValeur, nouvelleValeur) -> {
+            labelMessage.setText("");
+            cacherResultats();
+            
+            if (nouvelleValeur.trim().isEmpty()) {
+                cacherMenu();
+                return;
+            }
+
+            try {
+                if (vue != null && vue.getConnexionMySQL() != null) {
+                    PieceBD pieceBD = new PieceBD(vue.getConnexionMySQL());
+                    
+                    // On utilise bien ta liste d'objets Piece !
+                    List<Piece> resultats = pieceBD.rechercherPiecesDynamique(nouvelleValeur.trim());
+
+                    if (resultats.isEmpty()) {
+                        cacherMenu();
+                    } else {
+                        afficherMenu(resultats);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void afficherMenu(List<Piece> resultats) {
+        menuDeroulant.getChildren().clear(); 
+        
+        for (Piece piece : resultats) {
+            // Utilisation de tes vrais getters
+            String num = piece.obtenirNumPiece();
+            String nom = piece.obtenirNomPiece();
+
+            Label item = new Label("🧩 " + num + " - " + nom);
+            item.setMaxWidth(Double.MAX_VALUE);
+            item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
+            
+            item.setOnMouseEntered(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: #E8F0F8;"));
+            item.setOnMouseExited(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;"));
+            
+            item.setOnMouseClicked(e -> {
+                champNumPiece.setText(num); 
+                cacherMenu();
+                handleRechercher(null);
+            });
+            
+            menuDeroulant.getChildren().add(item);
+        }
+        
+        menuDeroulant.setVisible(true);
+        menuDeroulant.setManaged(true);
+    }
+
+    private void cacherMenu() {
+        menuDeroulant.setVisible(false);
+        menuDeroulant.setManaged(false);
+        menuDeroulant.getChildren().clear();
     }
 
     @FXML
@@ -49,10 +118,10 @@ public class BoitesContenantPieceControleur {
             if (boites == null || boites.isEmpty()) {
                 afficherErreur("Aucune boîte ne contient la pièce n° " + numPiece + ".");
                 cacherResultats();
+                cacherMenu();
                 return;
             }
 
-            
             labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
             labelMessage.setText(boites.size() + " boîte(s) trouvée(s) contenant la pièce n° " + numPiece);
 
@@ -62,6 +131,7 @@ public class BoitesContenantPieceControleur {
 
             scrollResultats.setVisible(true);
             scrollResultats.setManaged(true);
+            cacherMenu();
 
         } catch (Exception e) {
             afficherErreur("Erreur lors de la recherche : " + e.getMessage());
@@ -69,9 +139,8 @@ public class BoitesContenantPieceControleur {
             e.printStackTrace();
         }
     }
-
     
-    private VBox creerCarte(BoiteSimple boite){
+    public VBox creerCarte(BoiteSimple boite){
         VBox carte = new VBox();
         carte.setSpacing(0);
         carte.setMaxWidth(640);
@@ -79,7 +148,6 @@ public class BoitesContenantPieceControleur {
             "-fx-background-color: #F0F4F8; -fx-border-color: #AAAACC; " +
             "-fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;"
         );
-
         
         HBox entete = new HBox(12);
         entete.setAlignment(Pos.CENTER_LEFT);
@@ -120,7 +188,6 @@ public class BoitesContenantPieceControleur {
 
         entete.getChildren().addAll(labelNum, labelNom, spacer, labelStatut);
 
-
         HBox corps = new HBox(0);
         corps.setStyle("-fx-padding: 18 18 18 18;");
 
@@ -160,7 +227,6 @@ public class BoitesContenantPieceControleur {
         colTheme.getChildren().addAll(titreTheme, valTheme);
 
         corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colTheme);
-
         
         Separator sepBas = new Separator();
         sepBas.setStyle("-fx-background-color: #AAAACC;");
@@ -178,7 +244,7 @@ public class BoitesContenantPieceControleur {
         );
         final String numBoite = boite.getNumBoite();
         btnDetail.setOnAction(e -> {
-            // TODO : vue.modeDetail(numBoite); pour avoir les infos sur la boite en question
+            vue.modeDetail(numBoite);
             System.out.println("Voir détail de : " + numBoite);
         });
 

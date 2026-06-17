@@ -89,7 +89,7 @@ public void start(Stage primaryStage) {
     public ConnexionMySQL getConnexionMySQL() {
         return connexionMySQL;
     }
- 
+
     public void modeAcceuil() {
         setTitrePage("");
         this.panelCentral.setLeft(null);
@@ -216,6 +216,25 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
+
+    public void modeDetail(String numBoite) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/DetailBoite.fxml"));
+            VBox contenu = loader.load();
+
+            DetailBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            if (numBoite != null) {
+                ctrl.chargerBoite(numBoite);
+            }
+
+            this.panelCentral.setCenter(contenu);
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void modeAjouterPiece() {
         setTitrePage("Administrateur  |  Ajouter une pièce");
