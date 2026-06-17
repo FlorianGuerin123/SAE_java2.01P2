@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
@@ -27,7 +28,7 @@ public class JeuDeLaVieInfini {
     private double zoom = 1.0; 
     
     private boolean enLecture = false;
-    private boolean modeEffacement = false; // <-- NOUVEAU : Pinceau ou Gomme
+    private boolean modeEffacement = false; 
     private final int TAILLE_CELLULE = 20;
 
     public void lancer() {
@@ -40,53 +41,57 @@ public class JeuDeLaVieInfini {
         Canvas canvas = new Canvas();
         canvas.widthProperty().bind(racine.widthProperty());
         canvas.heightProperty().bind(racine.heightProperty());
-        racine.getChildren().add(canvas);
+        
+        // --- NOUVEAU : Bouton Importer Image ---
+        Button btnImage = new Button("🖼 Importer Image");
+        
+        // LA LIGNE À AJOUTER POUR RÉGLER LE BUG :
+        btnImage.setFocusTraversable(false); 
+        
+        btnImage.setStyle("-fx-background-color: #4bdb6a; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14; -fx-padding: 8 15 8 15;");
+        btnImage.setLayoutY(20);
+        btnImage.layoutXProperty().bind(racine.widthProperty().subtract(180));
+        
+        btnImage.setOnAction(e -> importerImage(stage, canvas));
+
+        // On ajoute d'abord le canvas, puis le bouton par-dessus
+        racine.getChildren().addAll(canvas, btnImage);
 
         stage.setMaximized(true);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // --- GESTION DES CLICS SOURIS ---
         canvas.setOnMousePressed(e -> {
             derniereSourisX = e.getX();
             derniereSourisY = e.getY();
             
             if (e.getButton() == MouseButton.PRIMARY) {
                 Cellule c = obtenirCellule(e.getX(), e.getY());
-                // Si on clique sur une case vivante, on passe en mode Gomme. Sinon, Pinceau.
                 modeEffacement = vivantes.contains(c);
                 modifierCellule(e.getX(), e.getY(), modeEffacement);
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             }
         });
 
-        // --- GESTION DU GLISSEMENT ---
         canvas.setOnMouseDragged(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 cameraX += (e.getX() - derniereSourisX);
                 cameraY += (e.getY() - derniereSourisY);
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             } else if (e.getButton() == MouseButton.PRIMARY) {
-                // On trace une ligne continue pour boucher les trous de la souris
                 dessinerLigne(derniereSourisX, derniereSourisY, e.getX(), e.getY(), modeEffacement);
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             }
-            // On mémorise la position pour le prochain mouvement
             derniereSourisX = e.getX();
             derniereSourisY = e.getY();
         });
 
-        // --- GESTION DU ZOOM ---
         canvas.setOnScroll(e -> {
             if (e.getDeltaY() == 0) return; 
 
             double ancienZoom = zoom;
-            
-            if (e.getDeltaY() > 0) {
-                zoom *= 1.1; 
-            } else {
-                zoom /= 1.1; 
-            }
+            if (e.getDeltaY() > 0) zoom *= 1.1; 
+            else zoom /= 1.1; 
             
             if (zoom < 0.1) zoom = 0.1;   
             if (zoom > 10.0) zoom = 10.0; 
@@ -98,7 +103,6 @@ public class JeuDeLaVieInfini {
             dessiner(gc, canvas.getWidth(), canvas.getHeight());
         });
 
-        // Contrôle Play/Pause
         racine.setFocusTraversable(true);
         racine.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.SPACE) {
@@ -128,7 +132,54 @@ public class JeuDeLaVieInfini {
         stage.setOnCloseRequest(e -> timer.stop()); 
     }
 
-    // --- NOUVELLES MÉTHODES POUR LE PINCEAU FLUIDE ---
+    // --- NOUVELLE MÉTHODE : Importation d'image ---
+    private void importerImage(Stage stage, Canvas canvas) {
+        javafx.stage.FileChooser selecteur = new javafx.stage.FileChooser();
+        selecteur.setTitle("Choisir une image pour le Jeu de la Vie");
+        selecteur.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg", "*.bmp"));
+        
+        java.io.File fichier = selecteur.showOpenDialog(stage);
+
+        if (fichier != null) {
+            try {
+                javafx.scene.image.Image image = new javafx.scene.image.Image(fichier.toURI().toString());
+                javafx.scene.image.PixelReader lecteur = image.getPixelReader();
+                
+                int largeurImg = (int) image.getWidth();
+                int hauteurImg = (int) image.getHeight();
+                
+                // Sécurité anti-crash : on ne garde qu'un pixel sur 'pas' si l'image est énorme
+                int limiteMax = 150; 
+                int pas = Math.max(1, Math.max(largeurImg / limiteMax, hauteurImg / limiteMax));
+                
+                // Calcul pour centrer l'image au milieu de l'écran actuel
+                double tailleActuelle = TAILLE_CELLULE * zoom;
+                int centreEcranX = (int) (((canvas.getWidth() / 2) - cameraX) / tailleActuelle);
+                int centreEcranY = (int) (((canvas.getHeight() / 2) - cameraY) / tailleActuelle);
+                
+                int decalageX = centreEcranX - ((largeurImg / pas) / 2);
+                int decalageY = centreEcranY - ((hauteurImg / pas) / 2);
+                
+                for (int y = 0; y < hauteurImg; y += pas) {
+                    for (int x = 0; x < largeurImg; x += pas) {
+                        Color couleur = lecteur.getColor(x, y);
+                        
+                        // Si le pixel est suffisamment sombre et pas totalement transparent
+                        if (couleur.getOpacity() > 0.5 && couleur.getBrightness() < 0.9) {
+                            vivantes.add(new Cellule(decalageX + (x / pas), decalageY + (y / pas)));
+                        }
+                    }
+                }
+                
+                // On met sur pause automatiquement pour admirer le résultat avant de lancer
+                enLecture = false; 
+                dessiner(canvas.getGraphicsContext2D(), canvas.getWidth(), canvas.getHeight());
+                
+            } catch (Exception ex) {
+                System.err.println("Impossible de charger l'image.");
+            }
+        }
+    }
 
     private Cellule obtenirCellule(double ecranX, double ecranY) {
         double tailleActuelle = TAILLE_CELLULE * zoom;
@@ -139,16 +190,12 @@ public class JeuDeLaVieInfini {
 
     private void modifierCellule(double ecranX, double ecranY, boolean effacer) {
         Cellule c = obtenirCellule(ecranX, ecranY);
-        if (effacer) {
-            vivantes.remove(c);
-        } else {
-            vivantes.add(c);
-        }
+        if (effacer) vivantes.remove(c);
+        else vivantes.add(c);
     }
 
     private void dessinerLigne(double x1, double y1, double x2, double y2, boolean effacer) {
         double distance = Math.hypot(x2 - x1, y2 - y1);
-        // On vérifie une case tous les 5 pixels pour être sûr de ne rater aucune cellule
         int nbEtapes = (int) Math.max(1, distance / 5); 
         
         for (int i = 0; i <= nbEtapes; i++) {
@@ -159,14 +206,11 @@ public class JeuDeLaVieInfini {
         }
     }
 
-    // --- AFFICHAGE ET LOGIQUE ---
-
     private void dessiner(GraphicsContext gc, double largeur, double hauteur) {
         gc.clearRect(0, 0, largeur, hauteur);
         
         double tailleActuelle = TAILLE_CELLULE * zoom;
 
-        // 1. Quadrillage
         gc.setStroke(Color.web("#333344"));
         gc.setLineWidth(1);
         
@@ -185,7 +229,6 @@ public class JeuDeLaVieInfini {
             }
         }
 
-        // 2. Cellules vivantes
         gc.setFill(Color.web("#FF4D6A"));
         double marge = (tailleActuelle > 5) ? 1.0 : 0.0; 
         
@@ -198,7 +241,6 @@ public class JeuDeLaVieInfini {
             }
         }
         
-        // UI
         gc.setFill(Color.WHITE);
         gc.fillText(enLecture ? "▶ LECTURE" : "⏸ PAUSE", 20, 30);
         gc.fillText("Zoom : " + Math.round(zoom * 100) + "%", 20, 50);
