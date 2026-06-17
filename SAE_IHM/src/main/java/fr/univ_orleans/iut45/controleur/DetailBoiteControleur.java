@@ -3,10 +3,15 @@ package fr.univ_orleans.iut45.controleur;
 import fr.univ_orleans.iut45.vue.Vue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
@@ -39,7 +44,7 @@ public class DetailBoiteControleur {
     public void setVue(Vue vue) {
         this.vue = vue;
     }
-
+    
     @FXML
     private void initialize() {
         champNumero.textProperty().addListener((observable, ancienneValeur, nouvelleValeur) -> {
@@ -85,6 +90,8 @@ public class DetailBoiteControleur {
                 handleAfficher(null);
             });
             
+            
+           
             menuDeroulant.getChildren().add(item);
         }
         
@@ -145,8 +152,17 @@ public class DetailBoiteControleur {
             List<Figurine> figurines = figurineBD.getFigurinesDansBoite(numero);
             
             List<BoiteSimple> boitesIncluses = boiteBD.getBoitesIncluses(numero);
-
+            VBox colImage = new VBox(4);
+            colImage.setAlignment(Pos.CENTER);
+            HBox.setHgrow(colImage, Priority.ALWAYS);
+            Image imageLego = new Image("https://cdn.rebrickable.com/media/sets/" + boite.getNumBoite() + ".jpg");
+            ImageView imgvLego = new ImageView(imageLego);
+            imgvLego.setFitWidth(175);
+            imgvLego.setFitHeight(120);
+            colImage.getChildren().add(imgvLego);
+            carteInfo.getChildren().add(colImage);
             if (pieces == null || pieces.isEmpty()) {
+                
                 flowPieces.getChildren().add(new Label("Aucune pièce enregistrée pour cette boîte."));
             } else {
                 for (Piece p : pieces)  {
@@ -170,10 +186,12 @@ public class DetailBoiteControleur {
                 for (BoiteSimple bs : boitesIncluses) {
                     String texteBs = "N° " + bs.getNumBoite() + " - " + bs.getNomBoite();
                     flowSousBoites.getChildren().add(creerText(texteBs, "#FFF0F2", "#FF4D6A"));
+                    
                 }
             }
+            
 
-            labelMessage.setText(""); 
+            labelMessage.setText("");
             afficherContenu();
             cacherMenu();
 
@@ -183,6 +201,7 @@ public class DetailBoiteControleur {
             cacherContenu();
             e.printStackTrace();
         }
+        
     }
 
     private Label creerText(String texte, String couleurFond, String couleurTexte) {
