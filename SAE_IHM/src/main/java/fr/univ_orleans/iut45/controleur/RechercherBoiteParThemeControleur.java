@@ -170,7 +170,7 @@ public class RechercherBoiteParThemeControleur {
 
         entete.getChildren().addAll(labelNum, labelNom, spacer, labelStatut);
 
-        // Corps : année / pièces / thème
+        
         HBox corps = new HBox();
         corps.setStyle("-fx-padding: 18 18 18 18;");
 
@@ -192,7 +192,7 @@ public class RechercherBoiteParThemeControleur {
         Separator sepHoriz = new Separator();
         sepHoriz.setStyle("-fx-background-color: #AAAACC;");
 
-        // Pied : bouton détail
+        
         HBox pied = new HBox();
         pied.setAlignment(Pos.CENTER_RIGHT);
         pied.setStyle("-fx-padding: 12 18 12 18;");
@@ -230,5 +230,6 @@ public class RechercherBoiteParThemeControleur {
 
     private void handleVoirDetail(BoiteSimple boite) {
         System.out.println("Voir détail de : " + boite.getNumBoite());
+        vue.modeDetail(boite.getNumBoite());
     }
 }

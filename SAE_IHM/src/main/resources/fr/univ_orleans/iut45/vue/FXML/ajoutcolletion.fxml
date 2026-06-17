@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="15.0" style="-fx-background-color: #C8D8E8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.univ_orleans.iut45.controleur.ajoutCollectionControleur">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      
+      <VBox spacing="5.0">
+         <children>
+            <Label text="Ajouter une Boîte à la Collection" textFill="#1e1e2e">
+               <font>
+                  <Font name="System Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label text="Recherchez une boîte par son nom pour l'ajouter." textFill="#555566" />
+         </children>
+      </VBox>
+      
+      <VBox spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+               <children>
+                  
+                  <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <StackPane alignment="TOP_LEFT">
+                           <children>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <TextField fx:id="champNom" promptText="Ex: Le château de Poudlard..." style="-fx-padding: 10; -fx-background-radius: 5; -fx-border-color: #AAAACC; -fx-border-radius: 5;" />
+                                    
+                                    <VBox fx:id="menuDeroulant" managed="false" spacing="2.0" style="-fx-background-color: white; -fx-border-color: #AAAACC; -fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" visible="false">
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </VBox>
+                  
+                  <Button mnemonicParsing="false" onAction="#handleRechercher" style="-fx-background-color: #FF4D6A; -fx-text-fill: white; -fx-padding: 10 20 10 20; -fx-font-weight: bold; -fx-background-radius: 5; -fx-cursor: hand;" text="Rechercher" />
+               </children>
+            </HBox>
+            
+            <Label fx:id="labelMessage" text="" wrapText="true" />
+         </children>
+      </VBox>
+      
+      <ScrollPane fx:id="scrollResultats" fitToWidth="true" managed="false" style="-fx-background-color: transparent; -fx-background: transparent; -fx-background-insets: 0; -fx-padding: 0;" visible="false" VBox.vgrow="ALWAYS">
+         <content>
+            
+            <GridPane fx:id="grilleResultats" hgap="15.0" style="-fx-background-color: #C8D8E8;" vgap="15.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                  <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+               </columnConstraints>
+               <padding>
+                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+               </padding>
+            </GridPane>
+            
+         </content>
+      </ScrollPane>
+      
+   </children>
+</VBox>

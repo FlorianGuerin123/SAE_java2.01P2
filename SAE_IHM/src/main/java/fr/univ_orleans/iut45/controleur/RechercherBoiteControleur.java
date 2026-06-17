@@ -165,6 +165,8 @@ public class RechercherBoiteControleur {
     private void handleVoirDetail(ActionEvent event) {
         if (boiteTrouvee != null) {
             System.out.println("Voir détail de : " + boiteTrouvee.getNumBoite());
+            vue.modeDetail(boiteTrouvee.getNumBoite());
         }
+        
     }
 }

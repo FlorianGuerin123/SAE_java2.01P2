@@ -18,16 +18,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class RechercherBoiteParNomControleur {
+public class ajoutCollectionControleur {
 
-    @FXML private TextField  champNom;
-    @FXML private Label      labelMessage;
-    @FXML private VBox       menuDeroulant;
+    @FXML private TextField champNom;
+    @FXML private Label labelMessage;
+    @FXML private VBox menuDeroulant;
 
     @FXML private ScrollPane scrollResultats;
-    @FXML private GridPane   grilleResultats;
+    @FXML private GridPane grilleResultats;
 
     private Vue vue;
 
@@ -225,29 +226,45 @@ public class RechercherBoiteParNomControleur {
         piedCarte.setAlignment(Pos.CENTER_RIGHT);
         piedCarte.setStyle("-fx-padding: 12 18 12 18;");
 
-        Button btnDetail = new Button("Voir le détail →");
-        btnDetail.setStyle(
+        Button boutonajout = new Button("Ajouter dans la collection");
+        boutonajout.setStyle(
             "-fx-background-color: #FF4D6A; -fx-text-fill: white; " +
             "-fx-font-size: 12; -fx-font-weight: bold; " +
             "-fx-background-radius: 5; -fx-cursor: hand; " +
             "-fx-padding: 8 18 8 18;"
         );
         final String numBoite = boite.getNumBoite();
-        btnDetail.setOnAction(e -> {
-            System.out.println("Voir détail de : " + numBoite);
-            vue.modeDetail(numBoite);
-        });
-        piedCarte.getChildren().add(btnDetail);
+        boutonajout.setOnAction(e -> {
+        try {
+                boolean ajoute = vue.ajouteDanscollection(numBoite);
+                if (ajoute) {
+                    labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
+                    labelMessage.setText("Ajout effectué");
+                } else {
+                    labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #FF4D6A;");
+                    labelMessage.setText("Cette boîte est déjà dans votre collection.");
+                }
+        } catch (SQLException a) {
+            labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #FF4D6A;");
+            labelMessage.setText("Erreur lors de l'ajout : " + a.getMessage());
+            a.printStackTrace();
+        }
+    });
+        piedCarte.getChildren().add(boutonajout);
 
         carte.getChildren().addAll(entete, corps, sepBas, piedCarte);
         return carte;
     }
 
     private void cacherResultats() {
+    if (scrollResultats != null) {
         scrollResultats.setVisible(false);
         scrollResultats.setManaged(false);
+    }
+    if (grilleResultats != null) {
         grilleResultats.getChildren().clear();
     }
+}
 
     private void afficherErreur(String msg) {
         labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #FF4D6A;");

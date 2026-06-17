@@ -94,7 +94,7 @@ public class BoiteBD {
     }
 
 
-    BoiteComposee getBoiteComplete(String numBoite, boolean complete, boolean collection) throws SQLException{
+    public BoiteComposee getBoiteComplete(String numBoite, boolean complete, boolean collection) throws SQLException{
         // 1. Boite
         PreparedStatement ps = laConnexion.prepareStatement("SELECT b.numboite, b.nomboite, b.annee, b.nbpieces,t.idtheme, t.nomtheme FROM BOITE b JOIN THEME t ON b.idtheme = t.idtheme WHERE b.numboite = ?");
         ps.setString(1, numBoite);
