@@ -66,7 +66,7 @@ public class RechercherBoiteParThemeControleur {
         menuDeroulant.getChildren().clear();
 
         for (String theme : themes) {
-            Label item = new Label("🏷  " + theme);
+            Label item = new Label(theme);
             item.setMaxWidth(Double.MAX_VALUE);
             item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
 

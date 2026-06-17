@@ -160,6 +160,7 @@ public class DetailBoiteControleur {
             imgvLego.setFitWidth(175);
             imgvLego.setFitHeight(120);
             colImage.getChildren().add(imgvLego);
+            carteInfo.getChildren().removeIf(node -> node instanceof VBox);
             carteInfo.getChildren().add(colImage);
             if (pieces == null || pieces.isEmpty()) {
                 
