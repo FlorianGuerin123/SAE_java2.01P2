@@ -1,6 +1,7 @@
 package fr.univ_orleans.iut45.controleur;
 
 import fr.univ_orleans.iut45.modele.BoiteBD;
+import fr.univ_orleans.iut45.modele.BoiteSimple;
 import fr.univ_orleans.iut45.modele.CouleurBD;
 import fr.univ_orleans.iut45.modele.PieceBD;
 import fr.univ_orleans.iut45.vue.Vue;
@@ -20,6 +21,8 @@ public class StatistiquesBoiteControleur {
 
     @FXML private TextField champNumero;
     @FXML private Label labelMessage;
+    @FXML private VBox menuDeroulant;
+
     @FXML private VBox zoneResultats;
     @FXML private Label labelTypesPieces;
     @FXML private Label labelTotalPieces;
@@ -29,6 +32,64 @@ public class StatistiquesBoiteControleur {
 
     public void setVue(Vue vue) {
         this.vue = vue;
+    }
+
+    @FXML
+    private void initialize() {
+        champNumero.textProperty().addListener((observable, ancienneValeur, nouvelleValeur) -> {
+            labelMessage.setText("");
+            cacherResultats();
+            
+            if (nouvelleValeur.trim().isEmpty()) {
+                cacherMenu();
+                return;
+            }
+
+            try {
+                if (vue != null && vue.getConnexionMySQL() != null) {
+                    BoiteBD boiteBD = new BoiteBD(vue.getConnexionMySQL());
+                    List<BoiteSimple> resultats = boiteBD.rechercherBoitesDynamique(nouvelleValeur.trim());
+
+                    if (resultats.isEmpty()) {
+                        cacherMenu();
+                    } else {
+                        afficherMenu(resultats);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void afficherMenu(List<BoiteSimple> resultats) {
+        menuDeroulant.getChildren().clear(); 
+        
+        for (BoiteSimple boite : resultats) {
+            Label item = new Label("📦 " + boite.getNumBoite() + " - " + boite.getNomBoite());
+            item.setMaxWidth(Double.MAX_VALUE);
+            item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
+            
+            item.setOnMouseEntered(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: #E8F0F8;"));
+            item.setOnMouseExited(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;"));
+            
+            item.setOnMouseClicked(e -> {
+                champNumero.setText(boite.getNumBoite()); 
+                cacherMenu();
+                handleRechercher(null);
+            });
+            
+            menuDeroulant.getChildren().add(item);
+        }
+        
+        menuDeroulant.setVisible(true);
+        menuDeroulant.setManaged(true);
+    }
+
+    private void cacherMenu() {
+        menuDeroulant.setVisible(false);
+        menuDeroulant.setManaged(false);
+        menuDeroulant.getChildren().clear();
     }
 
     @FXML
@@ -62,7 +123,6 @@ public class StatistiquesBoiteControleur {
 
             for (CouleurBD.StatCouleur statCoul : statsCouleurs) {
                 double pourcentage = ((double) statCoul.quantite() / statCoul.totalPiecesBoite()) * 100;
-                
                 if (pourcentage >= 1.0) {
                     donneesGraphique.add(new PieChart.Data(statCoul.nomCouleur() + " (" + Math.round(pourcentage) + "%)", statCoul.quantite()));
                 }
@@ -73,6 +133,7 @@ public class StatistiquesBoiteControleur {
 
             zoneResultats.setVisible(true);
             zoneResultats.setManaged(true);
+            cacherMenu();
 
         } catch (SQLException e) {
             labelMessage.setText("Erreur lors de la récupération des données : " + e.getMessage());

@@ -1,6 +1,4 @@
-
 package fr.univ_orleans.iut45.controleur;
-
 
 import fr.univ_orleans.iut45.modele.BoiteBD;
 import fr.univ_orleans.iut45.modele.BoiteSimple;
@@ -14,14 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Separator;
-
 
 import java.util.List;
 
@@ -29,6 +24,8 @@ public class RechercherBoiteParNomControleur {
 
     @FXML private TextField  champNom;
     @FXML private Label      labelMessage;
+    @FXML private VBox       menuDeroulant;
+
     @FXML private ScrollPane scrollResultats;
     @FXML private GridPane   grilleResultats;
 
@@ -36,6 +33,64 @@ public class RechercherBoiteParNomControleur {
 
     public void setVue(Vue vue) {
         this.vue = vue;
+    }
+
+    @FXML
+    private void initialize() {
+        champNom.textProperty().addListener((observable, ancienneValeur, nouvelleValeur) -> {
+            labelMessage.setText("");
+            cacherResultats();
+            
+            if (nouvelleValeur.trim().isEmpty()) {
+                cacherMenu();
+                return;
+            }
+
+            try {
+                if (vue != null && vue.getConnexionMySQL() != null) {
+                    BoiteBD boiteBD = new BoiteBD(vue.getConnexionMySQL());
+                    List<BoiteSimple> resultats = boiteBD.rechercherBoitesDynamique(nouvelleValeur.trim());
+
+                    if (resultats.isEmpty()) {
+                        cacherMenu();
+                    } else {
+                        afficherMenu(resultats);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void afficherMenu(List<BoiteSimple> resultats) {
+        menuDeroulant.getChildren().clear(); 
+        
+        for (BoiteSimple boite : resultats) {
+            Label item = new Label("📦 " + boite.getNumBoite() + " - " + boite.getNomBoite());
+            item.setMaxWidth(Double.MAX_VALUE);
+            item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
+            
+            item.setOnMouseEntered(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: #E8F0F8;"));
+            item.setOnMouseExited(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;"));
+            
+            item.setOnMouseClicked(e -> {
+                champNom.setText(boite.getNomBoite()); 
+                cacherMenu();
+                handleRechercher(null);
+            });
+            
+            menuDeroulant.getChildren().add(item);
+        }
+        
+        menuDeroulant.setVisible(true);
+        menuDeroulant.setManaged(true);
+    }
+
+    private void cacherMenu() {
+        menuDeroulant.setVisible(false);
+        menuDeroulant.setManaged(false);
+        menuDeroulant.getChildren().clear();
     }
 
     @FXML
@@ -62,7 +117,6 @@ public class RechercherBoiteParNomControleur {
 
             labelMessage.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #2E7D32;");
             labelMessage.setText(boites.size() + " boîte(s) trouvée(s) pour « " + nom + " »");
-
             
             for (int i = 0; i < boites.size(); i++) {
                 VBox carte = creerCarte(boites.get(i));
@@ -73,6 +127,7 @@ public class RechercherBoiteParNomControleur {
 
             scrollResultats.setVisible(true);
             scrollResultats.setManaged(true);
+            cacherMenu();
 
         } catch (Exception e) {
             afficherErreur("Erreur lors de la recherche : " + e.getMessage());
@@ -90,7 +145,6 @@ public class RechercherBoiteParNomControleur {
             "-fx-background-color: #F0F4F8; -fx-border-color: #AAAACC; " +
             "-fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;"
         );
-
         
         HBox entete = new HBox(12);
         entete.setAlignment(Pos.CENTER_LEFT);
@@ -125,7 +179,6 @@ public class RechercherBoiteParNomControleur {
             );
         }
         entete.getChildren().addAll(labelNum, labelNom, spacer, labelStatut);
-
         
         HBox corps = new HBox(0);
         corps.setStyle("-fx-padding: 18 18 18 18;");
@@ -165,7 +218,6 @@ public class RechercherBoiteParNomControleur {
 
         corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colTheme);
 
-        // --- Pied de carte ---
         Separator sepBas = new Separator();
         sepBas.setStyle("-fx-background-color: #AAAACC;");
 
@@ -182,7 +234,6 @@ public class RechercherBoiteParNomControleur {
         );
         final String numBoite = boite.getNumBoite();
         btnDetail.setOnAction(e -> {
-            // TODO : vue.modeDetail(numBoite);
             System.out.println("Voir détail de : " + numBoite);
         });
         piedCarte.getChildren().add(btnDetail);

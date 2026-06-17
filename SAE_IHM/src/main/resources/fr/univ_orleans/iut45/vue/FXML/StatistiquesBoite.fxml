@@ -18,6 +18,8 @@
         <Button onAction="#handleRechercher" style="-fx-background-color: #FF4D6A; -fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 8 15 8 15;" text="🔍 Rechercher" />
     </HBox>
 
+    <VBox fx:id="menuDeroulant" managed="false" visible="false" maxWidth="320" style="-fx-background-color: white; -fx-border-color: #AAAACC; -fx-border-radius: 4; -fx-background-radius: 4;" />
+
     <Label fx:id="labelMessage" style="-fx-text-fill: #FF4D6A; -fx-font-weight: bold;" text="" />
 
     <VBox fx:id="zoneResultats" managed="false" spacing="20" style="-fx-background-color: white; -fx-padding: 20; -fx-border-color: #2b87d1; -fx-border-width: 2; -fx-border-radius: 6; -fx-background-radius: 6;" visible="false">
