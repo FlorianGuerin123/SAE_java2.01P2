@@ -21,14 +21,7 @@ public class CollectionPersonnelle {
         return boites; 
     }
 
-    public void ajouterBoite(BoiteComposee boite){
-        if (!boites.contains(boite)) {
-            boites.add(boite);
-            System.out.println("Boîte " + boite.getNumBoite() + " ajoutée à la collection.");
-        } else {
-            System.out.println("Cette boîte est déjà dans la collection.");
-        }
-    }
+    
 
     public void retirerBoite(String numBoite) {
         boolean ok = boites.removeIf(b -> b.getNumBoite().equals(numBoite));
@@ -256,4 +249,18 @@ public class CollectionPersonnelle {
             System.out.println(b);}
         
     }
+
+    public boolean contientBoite(String numBoite) {
+    return boites.stream().anyMatch(b -> b.getNumBoite().equals(numBoite));
+}
+
+    public boolean ajouterBoite(BoiteComposee boite){
+        if (contientBoite(boite.getNumBoite())) {
+            System.out.println("Cette boîte est déjà dans la collection.");
+            return false;
+        }
+        boites.add(boite);
+        System.out.println("Boîte " + boite.getNumBoite() + " ajoutée à la collection.");
+        return true;
+        }
 }

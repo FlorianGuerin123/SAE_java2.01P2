@@ -148,7 +148,7 @@ public class CollectionneurControleur {
     private void handleAjouterCollection(ActionEvent event) {
         setActif(btnAjouterCollection);
         vue.setTitrePage("Espace Collectionneur  |  Ajouter à ma collection");
-        // TODO : vue.modeAjouterCollection();
+        vue.modeAjoutsimple();
     }
 
     @FXML

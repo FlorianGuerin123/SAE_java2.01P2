@@ -165,6 +165,7 @@ public class CollectionControleur {
         final String numBoite = boite.getNumBoite();
         btnDetail.setOnAction(e -> {
             System.out.println("Voir détail de : " + numBoite);
+            vue.modeDetail(numBoite);
         });
         piedCarte.getChildren().add(btnDetail);
 

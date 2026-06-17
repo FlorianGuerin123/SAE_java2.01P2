@@ -1,5 +1,7 @@
 package fr.univ_orleans.iut45.vue;
  
+import java.sql.SQLException;
+
 import fr.univ_orleans.iut45.controleur.AdministrateurControleur;
 import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 import fr.univ_orleans.iut45.controleur.ConnexionControleur;
@@ -14,7 +16,9 @@ import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParThemeControleur;
 import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
+import fr.univ_orleans.iut45.modele.BoiteComposee;
 import fr.univ_orleans.iut45.modele.CollectionPersonnelle;
+import fr.univ_orleans.iut45.modele.BoiteBD;
 import fr.univ_orleans.iut45.controleur.SupprimerDeCollectionControleur;
  
 import javafx.fxml.FXMLLoader;
@@ -27,6 +31,7 @@ import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import fr.univ_orleans.iut45.controleur.SupprimerBoiteControleur;
 import fr.univ_orleans.iut45.controleur.SupprimerPieceControleur;
+import fr.univ_orleans.iut45.controleur.ajoutCollectionControleur;
 import fr.univ_orleans.iut45.controleur.PiecesManquantesControleur;
  
  
@@ -386,7 +391,30 @@ public void start(Stage primaryStage) {
         }
     }
 
+    public void modeAjoutsimple() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/ajoutcolletion.fxml"));
+            VBox contenu = loader.load();
+    
+            ajoutCollectionControleur ctrl = loader.getController();
+            ctrl.setVue(this);   
+    
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+
+    
+    public boolean ajouteDanscollection(String num) throws SQLException {
+        BoiteBD boitebd = new BoiteBD(connexionMySQL);
+        BoiteComposee boite = boitebd.getBoiteComplete(num, true, true);
+        if (boite == null) {
+            return false;
+        }
+        return collection.ajouterBoite(boite);
+    }
 
 }
 
