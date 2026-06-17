@@ -24,6 +24,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import fr.univ_orleans.iut45.controleur.SupprimerBoiteControleur;
+import fr.univ_orleans.iut45.controleur.SupprimerPieceControleur;
 
  
  
