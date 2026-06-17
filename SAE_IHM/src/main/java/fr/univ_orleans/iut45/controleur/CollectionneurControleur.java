@@ -155,15 +155,16 @@ public class CollectionneurControleur {
     private void handleRetirerCollection(ActionEvent event) {
         setActif(btnRetirerCollection);
         vue.setTitrePage("Espace Collectionneur  |  Retirer de ma collection");
-        // TODO : vue.modeRetirerCollection();
+        vue.modeSupprimerDeCollection();
     }
 
     @FXML
     private void handlePiecesManquantes(ActionEvent event) {
         setActif(btnPiecesManquantes);
         vue.setTitrePage("Espace Collectionneur  |  Pièces manquantes");
-        // TODO : vue.modePiecesManquantes();
+        vue.modePiecesManquantes();   
     }
+
 
     @FXML
     private void handleComposer(ActionEvent event) {
