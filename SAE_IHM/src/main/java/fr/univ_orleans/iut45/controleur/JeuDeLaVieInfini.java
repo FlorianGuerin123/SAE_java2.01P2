@@ -11,16 +11,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class JeuDeLaVieInfini {
 
     private record Cellule(int x, int y) {}
 
-    private Set<Cellule> vivantes = new HashSet<>();
+    private Map<Cellule, Color> vivantes = new HashMap<>();
     
-    // Caméra et Zoom
     private double cameraX = 0;
     private double cameraY = 0;
     private double derniereSourisX = 0;
@@ -30,6 +31,9 @@ public class JeuDeLaVieInfini {
     private boolean enLecture = false;
     private boolean modeEffacement = false; 
     private final int TAILLE_CELLULE = 20;
+    
+    // Le pinceau manuel est maintenant blanc (plus propre que le rouge)
+    private final Color COULEUR_DEFAUT = Color.WHITE;
 
     public void lancer() {
         Stage stage = new Stage();
@@ -42,21 +46,15 @@ public class JeuDeLaVieInfini {
         canvas.widthProperty().bind(racine.widthProperty());
         canvas.heightProperty().bind(racine.heightProperty());
         
-        // --- NOUVEAU : Bouton Importer Image ---
         Button btnImage = new Button("🖼 Importer Image");
-        
-        // LA LIGNE À AJOUTER POUR RÉGLER LE BUG :
         btnImage.setFocusTraversable(false); 
-        
         btnImage.setStyle("-fx-background-color: #4bdb6a; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-size: 14; -fx-padding: 8 15 8 15;");
         btnImage.setLayoutY(20);
         btnImage.layoutXProperty().bind(racine.widthProperty().subtract(180));
         
         btnImage.setOnAction(e -> importerImage(stage, canvas));
 
-        // On ajoute d'abord le canvas, puis le bouton par-dessus
         racine.getChildren().addAll(canvas, btnImage);
-
         stage.setMaximized(true);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -67,7 +65,7 @@ public class JeuDeLaVieInfini {
             
             if (e.getButton() == MouseButton.PRIMARY) {
                 Cellule c = obtenirCellule(e.getX(), e.getY());
-                modeEffacement = vivantes.contains(c);
+                modeEffacement = vivantes.containsKey(c); 
                 modifierCellule(e.getX(), e.getY(), modeEffacement);
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             }
@@ -132,7 +130,6 @@ public class JeuDeLaVieInfini {
         stage.setOnCloseRequest(e -> timer.stop()); 
     }
 
-    // --- NOUVELLE MÉTHODE : Importation d'image ---
     private void importerImage(Stage stage, Canvas canvas) {
         javafx.stage.FileChooser selecteur = new javafx.stage.FileChooser();
         selecteur.setTitle("Choisir une image pour le Jeu de la Vie");
@@ -148,11 +145,9 @@ public class JeuDeLaVieInfini {
                 int largeurImg = (int) image.getWidth();
                 int hauteurImg = (int) image.getHeight();
                 
-                // Sécurité anti-crash : on ne garde qu'un pixel sur 'pas' si l'image est énorme
                 int limiteMax = 150; 
                 int pas = Math.max(1, Math.max(largeurImg / limiteMax, hauteurImg / limiteMax));
                 
-                // Calcul pour centrer l'image au milieu de l'écran actuel
                 double tailleActuelle = TAILLE_CELLULE * zoom;
                 int centreEcranX = (int) (((canvas.getWidth() / 2) - cameraX) / tailleActuelle);
                 int centreEcranY = (int) (((canvas.getHeight() / 2) - cameraY) / tailleActuelle);
@@ -164,14 +159,12 @@ public class JeuDeLaVieInfini {
                     for (int x = 0; x < largeurImg; x += pas) {
                         Color couleur = lecteur.getColor(x, y);
                         
-                        // Si le pixel est suffisamment sombre et pas totalement transparent
                         if (couleur.getOpacity() > 0.5 && couleur.getBrightness() < 0.9) {
-                            vivantes.add(new Cellule(decalageX + (x / pas), decalageY + (y / pas)));
+                            vivantes.put(new Cellule(decalageX + (x / pas), decalageY + (y / pas)), couleur);
                         }
                     }
                 }
                 
-                // On met sur pause automatiquement pour admirer le résultat avant de lancer
                 enLecture = false; 
                 dessiner(canvas.getGraphicsContext2D(), canvas.getWidth(), canvas.getHeight());
                 
@@ -190,8 +183,11 @@ public class JeuDeLaVieInfini {
 
     private void modifierCellule(double ecranX, double ecranY, boolean effacer) {
         Cellule c = obtenirCellule(ecranX, ecranY);
-        if (effacer) vivantes.remove(c);
-        else vivantes.add(c);
+        if (effacer) {
+            vivantes.remove(c);
+        } else {
+            vivantes.put(c, COULEUR_DEFAUT);
+        }
     }
 
     private void dessinerLigne(double x1, double y1, double x2, double y2, boolean effacer) {
@@ -229,14 +225,17 @@ public class JeuDeLaVieInfini {
             }
         }
 
-        gc.setFill(Color.web("#FF4D6A"));
         double marge = (tailleActuelle > 5) ? 1.0 : 0.0; 
         
-        for (Cellule c : vivantes) {
+        for (Map.Entry<Cellule, Color> entree : vivantes.entrySet()) {
+            Cellule c = entree.getKey();
+            Color couleur = entree.getValue();
+            
             double ecranX = c.x * tailleActuelle + cameraX;
             double ecranY = c.y * tailleActuelle + cameraY;
             
             if (ecranX >= -tailleActuelle && ecranX <= largeur && ecranY >= -tailleActuelle && ecranY <= hauteur) {
+                gc.setFill(couleur); 
                 gc.fillRect(ecranX, ecranY, tailleActuelle - marge, tailleActuelle - marge);
             }
         }
@@ -247,10 +246,10 @@ public class JeuDeLaVieInfini {
     }
 
     private void calculerGenerationSuivante() {
-        Set<Cellule> prochaines = new HashSet<>();
+        Map<Cellule, Color> prochaines = new HashMap<>();
         Set<Cellule> cellulesAVerifier = new HashSet<>();
 
-        for (Cellule c : vivantes) {
+        for (Cellule c : vivantes.keySet()) {
             cellulesAVerifier.add(c);
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
@@ -261,18 +260,30 @@ public class JeuDeLaVieInfini {
 
         for (Cellule c : cellulesAVerifier) {
             int voisins = 0;
+            double r = 0, g = 0, b = 0; // On prépare les variables pour mélanger les couleurs
+
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dy = -1; dy <= 1; dy++) {
-                    if ((dx != 0 || dy != 0) && vivantes.contains(new Cellule(c.x + dx, c.y + dy))) {
-                        voisins++;
+                    if (dx != 0 || dy != 0) {
+                        Cellule voisin = new Cellule(c.x + dx, c.y + dy);
+                        if (vivantes.containsKey(voisin)) {
+                            voisins++;
+                            // On récupère la couleur du parent pour le mélange
+                            Color couleurVoisin = vivantes.get(voisin);
+                            r += couleurVoisin.getRed();
+                            g += couleurVoisin.getGreen();
+                            b += couleurVoisin.getBlue();
+                        }
                     }
                 }
             }
 
-            if (vivantes.contains(c) && (voisins == 2 || voisins == 3)) {
-                prochaines.add(c);
-            } else if (!vivantes.contains(c) && voisins == 3) {
-                prochaines.add(c);
+            if (vivantes.containsKey(c) && (voisins == 2 || voisins == 3)) {
+                // Elle survit : elle garde sa propre couleur intacte
+                prochaines.put(c, vivantes.get(c));
+            } else if (!vivantes.containsKey(c) && voisins == 3) {
+                // HÉRITAGE ! Elle naît avec la moyenne exacte des couleurs de ses 3 parents
+                prochaines.put(c, Color.color(r / 3.0, g / 3.0, b / 3.0));
             }
         }
 
