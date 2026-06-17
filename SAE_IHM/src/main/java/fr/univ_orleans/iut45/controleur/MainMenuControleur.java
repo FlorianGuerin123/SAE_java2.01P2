@@ -12,12 +12,21 @@ public class MainMenuControleur {
     @FXML private Button btnAdministrateur;
     @FXML private Button btnQuitter;
     @FXML private Button btnParNumero;
+    
+    @FXML private Button btnDeconnexion;
+    
     private Vue vue;
  
     public void setVue(Vue vue) {
         this.vue = vue;
     }
 
+    @FXML
+    private void handleDeconnexion(ActionEvent event) {
+        System.out.println("Déconnexion cliquée");
+
+        this.vue.modeConnexion(); 
+    }
 
     @FXML
     private void handleCollectionneur(ActionEvent event) {
