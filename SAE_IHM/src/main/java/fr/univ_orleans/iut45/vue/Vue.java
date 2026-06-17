@@ -13,6 +13,7 @@ import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
 import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
+import fr.univ_orleans.iut45.modele.CollectionPersonnelle;
  
 import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
@@ -239,7 +240,6 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
-
     public void modeSupprimerBoite() {
         setTitrePage("Administrateur  |  Supprimer une boîte");
         try {
@@ -255,6 +255,27 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
+
+    public void modeCollection() {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/collection.fxml"));
+            VBox contenu = loader.load();
+            
+            CollectionControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+    public CollectionPersonnelle getCollectionPersonnelle(){
+        return this.collection;
+    }
+
 
 
 }
