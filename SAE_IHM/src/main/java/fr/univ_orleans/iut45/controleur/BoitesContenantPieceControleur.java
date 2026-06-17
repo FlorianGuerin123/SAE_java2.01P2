@@ -237,6 +237,7 @@ public class BoitesContenantPieceControleur {
         );
         final String numBoite = boite.getNumBoite();
         btnDetail.setOnAction(e -> {
+            vue.modeDetail(numBoite);
             System.out.println("Voir détail de : " + numBoite);
         });
 

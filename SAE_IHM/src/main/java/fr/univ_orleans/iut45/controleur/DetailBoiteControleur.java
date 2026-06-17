@@ -100,7 +100,15 @@ public class DetailBoiteControleur {
 
     @FXML
     private void handleAfficher(ActionEvent event) {
-        String numero = champNumero.getText().trim();
+        afficherDetail(champNumero.getText().trim());
+    }
+
+    public void chargerBoite(String numero) {
+        champNumero.setText(numero);
+        afficherDetail(numero);
+    }
+
+    private void afficherDetail(String numero) {
 
         if (numero.isEmpty()) {
             labelMessage.setStyle("-fx-text-fill: #FF4D6A; -fx-font-weight: bold;");
