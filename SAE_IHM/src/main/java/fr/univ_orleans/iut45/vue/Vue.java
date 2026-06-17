@@ -276,6 +276,21 @@ public void start(Stage primaryStage) {
         return this.collection;
     }
 
+    public void modeStatistiquesBoite() {
+        setTitrePage("Espace Collectionneur  |  Statistiques d'une boîte");
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/StatistiquesBoite.fxml"));
+            javafx.scene.layout.VBox contenu = loader.load();
+            
+            fr.univ_orleans.iut45.controleur.StatistiquesBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
