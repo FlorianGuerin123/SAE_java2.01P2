@@ -15,24 +15,24 @@ import java.util.Set;
 
 public class JeuDeLaVieInfini {
 
-    // On utilise un Record pour stocker facilement les coordonnées (x,y)
     private record Cellule(int x, int y) {}
 
     private Set<Cellule> vivantes = new HashSet<>();
     
-    // Variables de la caméra et du zoom
+    // Caméra et Zoom
     private double cameraX = 0;
     private double cameraY = 0;
     private double derniereSourisX = 0;
     private double derniereSourisY = 0;
-    private double zoom = 1.0; // <-- NOUVEAU : Variable de zoom (1.0 = 100%)
+    private double zoom = 1.0; 
     
     private boolean enLecture = false;
+    private boolean modeEffacement = false; // <-- NOUVEAU : Pinceau ou Gomme
     private final int TAILLE_CELLULE = 20;
 
     public void lancer() {
         Stage stage = new Stage();
-        stage.setTitle("Jeu de la Vie Infini  |  ESPACE = Play/Pause  |  CLIC GAUCHE = Dessiner  |  CLIC DROIT = Déplacer  |  MOLETTE = Zoom");
+        stage.setTitle("Jeu de la Vie Infini  |  ESPACE = Play/Pause  |  CLIC GAUCHE = Pinceau/Gomme  |  CLIC DROIT = Déplacer  |  MOLETTE = Zoom");
 
         Pane racine = new Pane();
         racine.setStyle("-fx-background-color: #1E1E2E;");
@@ -46,34 +46,38 @@ public class JeuDeLaVieInfini {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // Contrôles de la souris (Clics)
+        // --- GESTION DES CLICS SOURIS ---
         canvas.setOnMousePressed(e -> {
-            if (e.getButton() == MouseButton.SECONDARY) {
-                derniereSourisX = e.getX();
-                derniereSourisY = e.getY();
-            } else if (e.getButton() == MouseButton.PRIMARY) {
-                ajouterCellule(e.getX(), e.getY());
+            derniereSourisX = e.getX();
+            derniereSourisY = e.getY();
+            
+            if (e.getButton() == MouseButton.PRIMARY) {
+                Cellule c = obtenirCellule(e.getX(), e.getY());
+                // Si on clique sur une case vivante, on passe en mode Gomme. Sinon, Pinceau.
+                modeEffacement = vivantes.contains(c);
+                modifierCellule(e.getX(), e.getY(), modeEffacement);
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             }
         });
 
-        // Contrôles de la souris (Glisser)
+        // --- GESTION DU GLISSEMENT ---
         canvas.setOnMouseDragged(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 cameraX += (e.getX() - derniereSourisX);
                 cameraY += (e.getY() - derniereSourisY);
-                derniereSourisX = e.getX();
-                derniereSourisY = e.getY();
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             } else if (e.getButton() == MouseButton.PRIMARY) {
-                ajouterCellule(e.getX(), e.getY());
+                // On trace une ligne continue pour boucher les trous de la souris
+                dessinerLigne(derniereSourisX, derniereSourisY, e.getX(), e.getY(), modeEffacement);
                 dessiner(gc, canvas.getWidth(), canvas.getHeight());
             }
+            // On mémorise la position pour le prochain mouvement
+            derniereSourisX = e.getX();
+            derniereSourisY = e.getY();
         });
 
-        // --- Contrôle de la molette pour le ZOOM ---
+        // --- GESTION DU ZOOM ---
         canvas.setOnScroll(e -> {
-            // Sécurité : on ignore les micro-mouvements à zéro des trackpads
             if (e.getDeltaY() == 0) return; 
 
             double ancienZoom = zoom;
@@ -94,7 +98,7 @@ public class JeuDeLaVieInfini {
             dessiner(gc, canvas.getWidth(), canvas.getHeight());
         });
 
-        // Contrôles clavier (Espace pour Play/Pause)
+        // Contrôle Play/Pause
         racine.setFocusTraversable(true);
         racine.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.SPACE) {
@@ -102,7 +106,6 @@ public class JeuDeLaVieInfini {
             }
         });
 
-        // Boucle principale
         AnimationTimer timer = new AnimationTimer() {
             private long dernierUpdate = 0;
 
@@ -125,34 +128,54 @@ public class JeuDeLaVieInfini {
         stage.setOnCloseRequest(e -> timer.stop()); 
     }
 
-    private void ajouterCellule(double ecranX, double ecranY) {
-        // On prend en compte le zoom pour savoir sur quelle case on a cliqué
+    // --- NOUVELLES MÉTHODES POUR LE PINCEAU FLUIDE ---
+
+    private Cellule obtenirCellule(double ecranX, double ecranY) {
         double tailleActuelle = TAILLE_CELLULE * zoom;
         int grilleX = (int) Math.floor((ecranX - cameraX) / tailleActuelle);
         int grilleY = (int) Math.floor((ecranY - cameraY) / tailleActuelle);
-        
-        Cellule c = new Cellule(grilleX, grilleY);
-        if (vivantes.contains(c)) vivantes.remove(c);
-        else vivantes.add(c);
+        return new Cellule(grilleX, grilleY);
     }
+
+    private void modifierCellule(double ecranX, double ecranY, boolean effacer) {
+        Cellule c = obtenirCellule(ecranX, ecranY);
+        if (effacer) {
+            vivantes.remove(c);
+        } else {
+            vivantes.add(c);
+        }
+    }
+
+    private void dessinerLigne(double x1, double y1, double x2, double y2, boolean effacer) {
+        double distance = Math.hypot(x2 - x1, y2 - y1);
+        // On vérifie une case tous les 5 pixels pour être sûr de ne rater aucune cellule
+        int nbEtapes = (int) Math.max(1, distance / 5); 
+        
+        for (int i = 0; i <= nbEtapes; i++) {
+            double fraction = (double) i / nbEtapes;
+            double x = x1 + fraction * (x2 - x1);
+            double y = y1 + fraction * (y2 - y1);
+            modifierCellule(x, y, effacer);
+        }
+    }
+
+    // --- AFFICHAGE ET LOGIQUE ---
 
     private void dessiner(GraphicsContext gc, double largeur, double hauteur) {
         gc.clearRect(0, 0, largeur, hauteur);
         
-        // On calcule la taille affichée avec le zoom
         double tailleActuelle = TAILLE_CELLULE * zoom;
 
-        // 1. Dessiner le quadrillage infini
+        // 1. Quadrillage
         gc.setStroke(Color.web("#333344"));
         gc.setLineWidth(1);
         
         double decalageX = cameraX % tailleActuelle;
-        if (decalageX < 0) decalageX += tailleActuelle; // Sécurité pour les nombres négatifs
+        if (decalageX < 0) decalageX += tailleActuelle; 
         
         double decalageY = cameraY % tailleActuelle;
         if (decalageY < 0) decalageY += tailleActuelle;
         
-        // On ne dessine le quadrillage que si le zoom n'est pas trop lointain (sinon ça fait un bloc gris)
         if (tailleActuelle > 3) {
             for (double x = decalageX; x < largeur; x += tailleActuelle) {
                 gc.strokeLine(x, 0, x, hauteur);
@@ -162,23 +185,20 @@ public class JeuDeLaVieInfini {
             }
         }
 
-        // 2. Dessiner les cellules vivantes
+        // 2. Cellules vivantes
         gc.setFill(Color.web("#FF4D6A"));
-        
-        // La marge évite que les blocs soient collés, sauf si on a trop dézoomé
         double marge = (tailleActuelle > 5) ? 1.0 : 0.0; 
         
         for (Cellule c : vivantes) {
             double ecranX = c.x * tailleActuelle + cameraX;
             double ecranY = c.y * tailleActuelle + cameraY;
             
-            // Optimisation : On ne dessine que ce qui est visible à l'écran
             if (ecranX >= -tailleActuelle && ecranX <= largeur && ecranY >= -tailleActuelle && ecranY <= hauteur) {
                 gc.fillRect(ecranX, ecranY, tailleActuelle - marge, tailleActuelle - marge);
             }
         }
         
-        // Indicateur d'état
+        // UI
         gc.setFill(Color.WHITE);
         gc.fillText(enLecture ? "▶ LECTURE" : "⏸ PAUSE", 20, 30);
         gc.fillText("Zoom : " + Math.round(zoom * 100) + "%", 20, 50);
@@ -188,7 +208,6 @@ public class JeuDeLaVieInfini {
         Set<Cellule> prochaines = new HashSet<>();
         Set<Cellule> cellulesAVerifier = new HashSet<>();
 
-        // On ne vérifie que les cellules vivantes et leurs voisins directs
         for (Cellule c : vivantes) {
             cellulesAVerifier.add(c);
             for (int dx = -1; dx <= 1; dx++) {
