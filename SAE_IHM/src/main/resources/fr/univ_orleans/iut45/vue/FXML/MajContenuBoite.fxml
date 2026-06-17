@@ -14,7 +14,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fr.univ_orleans.iut45.controleur.MajContenuBoiteControleur">
 
-    <Label text="✏️  Modifier le contenu d'une boîte"
+    <Label text="Modifier le contenu d'une boîte"
            style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #1A2B3C; -fx-padding: 0 0 20 0;" />
 
     <Label text="1. Rechercher la boîte à modifier :"

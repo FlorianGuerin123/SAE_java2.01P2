@@ -14,7 +14,7 @@ public class ThemeBD {
 
     public boolean themeEstDansBD(int numTheme) throws SQLException {
         st = laConnexion.createStatement();
-        String sql = "SELECT COUNT(*) FROM THEME WHERE numTheme = " + numTheme;
+        String sql = "SELECt * FROM THEME WHERE idtheme = " + numTheme;
         ResultSet rs = this.st.executeQuery(sql);
         if (rs.next()) {
             return true;
