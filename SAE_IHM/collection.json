@@ -14,7 +14,7 @@
     "personnalisee": true,
     "nomBoite": "djizefe",
     "annee": 2455,
-    "nbPieces": 0,
+    "nbPieces": 5,
     "idTheme": 45456,
     "nomTheme": "fezfezf",
     "pieces": [
@@ -27,11 +27,30 @@
         "nomCoul": "Blue",
         "rgb": "0055BF",
         "transparent": false,
-        "quantite": 3,
+        "quantite": 2,
         "enSupplement": false
+      },
+      {
+        "numPiece": "003006",
+        "nomPiece": "Technic Axle 2",
+        "idCat": 12,
+        "nomCat": "Technic",
+        "idCoul": 0,
+        "nomCoul": "Black",
+        "rgb": "05131D",
+        "transparent": false,
+        "quantite": 1,
+        "enSupplement": true
       }
     ],
-    "figurines": []
+    "figurines": [
+      {
+        "idFig": "fig042",
+        "nomFig": "Space Pilot",
+        "nbParties": 3,
+        "quantite": 1
+      }
+    ]
   },
   {
     "numBoite": "0014-1",
@@ -50,11 +69,49 @@
     "figurinesRetirees": []
   },
   {
-    "numBoite": "15-2",
+    "numBoite": "PERSO-71079",
+    "complete": false,
+    "collection": true,
+    "personnalisee": true,
+    "nomBoite": "dzedez",
+    "annee": 2024,
+    "nbPieces": 4,
+    "idTheme": 646,
+    "nomTheme": "fezfez",
+    "pieces": [
+      {
+        "numPiece": "011214",
+        "nomPiece": "Plate 1x2",
+        "idCat": 26,
+        "nomCat": "Plates",
+        "idCoul": 4,
+        "nomCoul": "Red",
+        "rgb": "C91A09",
+        "transparent": false,
+        "quantite": 4,
+        "enSupplement": false
+      }
+    ],
+    "figurines": [
+      {
+        "idFig": "fig007",
+        "nomFig": "Castle Knight",
+        "nbParties": 4,
+        "quantite": 2
+      }
+    ]
+  },
+  {
+    "numBoite": "PERSO-59491",
     "complete": true,
     "collection": true,
-    "personnalisee": false,
-    "piecesRetirees": [],
-    "figurinesRetirees": []
+    "personnalisee": true,
+    "nomBoite": "ffezf",
+    "annee": 2023,
+    "nbPieces": 1,
+    "idTheme": 62622,
+    "nomTheme": "fesfs",
+    "pieces": [],
+    "figurines": []
   }
 ]
