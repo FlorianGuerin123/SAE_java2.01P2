@@ -19,7 +19,7 @@ import java.util.prefs.Preferences;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
-
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,12 +27,12 @@ import java.util.Base64;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;
- 
+import javafx.scene.control.*;
 import java.sql.SQLException;
- 
+import javafx.scene.control.Alert.AlertType.*;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.vue.Vue;
-
+import java.awt.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 
@@ -44,7 +44,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.input.KeyCode;
-
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.shape.Polygon;
@@ -84,7 +84,7 @@ public class ConnexionControleur {
         });
 
         try {
-            java.util.Properties props = new java.util.Properties();
+            Properties props = new Properties();
             java.io.File file = new java.io.File("config.properties");
             if (file.exists()) {
                 java.io.FileInputStream in = new java.io.FileInputStream(file);
@@ -327,10 +327,10 @@ public class ConnexionControleur {
                 
                 boolean aChange = true; 
                 try {
-                    java.util.Properties props = new java.util.Properties();
-                    java.io.File file = new java.io.File("config.properties");
+                    Properties props = new Properties();
+                    File file = new File("config.properties");
                     if (file.exists()) {
-                        java.io.FileInputStream in = new java.io.FileInputStream(file);
+                        FileInputStream in = new FileInputStream(file);
                         props.load(in);
                         in.close();
                         
@@ -348,20 +348,20 @@ public class ConnexionControleur {
                 }
 
                 if (aChange) {
-                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
+                    Alert alert = new Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Sauvegarde locale");
                     alert.setHeaderText("Connexion réussie !");
                     alert.setContentText("Voulez-vous sauvegarder ces identifiants ?");
 
-                    java.util.Optional<javafx.scene.control.ButtonType> resultat = alert.showAndWait();
-                    if (resultat.isPresent() && resultat.get() == javafx.scene.control.ButtonType.OK) {
+                    Optional<ButtonType> resultat = alert.showAndWait();
+                    if (resultat.isPresent() && resultat.get() == ButtonType.OK) {
                         try {
-                            java.util.Properties props = new java.util.Properties();
+                            Properties props = new Properties();
                             props.setProperty("login", login);
                             props.setProperty("mdp", java.util.Base64.getEncoder().encodeToString(motDePasse.getBytes()));
                             props.setProperty("bd", baseDeDonnees);
 
-                            java.io.FileOutputStream out = new java.io.FileOutputStream("config.properties");
+                            FileOutputStream out = new FileOutputStream("config.properties");
                             props.store(out, null);
                             out.close();
                         } catch (Exception e) {
@@ -384,7 +384,7 @@ public class ConnexionControleur {
     }
 
     private void verifierMajuscule() {
-        boolean majActive = java.awt.Toolkit.getDefaultToolkit().getLockingKeyState(java.awt.event.KeyEvent.VK_CAPS_LOCK);
+        boolean majActive = Toolkit.getDefaultToolkit().getLockingKeyState(java.awt.event.KeyEvent.VK_CAPS_LOCK);
         
         if (majActive) {
             labelMessage.setText("⚠ Attention : Majuscule activée !");

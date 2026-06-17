@@ -14,8 +14,8 @@ import javafx.scene.layout.VBox;
 public class RechercherBoiteControleur {
 
     @FXML private TextField champNumero;
-    @FXML private Label     labelMessage;
-    @FXML private VBox      menuDeroulant; 
+    @FXML private Label labelMessage;
+    @FXML private VBox menuDeroulant; 
 
     @FXML private VBox  carteResultat;
     @FXML private Label labelNumBoite;
@@ -65,7 +65,7 @@ public class RechercherBoiteControleur {
         menuDeroulant.getChildren().clear(); 
         
         for (BoiteSimple boite : resultats) {
-            Label item = new Label("📦 " + boite.getNumBoite() + " - " + boite.getNomBoite());
+            Label item = new Label("" + boite.getNumBoite() + " - " + boite.getNomBoite());
             item.setMaxWidth(Double.MAX_VALUE);
             item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
             

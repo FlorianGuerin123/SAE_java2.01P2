@@ -52,8 +52,7 @@ public class BoitesContenantPieceControleur {
             try {
                 if (vue != null && vue.getConnexionMySQL() != null) {
                     PieceBD pieceBD = new PieceBD(vue.getConnexionMySQL());
-                    
-                    // On utilise bien ta liste d'objets Piece !
+
                     List<Piece> resultats = pieceBD.rechercherPiecesDynamique(nouvelleValeur.trim());
 
                     if (resultats.isEmpty()) {
@@ -72,11 +71,10 @@ public class BoitesContenantPieceControleur {
         menuDeroulant.getChildren().clear(); 
         
         for (Piece piece : resultats) {
-            // Utilisation de tes vrais getters
             String num = piece.obtenirNumPiece();
             String nom = piece.obtenirNomPiece();
 
-            Label item = new Label("🧩 " + num + " - " + nom);
+            Label item = new Label("" + num + " - " + nom);
             item.setMaxWidth(Double.MAX_VALUE);
             item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
             

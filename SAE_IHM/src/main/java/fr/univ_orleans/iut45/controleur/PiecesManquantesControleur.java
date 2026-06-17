@@ -62,7 +62,7 @@ public class PiecesManquantesControleur {
     @FXML
     private void initialize() {}
 
-    // ─── Menu déroulant ───────────────────────────────────────────────────────
+    
 
     private void afficherMenu(List<BoiteComposee> resultats) {
         menuDeroulant.getChildren().clear();
@@ -91,7 +91,6 @@ public class PiecesManquantesControleur {
         menuDeroulant.getChildren().clear();
     }
 
-    // ─── Affichage principal ──────────────────────────────────────────────────
 
     @FXML
     private void handleAfficherTout(ActionEvent event) {
@@ -144,31 +143,12 @@ public class PiecesManquantesControleur {
         }
     }
 
-    // ─── Calcul des manquants ─────────────────────────────────────────────────
-
-    /**
-     * BOÎTE PERSONNALISÉE : getPieces() contient directement les pièces
-     * manquantes (celles que l'utilisateur a listées comme absentes).
-     *
-     * BOÎTE BD : les manquants sont dans piecesRetirees (pièces physiquement
-     * retirées de la boîte et enregistrées via enregistrerPieceRetiree()).
-     * Après appliquerPiecesRetirees(), getPieces() ne contient plus ces pièces
-     * mais piecesRetirees en garde la trace.
-     */
     private List<ContenuPiece> calculerPiecesManquantes(BoiteComposee boite) {
         if (boite.estPersonnalisee()) {
-            // Pour les boîtes perso, toutes les pièces listées sont manquantes
             return new ArrayList<>(boite.getPieces());
         } else {
-            // Pour les boîtes BD, on reconstruit depuis piecesRetirees
-            // On cherche dans getPieces() la pièce correspondante pour avoir
-            // le nom, la catégorie, la couleur, etc.
-            // Mais attention : après appliquerPiecesRetirees(), la pièce peut
-            // avoir été complètement retirée de getPieces() si quantité = 0.
-            // On retourne donc directement les piecesRetirees avec les infos dispo.
             List<ContenuPiece> result = new ArrayList<>();
             for (BoiteComposee.PieceRetiree pr : boite.getPiecesRetirees()) {
-                // Cherche la pièce dans getPieces() (cas quantité partielle restante)
                 ContenuPiece cpTrouve = boite.getPieces().stream()
                     .filter(cp ->
                         cp.getPiece().obtenirNumPiece().equals(pr.numPiece) &&
@@ -180,10 +160,6 @@ public class PiecesManquantesControleur {
                 if (cpTrouve != null) {
                     result.add(new ContenuPiece(cpTrouve.getPiece(), pr.quantiteRetiree, cpTrouve.estEnSupplement()));
                 } else {
-                    // La pièce a été entièrement retirée (plus dans getPieces())
-                    // On crée un ContenuPiece minimal avec juste le numéro
-                    // On ne peut pas afficher le nom/couleur sans la pièce en mémoire
-                    // → on l'ignore silencieusement (cas rare, pièce 100% absente)
                 }
             }
             return result;
@@ -209,12 +185,7 @@ public class PiecesManquantesControleur {
         }
     }
 
-    // ─── Construction UI ──────────────────────────────────────────────────────
-
-    private VBox construireCarteBoite(BoiteComposee boite,
-                                      List<ContenuPiece> manquantes,
-                                      List<ContenuFigurine> figurinesManquantes,
-                                      int nbTotal) {
+    private VBox construireCarteBoite(BoiteComposee boite,List<ContenuPiece> manquantes,List<ContenuFigurine> figurinesManquantes,int nbTotal) {
         VBox carte = new VBox(8);
         carte.setStyle(
             "-fx-background-color: white; -fx-padding: 16;" +
@@ -222,7 +193,6 @@ public class PiecesManquantesControleur {
             "-fx-border-radius: 6; -fx-background-radius: 6;"
         );
 
-        // En-tête
         HBox entete = new HBox(10);
         entete.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
@@ -245,8 +215,8 @@ public class PiecesManquantesControleur {
         Label labelInfo = new Label(
             "Année : " + boite.getAnnee() +
             "  •  Pièces totales : " + boite.getNbPieces() +
-            "  •  " + (boite.estPersonnalisee() ? "🛠️ Personnalisée" : "📦 Officielle") +
-            "  •  " + (boite.estComplete() ? "✅ Complète" : "❌ Incomplète")
+            "  •  " + (boite.estPersonnalisee() ? "Personnalisée" : "Officielle") +
+            "  •  " + (boite.estComplete() ? "Complète" : "Incomplète")
         );
         labelInfo.setStyle("-fx-font-size: 12; -fx-text-fill: #5A7A9A;");
         carte.getChildren().add(labelInfo);
@@ -256,7 +226,7 @@ public class PiecesManquantesControleur {
         carte.getChildren().add(sep);
 
         if (!manquantes.isEmpty()) {
-            Label titre = new Label("🧱 Pièces manquantes :");
+            Label titre = new Label("Pièces manquantes :");
             titre.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #1E3050;");
             carte.getChildren().add(titre);
             for (ContenuPiece cp : manquantes) {
@@ -265,7 +235,7 @@ public class PiecesManquantesControleur {
         }
 
         if (!figurinesManquantes.isEmpty()) {
-            Label titre = new Label("🧍 Figurines manquantes :");
+            Label titre = new Label("Figurines manquantes :");
             titre.setStyle("-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #1E3050;");
             carte.getChildren().add(titre);
             for (ContenuFigurine cf : figurinesManquantes) {

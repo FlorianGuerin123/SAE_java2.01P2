@@ -19,9 +19,9 @@ import java.util.List;
 
 public class CollectionControleur {
 
-    @FXML private Label      labelMessage;
+    @FXML private Label labelMessage;
     @FXML private ScrollPane scrollResultats;
-    @FXML private GridPane   grilleResultats; 
+    @FXML private GridPane grilleResultats; 
 
     private Vue vue;
 

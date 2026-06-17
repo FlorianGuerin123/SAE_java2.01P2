@@ -77,7 +77,7 @@ public class DetailBoiteControleur {
         menuDeroulant.getChildren().clear(); 
         
         for (BoiteSimple boite : resultats) {
-            Label item = new Label("📦 " + boite.getNumBoite() + " - " + boite.getNomBoite());
+            Label item = new Label("" + boite.getNumBoite() + " - " + boite.getNomBoite());
             item.setMaxWidth(Double.MAX_VALUE);
             item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
             
@@ -116,7 +116,6 @@ public class DetailBoiteControleur {
     }
 
     private void afficherDetail(String numero) {
-
         if (numero.isEmpty()) {
             labelMessage.setStyle("-fx-text-fill: #FF4D6A; -fx-font-weight: bold;");
             labelMessage.setText("Veuillez saisir un numéro de boîte.");
@@ -152,6 +151,7 @@ public class DetailBoiteControleur {
             List<Figurine> figurines = figurineBD.getFigurinesDansBoite(numero);
             
             List<BoiteSimple> boitesIncluses = boiteBD.getBoitesIncluses(numero);
+            
             VBox colImage = new VBox(4);
             colImage.setAlignment(Pos.CENTER);
             HBox.setHgrow(colImage, Priority.ALWAYS);

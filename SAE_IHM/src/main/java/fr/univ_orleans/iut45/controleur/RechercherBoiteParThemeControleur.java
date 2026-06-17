@@ -25,9 +25,9 @@ import java.util.List;
 public class RechercherBoiteParThemeControleur {
 
     @FXML private TextField champTheme;
-    @FXML private Label     labelMessage;
-    @FXML private VBox      menuDeroulant;
-    @FXML private FlowPane  conteneurCartes;
+    @FXML private Label labelMessage;
+    @FXML private VBox  menuDeroulant;
+    @FXML private FlowPane conteneurCartes;
 
     private Vue vue;
 
@@ -260,29 +260,11 @@ public class RechercherBoiteParThemeControleur {
 
         carte.getChildren().addAll(entete, corps, sepBas, piedCarte);
         return carte;
-    }
-
-    private VBox creerBlocInfo(String titre, String valeur, String couleurValeur) {
-        VBox bloc = new VBox(4);
-        bloc.setAlignment(Pos.CENTER);
-        HBox.setHgrow(bloc, Priority.ALWAYS);
-
-        Label labelTitre = new Label(titre);
-        labelTitre.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
-
-        Label labelValeur = new Label(valeur);
-        labelValeur.setStyle("-fx-text-fill: " + couleurValeur + "; -fx-font-size: 20; -fx-font-weight: bold;");
-
-        bloc.getChildren().addAll(labelTitre, labelValeur);
-        return bloc;
-    }
+    }   
 
     private void afficherErreur(String msg) {
         labelMessage.setText(msg);
     }
 
-    private void handleVoirDetail(BoiteSimple boite) {
-        System.out.println("Voir détail de : " + boite.getNumBoite());
-        vue.modeDetail(boite.getNumBoite());
-    }
+    
 }
