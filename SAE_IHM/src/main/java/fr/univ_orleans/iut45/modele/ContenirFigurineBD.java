@@ -10,11 +10,11 @@ import java.util.*;
 public class ContenirFigurineBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	ContenirFigurineBD(ConnexionMySQL laConnexion){
+	public ContenirFigurineBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-    void ajouterFigurineDansBoite(String nomFigurine, String numBoite, int quantite) throws SQLException {
+    public void ajouterFigurineDansBoite(String nomFigurine, String numBoite, int quantite) throws SQLException {
         String idfig = this.getIdFigAvecNom(nomFigurine);
         int idcontenu = (new ContenuBD(laConnexion)).getIdcontDUneBoite(numBoite);
         PreparedStatement ps = laConnexion.prepareStatement("INSERT INTO CONTENIRF (idcont, idfig, quantitef) VALUES (?, ?, ?)");
@@ -35,7 +35,7 @@ public class ContenirFigurineBD {
         }
     }
 
-    String getIdFigAvecNom(String nomFigurine) throws SQLException {
+    public String getIdFigAvecNom(String nomFigurine) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("select idfig from FIGURINE where nomfig = ?");
         ps.setString(1, nomFigurine);
         ResultSet rs = ps.executeQuery();

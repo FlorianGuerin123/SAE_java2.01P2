@@ -291,5 +291,23 @@ public class BoiteBD {
     }
     return boites;
 }
+public List<String> rechercherThemesDynamique(String recherche) throws SQLException {
+    List<String> resultats = new ArrayList<>();
+ 
+    String query = "SELECT DISTINCT nomtheme FROM THEME WHERE nomtheme LIKE ? LIMIT 5";
+ 
+    PreparedStatement ps = laConnexion.prepareStatement(query);
+    ps.setString(1, recherche + "%");
+ 
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+        resultats.add(rs.getString("nomtheme"));
+    }
+ 
+    rs.close();
+    ps.close();
+    return resultats;
+}
+
 
 }
