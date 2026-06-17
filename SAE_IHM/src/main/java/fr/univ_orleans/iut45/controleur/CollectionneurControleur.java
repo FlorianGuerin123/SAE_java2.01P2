@@ -84,7 +84,7 @@ public class CollectionneurControleur {
                      "-fx-cursor: hand; -fx-border-width: 0;");
     }
 
-    private void setActif(Button btn) {
+    public void setActif(Button btn) {
         if (boutonActif != null) {
             boutonActif.setStyle(STYLE_INACTIF);
         }

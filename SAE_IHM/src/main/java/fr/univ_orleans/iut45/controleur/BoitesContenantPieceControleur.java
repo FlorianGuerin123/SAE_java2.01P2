@@ -3,6 +3,7 @@ package fr.univ_orleans.iut45.controleur;
 import fr.univ_orleans.iut45.modele.BoiteBD;
 import fr.univ_orleans.iut45.modele.BoiteSimple;
 import fr.univ_orleans.iut45.vue.Vue;
+import fr.univ_orleans.iut45.controleur.CollectionneurControleur;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -71,7 +72,7 @@ public class BoitesContenantPieceControleur {
     }
 
     
-    private VBox creerCarte(BoiteSimple boite){
+    public VBox creerCarte(BoiteSimple boite){
         VBox carte = new VBox();
         carte.setSpacing(0);
         carte.setMaxWidth(640);
