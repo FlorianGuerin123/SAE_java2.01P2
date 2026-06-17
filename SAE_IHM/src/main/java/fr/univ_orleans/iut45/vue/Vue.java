@@ -88,7 +88,7 @@ public void start(Stage primaryStage) {
     public ConnexionMySQL getConnexionMySQL() {
         return connexionMySQL;
     }
- 
+
     public void modeAcceuil() {
         setTitrePage("");
         this.panelCentral.setLeft(null);
