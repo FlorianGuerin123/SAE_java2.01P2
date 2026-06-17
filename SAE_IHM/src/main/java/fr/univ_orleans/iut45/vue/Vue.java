@@ -267,7 +267,6 @@ public void start(Stage primaryStage) {
         }
     }
 
-<<<<<<< HEAD
      
     public void modeBoitesContenantPiece() {
         try {
@@ -282,7 +281,6 @@ public void start(Stage primaryStage) {
         }
     }
 
-=======
     public void modeSupprimerPiece() {
         setTitrePage("Administrateur  |  Supprimer une pièce");
         try {
@@ -290,16 +288,11 @@ public void start(Stage primaryStage) {
             VBox contenu = loader.load();
             SupprimerPieceControleur ctrl = loader.getController();
             ctrl.setVue(this);
->>>>>>> florian
             this.panelCentral.setCenter(contenu);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> florian
 
 }
 
