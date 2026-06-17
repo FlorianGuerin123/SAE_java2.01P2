@@ -29,8 +29,6 @@ public class SupprimerDeCollectionControleur {
 
     public void setVue(Vue vue) {
         this.vue = vue;
-        // L'initialisation du listener est faite ici car on a besoin de vue
-        // pour accéder à la collection
         champRecherche.textProperty().addListener((observable, ancienneValeur, nouvelleValeur) -> {
             labelMessage.setText("");
             cacherCarte();
@@ -64,8 +62,7 @@ public class SupprimerDeCollectionControleur {
     }
 
     @FXML
-    private void initialize() {
-        // Le listener est ajouté dans setVue() car on a besoin de la collection
+    private void initialize(){
     }
 
     private void afficherMenu(List<BoiteComposee> resultats) {
@@ -100,7 +97,7 @@ public class SupprimerDeCollectionControleur {
         boiteSelectionnee = boite;
         labelNumNom.setText(boite.getNumBoite() + " - " + boite.getNomBoite());
         labelAnneePieces.setText("Année : " + boite.getAnnee() + "  |  Pièces : " + boite.getNbPieces());
-        labelStatut.setText("Statut : " + (boite.estComplete() ? "✅ Complète" : "❌ Incomplète"));
+        labelStatut.setText("Statut : " + (boite.estComplete() ? "Complète" : "Incomplète"));
         carteResultat.setVisible(true);
         carteResultat.setManaged(true);
     }

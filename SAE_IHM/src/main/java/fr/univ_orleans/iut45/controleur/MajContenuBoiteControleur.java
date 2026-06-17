@@ -43,7 +43,7 @@ public class MajContenuBoiteControleur {
     private Vue vue;
     private BoiteSimple boiteSelectionnee  = null;
     private String typeSelectionne = null; // "PIECE", "FIGURINE", "BOITE"
-    private String elementSelectionne = null; // nom utilisé pour l'ajout
+    private String elementSelectionne = null; 
     private String elementId = null; // numBoite pour le cas BOITE
 
     private static final String STYLE_BTN_ACTIF =
@@ -233,9 +233,7 @@ public class MajContenuBoiteControleur {
                 BoiteBD bd = new BoiteBD(vue.getConnexionMySQL());
                 List<BoiteSimple> res = bd.rechercherBoitesDynamique(val);
                 if (res.isEmpty()) cacherMenuElement();
-                else afficherMenuElement(res.stream()
-                    .map(b -> new String[]{b.getNumBoite(), b.getNomBoite(), "Thème : " + b.getTheme().getNomTheme()})
-                    .toList());
+                else afficherMenuElement(res.stream().map(b -> new String[]{b.getNumBoite(), b.getNomBoite(), "Thème : " + b.getTheme().getNomTheme()}).toList());
             }
         }
     }
@@ -267,7 +265,7 @@ public class MajContenuBoiteControleur {
     }
 
     private void selectionnerElement(String id, String nom, String info) {
-        elementSelectionne = nom; // on garde le nom (utilisé par ContenirXxxBD)
+        elementSelectionne = nom; 
         elementId = id;
         labelElementNom.setText(id + " — " + nom);
         labelElementInfo.setText(info);

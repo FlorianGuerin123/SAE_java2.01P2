@@ -69,7 +69,7 @@ public class RechercherBoiteParNomControleur {
         menuDeroulant.getChildren().clear(); 
         
         for (BoiteSimple boite : resultats) {
-            Label item = new Label("📦 " + boite.getNumBoite() + " - " + boite.getNomBoite());
+            Label item = new Label("" + boite.getNumBoite() + " - " + boite.getNomBoite());
             item.setMaxWidth(Double.MAX_VALUE);
             item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
             

@@ -23,26 +23,26 @@ public class ComposerBoitePersoControleur {
     @FXML private Label labelBoiteCreeeInfo;
     @FXML private Label labelBoiteCreeeContenu;
     @FXML private VBox sectionType;
-    @FXML private Button  btnTypePiece;
-    @FXML private Button  btnTypeFigurine;
-    @FXML private VBox  sectionElement;
-    @FXML private Label  labelRechercheElement;
+    @FXML private Button btnTypePiece;
+    @FXML private Button btnTypeFigurine;
+    @FXML private VBox sectionElement;
+    @FXML private Label labelRechercheElement;
     @FXML private TextField champRechercheElement;
-    @FXML private VBox  menuElement;
-    @FXML private VBox  carteElement;
-    @FXML private Label  labelElementNom;
-    @FXML private Label   labelElementInfo;
+    @FXML private VBox menuElement;
+    @FXML private VBox carteElement;
+    @FXML private Label labelElementNom;
+    @FXML private Label labelElementInfo;
     @FXML private TextField champQuantitePrise;
     @FXML private Button btnTerminer;
     @FXML private Label labelMessage;
 
     private Vue vue;
     private BoiteComposee boiteEnCours = null;
-    private String typeSelectionne    = null;  
+    private String typeSelectionne  = null;  
 
     
-    private BoiteComposee boiteSourceSelectionnee  = null;
-    private ContenuPiece  pieceSourceSelectionnee  = null;
+    private BoiteComposee boiteSourceSelectionnee = null;
+    private ContenuPiece  pieceSourceSelectionnee = null;
     private ContenuFigurine figurineSourceSelectionnee = null;
 
     
@@ -91,7 +91,7 @@ public class ComposerBoitePersoControleur {
 
         int annee, idTheme;
         try {
-            annee   = Integer.parseInt(anneeStr);
+            annee = Integer.parseInt(anneeStr);
             idTheme = Integer.parseInt(idThemeStr);
         } catch (NumberFormatException e) {
             setMessage("Année et ID du thème doivent être des entiers.", false);
@@ -112,7 +112,7 @@ public class ComposerBoitePersoControleur {
         btnTerminer.setVisible(true);
         btnTerminer.setManaged(true);
 
-        setMessage("Boîte créée. Ajoutez maintenant des pièces ou figurines depuis votre collection.", true);
+        setMessage("Boîte créée. Ajoutez maintenant des pièces ou figurines depuis votre collection", true);
     }
 
     @FXML
@@ -158,9 +158,7 @@ public class ComposerBoitePersoControleur {
                             num + " — " + nomP + "  [" + b.getNomBoite() + "]",
                             b.getNumBoite(),
                             num,
-                            "Couleur : " + cp.getPiece().obtenirCouleur().getNomCouleur()
-                                + "  |  Dispo : " + cp.getQuantite()
-                                + "  |  Source : " + b.getNomBoite()
+                            "Couleur : " + cp.getPiece().obtenirCouleur().getNomCouleur()+ "  |  Dispo : " + cp.getQuantite() + "  |  Source : " + b.getNomBoite()
                         });
                     }
                 }
@@ -174,9 +172,7 @@ public class ComposerBoitePersoControleur {
                             id + " — " + nomF + "  [" + b.getNomBoite() + "]",
                             b.getNumBoite(),
                             id,
-                            "Parties : " + cf.getFigurine().getNombrePartie()
-                                + "  |  Dispo : " + cf.getQuantite()
-                                + "  |  Source : " + b.getNomBoite()
+                            "Parties : " + cf.getFigurine().getNombrePartie() + "  |  Dispo : " + cf.getQuantite()+ "  |  Source : " + b.getNomBoite()
                         });
                     }
                 }
@@ -418,8 +414,7 @@ public class ComposerBoitePersoControleur {
         int nbTypePieces = boiteEnCours.getPieces().size();
         int nbTypeFig    = boiteEnCours.getFigurines().size();
         labelBoiteCreeeContenu.setText(
-            "Pièces : " + nbTypePieces + " type(s)  |  Figurines : " + nbTypeFig + " type(s)"
-            + "  |  Total pièces : " + boiteEnCours.getNbPieces()
+            "Pièces : " + nbTypePieces + " type(s)  |  Figurines : " + nbTypeFig + " type(s)"+ "  |  Total pièces : " + boiteEnCours.getNbPieces()
         );
     }
 
