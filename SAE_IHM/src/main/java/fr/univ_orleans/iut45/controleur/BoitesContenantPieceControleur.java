@@ -3,6 +3,7 @@ package fr.univ_orleans.iut45.controleur;
 import fr.univ_orleans.iut45.modele.BoiteBD;
 import fr.univ_orleans.iut45.modele.BoiteSimple;
 import fr.univ_orleans.iut45.modele.PieceBD;
+import fr.univ_orleans.iut45.modele.Piece;
 import fr.univ_orleans.iut45.vue.Vue;
 
 import javafx.event.ActionEvent;
@@ -47,7 +48,9 @@ public class BoitesContenantPieceControleur {
             try {
                 if (vue != null && vue.getConnexionMySQL() != null) {
                     PieceBD pieceBD = new PieceBD(vue.getConnexionMySQL());
-                    List<String[]> resultats = pieceBD.rechercherPiecesDynamique(nouvelleValeur.trim());
+                    
+                    // On utilise bien ta liste d'objets Piece !
+                    List<Piece> resultats = pieceBD.rechercherPiecesDynamique(nouvelleValeur.trim());
 
                     if (resultats.isEmpty()) {
                         cacherMenu();
@@ -61,12 +64,15 @@ public class BoitesContenantPieceControleur {
         });
     }
 
-    private void afficherMenu(List<String[]> resultats) {
+    private void afficherMenu(List<Piece> resultats) {
         menuDeroulant.getChildren().clear(); 
         
-        for (String[] piece : resultats) {
-            // piece[0] = numpiece, piece[1] = nompiece
-            Label item = new Label("🧩 " + piece[0] + " - " + piece[1]);
+        for (Piece piece : resultats) {
+            // Utilisation de tes vrais getters
+            String num = piece.obtenirNumPiece();
+            String nom = piece.obtenirNomPiece();
+
+            Label item = new Label("🧩 " + num + " - " + nom);
             item.setMaxWidth(Double.MAX_VALUE);
             item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;");
             
@@ -74,7 +80,7 @@ public class BoitesContenantPieceControleur {
             item.setOnMouseExited(e -> item.setStyle("-fx-padding: 10; -fx-font-size: 13; -fx-cursor: hand; -fx-background-color: white;"));
             
             item.setOnMouseClicked(e -> {
-                champNumPiece.setText(piece[0]); 
+                champNumPiece.setText(num); 
                 cacherMenu();
                 handleRechercher(null);
             });
