@@ -40,7 +40,7 @@
 
     <Label fx:id="labelMessage" text="" wrapText="true"
            style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;"/>
-
+       
     <ScrollPane fx:id="scrollResultats"
                 fitToWidth="true"
                 style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;"
