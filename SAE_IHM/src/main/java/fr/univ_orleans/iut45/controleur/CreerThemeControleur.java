@@ -22,15 +22,13 @@ public class CreerThemeControleur {
 
     @FXML
     private void handleCreer(ActionEvent event) {
-        String idStr      = champIdTheme.getText().trim();
-        String nomTheme   = champNomTheme.getText().trim();
-        String parent     = champThemeParent.getText().trim();
-
+        String idStr = champIdTheme.getText().trim();
+        String nomTheme = champNomTheme.getText().trim();
+        String parent = champThemeParent.getText().trim();
         if (idStr.isBlank() || nomTheme.isBlank()) {
             setMessage("Veuillez remplir les champs obligatoires (ID et nom).", false);
             return;
         }
-
         int idTheme;
         try {
             idTheme = Integer.parseInt(idStr);
@@ -38,12 +36,14 @@ public class CreerThemeControleur {
             setMessage("L'ID du thème doit être un nombre entier.", false);
             return;
         }
-
         try {
             ThemeBD themeBD = new ThemeBD(vue.getConnexionMySQL());
-            // themeParent vide → null (pas de parent)
+            if (themeBD.themeEstDansBD(idTheme)) {
+                setMessage("Erreur : un thème avec cet ID existe déjà.", false);
+                return;
+            }
             themeBD.ajouterTheme(idTheme, nomTheme, parent.isEmpty() ? null : parent);
-            setMessage("✔  Thème \"" + nomTheme + "\" créé avec succès.", true);
+            setMessage("Thème \"" + nomTheme + "\" créé avec succès.", true);
             handleReset(null);
         } catch (Exception e) {
             setMessage("Erreur : " + e.getMessage(), false);

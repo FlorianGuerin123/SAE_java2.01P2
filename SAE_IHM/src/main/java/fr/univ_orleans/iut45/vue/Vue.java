@@ -53,12 +53,11 @@ public void start(Stage primaryStage) {
         connexionMySQL = new ConnexionMySQL();
         panelCentral = new BorderPane();
         
-        // --- BARRE TOP GLOBALE ---
         HBox topBar = new HBox(12);
         topBar.setStyle("-fx-background-color: #1E1E2E; -fx-padding: 6 12 6 12;");
         topBar.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-        Button btnAccueil = new Button("🧱 BRIQU'IUTO");
+        Button btnAccueil = new Button("BRIQU'IUTO");
         btnAccueil.setStyle(
             "-fx-background-color: transparent; -fx-text-fill: #FF4D6A; " +
             "-fx-font-weight: bold; -fx-font-size: 13; -fx-cursor: hand; " +
@@ -66,7 +65,7 @@ public void start(Stage primaryStage) {
         );
         btnAccueil.setOnAction(e -> this.modeAcceuil());
 
-        Label labelAppli = new Label("Collection Manager");
+        Label labelAppli = new Label("Gestion de collection");
         labelAppli.setStyle("-fx-text-fill: #AAAACC; -fx-font-size: 11;");
 
         Region spacer = new Region();

@@ -28,7 +28,7 @@
         <Label style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;" text="Nom du thème *" GridPane.columnIndex="0" GridPane.rowIndex="1" />
         <TextField fx:id="champNomTheme" promptText="ex: Space" style="-fx-background-color: white; -fx-border-color: #AAAACC;                           -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;                           -fx-font-size: 12; -fx-padding: 7 10 7 10;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-        <Label style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;" text="Thème parent" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #333344;" text="Nom du thème parent" GridPane.columnIndex="0" GridPane.rowIndex="2" />
         <TextField fx:id="champThemeParent" promptText="Laisser vide si aucun parent" style="-fx-background-color: white; -fx-border-color: #AAAACC;                           -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;                           -fx-font-size: 12; -fx-padding: 7 10 7 10;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <rowConstraints>
          <RowConstraints />
