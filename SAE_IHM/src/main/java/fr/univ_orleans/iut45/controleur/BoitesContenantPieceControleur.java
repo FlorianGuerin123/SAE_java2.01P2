@@ -14,7 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import java.util.List;
@@ -140,10 +143,11 @@ public class BoitesContenantPieceControleur {
         }
     }
     
-    public VBox creerCarte(BoiteSimple boite){
+     private VBox creerCarte(BoiteSimple boite){
         VBox carte = new VBox();
         carte.setSpacing(0);
-        carte.setMaxWidth(640);
+        
+        carte.setMaxWidth(Double.MAX_VALUE);
         carte.setStyle(
             "-fx-background-color: #F0F4F8; -fx-border-color: #AAAACC; " +
             "-fx-border-width: 1; -fx-border-radius: 6; -fx-background-radius: 6;"
@@ -157,17 +161,13 @@ public class BoitesContenantPieceControleur {
         );
 
         Label labelNum = new Label("N° " + boite.getNumBoite());
-        labelNum.setStyle(
-            "-fx-text-fill: #FF4D6A; -fx-font-size: 13; -fx-font-weight: bold;"
-        );
+        labelNum.setStyle("-fx-text-fill: #FF4D6A; -fx-font-size: 13; -fx-font-weight: bold;");
 
         Label labelNom = new Label(boite.getNomBoite());
-        labelNom.setStyle(
-            "-fx-text-fill: #1E1E2E; -fx-font-size: 15; -fx-font-weight: bold;"
-        );
+        labelNom.setStyle("-fx-text-fill: #1E1E2E; -fx-font-size: 15; -fx-font-weight: bold;");
 
         Region spacer = new Region();
-        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         Label labelStatut = new Label();
         if (boite.estComplete()) {
@@ -185,15 +185,14 @@ public class BoitesContenantPieceControleur {
                 "-fx-background-radius: 4; -fx-padding: 3 10 3 10;"
             );
         }
-
         entete.getChildren().addAll(labelNum, labelNom, spacer, labelStatut);
-
+        
         HBox corps = new HBox(0);
         corps.setStyle("-fx-padding: 18 18 18 18;");
 
         VBox colAnnee = new VBox(4);
         colAnnee.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colAnnee, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(colAnnee, Priority.ALWAYS);
         Label titreAnnee = new Label("Année de sortie");
         titreAnnee.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
         Label valAnnee = new Label(String.valueOf(boite.getAnnee()));
@@ -205,7 +204,7 @@ public class BoitesContenantPieceControleur {
 
         VBox colPieces = new VBox(4);
         colPieces.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colPieces, javafx.scene.layout.Priority.ALWAYS);
+        HBox.setHgrow(colPieces, Priority.ALWAYS);
         Label titrePieces = new Label("Nombre de pièces");
         titrePieces.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
         Label valPieces = new Label(String.valueOf(boite.getNbPieces()));
@@ -215,25 +214,33 @@ public class BoitesContenantPieceControleur {
         Separator sep2 = new Separator(javafx.geometry.Orientation.VERTICAL);
         sep2.setStyle("-fx-background-color: #AAAACC;");
 
-        VBox colTheme = new VBox(4);
-        colTheme.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colTheme, javafx.scene.layout.Priority.ALWAYS);
-        Label titreTheme = new Label("Thème");
-        titreTheme.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
-        Label valTheme = new Label(
-            boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—"
-        );
-        valTheme.setStyle("-fx-text-fill: #333344; -fx-font-size: 15; -fx-font-weight: bold;");
-        colTheme.getChildren().addAll(titreTheme, valTheme);
+        VBox colImage = new VBox(4);
+        colImage.setAlignment(Pos.CENTER);
+        HBox.setHgrow(colImage, Priority.ALWAYS);
+       
+        Image imageLego = new Image("https://cdn.rebrickable.com/media/sets/" + boite.getNumBoite() + ".jpg");
+        ImageView imgvLego = new ImageView(imageLego);
+        imgvLego.setFitWidth(175);
+        imgvLego.setFitHeight(120);
+        colImage.getChildren().add(imgvLego);
 
-        corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colTheme);
-        
+        corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colImage);
+
         Separator sepBas = new Separator();
         sepBas.setStyle("-fx-background-color: #AAAACC;");
 
+
+
+
+
         HBox piedCarte = new HBox();
-        piedCarte.setAlignment(Pos.CENTER_RIGHT);
+        piedCarte.setAlignment(Pos.CENTER_LEFT);
         piedCarte.setStyle("-fx-padding: 12 18 12 18;");
+
+        Label titreTheme = new Label("Thème : ");
+        titreTheme.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
+        Label valTheme = new Label(boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—");
+        valTheme.setStyle("-fx-text-fill: #333344; -fx-font-size: 15; -fx-font-weight: bold;");
 
         Button btnDetail = new Button("Voir le détail →");
         btnDetail.setStyle(
@@ -244,11 +251,16 @@ public class BoitesContenantPieceControleur {
         );
         final String numBoite = boite.getNumBoite();
         btnDetail.setOnAction(e -> {
-            vue.modeDetail(numBoite);
             System.out.println("Voir détail de : " + numBoite);
+            vue.modeDetail(numBoite);
         });
 
-        piedCarte.getChildren().add(btnDetail);
+        Region space = new Region();
+        HBox.setHgrow(space, Priority.ALWAYS);
+        piedCarte.getChildren().addAll(titreTheme, valTheme, space, btnDetail);
+
+
+
 
         carte.getChildren().addAll(entete, corps, sepBas, piedCarte);
         return carte;
