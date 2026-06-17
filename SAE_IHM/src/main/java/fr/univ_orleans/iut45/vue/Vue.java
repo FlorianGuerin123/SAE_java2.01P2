@@ -10,6 +10,7 @@ import fr.univ_orleans.iut45.controleur.AjouterBoiteControleur;
 import fr.univ_orleans.iut45.controleur.AjouterPieceControleur;
 import fr.univ_orleans.iut45.controleur.CollectionControleur;
 import fr.univ_orleans.iut45.controleur.CreerThemeControleur;
+import fr.univ_orleans.iut45.controleur.MajContenuBoiteControleur;
 import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParThemeControleur;
@@ -387,6 +388,19 @@ public void start(Stage primaryStage) {
     }
 
 
+
+    public void modeMajContenuBoite() {
+        setTitrePage("Administrateur  |  Modifier le contenu d'une boîte");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/MajContenuBoite.fxml"));
+            VBox contenu = loader.load();
+            MajContenuBoiteControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) { 
+            e.printStackTrace(); 
+        }
+    }
 
 }
 

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="0" style="-fx-background-color: #C8D8E8; -fx-padding: 32 40 32 40;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.univ_orleans.iut45.controleur.MajContenuBoiteControleur">
+
+    <Label text="✏️  Modifier le contenu d'une boîte"
+           style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #1A2B3C; -fx-padding: 0 0 20 0;" />
+
+    <Label text="1. Rechercher la boîte à modifier :"
+           style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2C3E50; -fx-padding: 0 0 8 0;" />
+
+    <StackPane>
+        <VBox>
+            <TextField fx:id="champRechercheBoite"
+                       promptText="Numéro ou nom de la boîte..."
+                       style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                              -fx-background-color: white;
+                              -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                              -fx-background-radius: 4; -fx-border-radius: 4;" />
+            <VBox fx:id="menuBoite" visible="false" managed="false"
+                  style="-fx-background-color: white;
+                         -fx-border-color: #CCCCCC; -fx-border-width: 0 1 1 1;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 3);" />
+        </VBox>
+    </StackPane>
+
+    <VBox fx:id="carteBoite" visible="false" managed="false"
+          spacing="6"
+          style="-fx-background-color: white;
+                 -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                 -fx-background-radius: 6; -fx-border-radius: 6;
+                 -fx-padding: 14;">
+        <VBox.margin><Insets top="12" /></VBox.margin>
+        <Label fx:id="labelBoiteNom"
+               style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #1A2B3C;" />
+        <Label fx:id="labelBoiteInfo"
+               style="-fx-font-size: 12; -fx-text-fill: #4A5568;" />
+    </VBox>
+
+    <VBox fx:id="sectionType" visible="false" managed="false" spacing="8">
+        <VBox.margin><Insets top="24" /></VBox.margin>
+
+        <Label text="2. Que voulez-vous ajouter ?"
+               style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+
+        <HBox spacing="12">
+            <Button fx:id="btnTypePiece" text=" Pièce"
+                    onAction="#handleTypePiece"
+                    style="-fx-background-color: #5BC8F5; -fx-text-fill: white;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 10 20 10 20; -fx-background-radius: 4;
+                           -fx-cursor: hand; -fx-border-width: 0;" />
+            <Button fx:id="btnTypeFigurine" text=" Figurine"
+                    onAction="#handleTypeFigurine"
+                    style="-fx-background-color: transparent; -fx-text-fill: #2C3E50;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 10 20 10 20; -fx-background-radius: 4;
+                           -fx-border-color: #AAAACC; -fx-border-width: 1;
+                           -fx-cursor: hand;" />
+            <Button fx:id="btnTypeBoite" text=" Boîte"
+                    onAction="#handleTypeBoite"
+                    style="-fx-background-color: transparent; -fx-text-fill: #2C3E50;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 10 20 10 20; -fx-background-radius: 4;
+                           -fx-border-color: #AAAACC; -fx-border-width: 1;
+                           -fx-cursor: hand;" />
+        </HBox>
+    </VBox>
+
+    
+
+    <VBox fx:id="sectionElement" visible="false" managed="false" spacing="8">
+        <VBox.margin><Insets top="24" /></VBox.margin>
+
+        <Label fx:id="labelRechercheElement" text="3. Rechercher l'élément à ajouter :"
+               style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+
+        <StackPane>
+            <VBox>
+                <TextField fx:id="champRechercheElement"
+                           promptText="Numéro ou nom..."
+                           style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                                  -fx-background-color: white;
+                                  -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                                  -fx-background-radius: 4; -fx-border-radius: 4;" />
+                <VBox fx:id="menuElement" visible="false" managed="false"
+                      style="-fx-background-color: white;
+                             -fx-border-color: #CCCCCC; -fx-border-width: 0 1 1 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 3);" />
+            </VBox>
+        </StackPane>
+
+        <VBox fx:id="carteElement" visible="false" managed="false"
+              spacing="10"
+              style="-fx-background-color: white;
+                     -fx-border-color: #FF4D6A; -fx-border-width: 2;
+                     -fx-background-radius: 6; -fx-border-radius: 6;
+                     -fx-padding: 16;">
+            <VBox.margin><Insets top="8" /></VBox.margin>
+
+            <Label fx:id="labelElementNom"
+                   style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #1A2B3C;" />
+            <Label fx:id="labelElementInfo"
+                   style="-fx-font-size: 12; -fx-text-fill: #4A5568;" />
+
+            <HBox spacing="16" alignment="CENTER_LEFT">
+
+                <VBox spacing="4">
+                    <Label text="Quantité"
+                           style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                    <TextField fx:id="champQuantite" promptText="ex: 2"
+                               prefWidth="80"
+                               style="-fx-background-color: #F5F8FA; -fx-border-color: #AAAACC;
+                                      -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                                      -fx-font-size: 12; -fx-padding: 6 8 6 8;" />
+                </VBox>
+
+                <VBox fx:id="sectionCouleur" spacing="4" visible="false" managed="false">
+                    <Label text="Nom de la couleur"
+                           style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                    <TextField fx:id="champCouleur" promptText="ex: Rouge"
+                               prefWidth="140"
+                               style="-fx-background-color: #F5F8FA; -fx-border-color: #AAAACC;
+                                      -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                                      -fx-font-size: 12; -fx-padding: 6 8 6 8;" />
+                </VBox>
+
+                <VBox fx:id="sectionSupplement" spacing="4" visible="false" managed="false">
+                    <Label text="En supplément ?"
+                           style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                    <CheckBox fx:id="checkSupplement"
+                              style="-fx-font-size: 12; -fx-padding: 6 0 0 0;" />
+                </VBox>
+
+            </HBox>
+
+            <Button fx:id="btnAjouter" text="✚  Ajouter dans la boîte"
+                    maxWidth="Infinity"
+                    onAction="#handleAjouter"
+                    style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 12; -fx-background-radius: 4;
+                           -fx-cursor: hand; -fx-border-width: 0;" />
+        </VBox>
+    </VBox>
+
+    <Label fx:id="labelMessage" text=""
+           style="-fx-font-size: 13; -fx-padding: 16 0 0 0;" />
+
+</VBox>

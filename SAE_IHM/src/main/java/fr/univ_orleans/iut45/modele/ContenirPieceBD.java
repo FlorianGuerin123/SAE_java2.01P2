@@ -9,11 +9,11 @@ import java.sql.Statement;
 public class ContenirPieceBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	ContenirPieceBD(ConnexionMySQL laConnexion){
+	public ContenirPieceBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-   void ajouterPieceDansBoite(String nomPiece, String numBoite, String nomCoul, String enSuppStr, int quantite) throws SQLException {
+   public void ajouterPieceDansBoite(String nomPiece, String numBoite, String nomCoul, String enSuppStr, int quantite) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("INSERT INTO CONTENIRP (idcont, numpiece, idcoul, en_supplement, quantitep) VALUES (?, ?, ?, ?, ?)");
         ContenuBD contenuBD = new ContenuBD(laConnexion);
         int idContenu = contenuBD.getIdcontDUneBoite(numBoite);
@@ -40,7 +40,7 @@ public class ContenirPieceBD {
         }
     }
 
-    void supprimerPieceContenue(String numPiece) throws SQLException {
+    public void supprimerPieceContenue(String numPiece) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("DELETE FROM CONTENIRP WHERE numpiece = ?");
         ps.setString(1, numPiece);
         int i = ps.executeUpdate();
