@@ -170,7 +170,7 @@ public class CollectionneurControleur {
     private void handleComposer(ActionEvent event) {
         setActif(btnComposer);
         vue.setTitrePage("Espace Collectionneur  |  Composer une boîte");
-        // TODO : vue.modeComposerBoite();
+        vue.modeComposerBoitePerso();
     }
 
     @FXML

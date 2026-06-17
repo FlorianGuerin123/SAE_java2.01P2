@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="0" style="-fx-background-color: #C8D8E8; -fx-padding: 32 40 32 40;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.univ_orleans.iut45.controleur.ComposerBoitePersoControleur">
+
+    <Label text="🧩  Composer une boîte personnalisée"
+           style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #1A2B3C; -fx-padding: 0 0 20 0;" />
+
+    <VBox fx:id="sectionCreation" spacing="10">
+
+        <Label text="1. Informations de votre boîte personnalisée :"
+               style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2C3E50; -fx-padding: 0 0 4 0;" />
+
+        <HBox spacing="16">
+            <VBox spacing="4">
+                <Label text="Nom de la boîte"
+                       style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                <TextField fx:id="champNomBoite" promptText="ex: Mon super set"
+                           prefWidth="240"
+                           style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                                  -fx-background-color: white;
+                                  -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                                  -fx-background-radius: 4; -fx-border-radius: 4;" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="Année"
+                       style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                <TextField fx:id="champAnnee" promptText="ex: 2025"
+                           prefWidth="100"
+                           style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                                  -fx-background-color: white;
+                                  -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                                  -fx-background-radius: 4; -fx-border-radius: 4;" />
+            </VBox>
+        </HBox>
+
+        <HBox spacing="16">
+            <VBox spacing="4">
+                <Label text="ID du thème"
+                       style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                <TextField fx:id="champIdTheme" promptText="ex: 12"
+                           prefWidth="100"
+                           style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                                  -fx-background-color: white;
+                                  -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                                  -fx-background-radius: 4; -fx-border-radius: 4;" />
+            </VBox>
+            <VBox spacing="4">
+                <Label text="Nom du thème"
+                       style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                <TextField fx:id="champNomTheme" promptText="ex: Star Wars"
+                           prefWidth="240"
+                           style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                                  -fx-background-color: white;
+                                  -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                                  -fx-background-radius: 4; -fx-border-radius: 4;" />
+            </VBox>
+        </HBox>
+
+        <Button fx:id="btnCreerBoite" text="✚  Créer la boîte"
+                onAction="#handleCreerBoite"
+                style="-fx-background-color: #5BC8F5; -fx-text-fill: white;
+                       -fx-font-size: 13; -fx-font-weight: bold;
+                       -fx-padding: 10 20 10 20; -fx-background-radius: 4;
+                       -fx-cursor: hand; -fx-border-width: 0;">
+            <VBox.margin><Insets top="6" /></VBox.margin>
+        </Button>
+    </VBox>
+
+   
+    <VBox fx:id="carteBoiteCreee" visible="false" managed="false"
+          spacing="6"
+          style="-fx-background-color: white;
+                 -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                 -fx-background-radius: 6; -fx-border-radius: 6;
+                 -fx-padding: 14;">
+        <VBox.margin><Insets top="12" bottom="12" /></VBox.margin>
+        <Label fx:id="labelBoiteCreeeNom"
+               style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #1A2B3C;" />
+        <Label fx:id="labelBoiteCreeeInfo"
+               style="-fx-font-size: 12; -fx-text-fill: #4A5568;" />
+        <Label fx:id="labelBoiteCreeeContenu"
+               style="-fx-font-size: 12; -fx-text-fill: #4A5568; -fx-font-weight: bold;" />
+    </VBox>
+
+    
+    <VBox fx:id="sectionType" visible="false" managed="false" spacing="8">
+
+        <Label text="2. Que voulez-vous prendre dans une boîte de votre collection ?"
+               style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+
+        <HBox spacing="12">
+            <Button fx:id="btnTypePiece" text=" Pièce"
+                    onAction="#handleTypePiece"
+                    style="-fx-background-color: #5BC8F5; -fx-text-fill: white;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 10 20 10 20; -fx-background-radius: 4;
+                           -fx-cursor: hand; -fx-border-width: 0;" />
+            <Button fx:id="btnTypeFigurine" text=" Figurine"
+                    onAction="#handleTypeFigurine"
+                    style="-fx-background-color: transparent; -fx-text-fill: #2C3E50;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 10 20 10 20; -fx-background-radius: 4;
+                           -fx-border-color: #AAAACC; -fx-border-width: 1;
+                           -fx-cursor: hand;" />
+        </HBox>
+    </VBox>
+
+    
+    <VBox fx:id="sectionElement" visible="false" managed="false" spacing="8">
+        <VBox.margin><Insets top="24" /></VBox.margin>
+
+        <Label fx:id="labelRechercheElement" text="3. Rechercher l'élément à prendre dans votre collection :"
+               style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+
+        <StackPane>
+            <VBox>
+                <TextField fx:id="champRechercheElement"
+                           promptText="Numéro ou nom..."
+                           style="-fx-font-size: 13; -fx-padding: 10 12 10 12;
+                                  -fx-background-color: white;
+                                  -fx-border-color: #5BC8F5; -fx-border-width: 2;
+                                  -fx-background-radius: 4; -fx-border-radius: 4;" />
+                <VBox fx:id="menuElement" visible="false" managed="false"
+                      style="-fx-background-color: white;
+                             -fx-border-color: #CCCCCC; -fx-border-width: 0 1 1 1;
+                             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 3);" />
+            </VBox>
+        </StackPane>
+
+        <VBox fx:id="carteElement" visible="false" managed="false"
+              spacing="10"
+              style="-fx-background-color: white;
+                     -fx-border-color: #FF4D6A; -fx-border-width: 2;
+                     -fx-background-radius: 6; -fx-border-radius: 6;
+                     -fx-padding: 16;">
+            <VBox.margin><Insets top="8" /></VBox.margin>
+
+            <Label fx:id="labelElementNom"
+                   style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill: #1A2B3C;" />
+            <Label fx:id="labelElementInfo"
+                   style="-fx-font-size: 12; -fx-text-fill: #4A5568;" />
+
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <VBox spacing="4">
+                    <Label text="Quantité à prendre"
+                           style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
+                    <TextField fx:id="champQuantitePrise" promptText="ex: 1"
+                               prefWidth="80"
+                               style="-fx-background-color: #F5F8FA; -fx-border-color: #AAAACC;
+                                      -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
+                                      -fx-font-size: 12; -fx-padding: 6 8 6 8;" />
+                </VBox>
+            </HBox>
+
+            <Button fx:id="btnPrendre" text="✚  Prendre et ajouter à ma boîte perso"
+                    maxWidth="Infinity"
+                    onAction="#handlePrendre"
+                    style="-fx-background-color: #FF4D6A; -fx-text-fill: white;
+                           -fx-font-size: 13; -fx-font-weight: bold;
+                           -fx-padding: 12; -fx-background-radius: 4;
+                           -fx-cursor: hand; -fx-border-width: 0;" />
+        </VBox>
+    </VBox>
+
+    
+    <Button fx:id="btnTerminer" text="✓  Terminer et ajouter cette boîte à ma collection"
+            visible="false" managed="false"
+            maxWidth="Infinity"
+            onAction="#handleTerminer"
+            style="-fx-background-color: #1A6B3C; -fx-text-fill: white;
+                   -fx-font-size: 14; -fx-font-weight: bold;
+                   -fx-padding: 14; -fx-background-radius: 4;
+                   -fx-cursor: hand; -fx-border-width: 0;">
+        <VBox.margin><Insets top="28" /></VBox.margin>
+    </Button>
+
+    <Label fx:id="labelMessage" text=""
+           style="-fx-font-size: 13; -fx-padding: 16 0 0 0;" />
+
+</VBox>
