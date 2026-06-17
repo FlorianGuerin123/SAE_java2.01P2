@@ -14,6 +14,7 @@ import fr.univ_orleans.iut45.modele.ConnexionMySQL;
 import fr.univ_orleans.iut45.controleur.RechercherBoiteParNomControleur;
 import fr.univ_orleans.iut45.controleur.BoitesContenantPieceControleur;
 import fr.univ_orleans.iut45.modele.CollectionPersonnelle;
+import fr.univ_orleans.iut45.controleur.SupprimerDeCollectionControleur;
  
 import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
@@ -25,7 +26,7 @@ import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import fr.univ_orleans.iut45.controleur.SupprimerBoiteControleur;
 import fr.univ_orleans.iut45.controleur.SupprimerPieceControleur;
-
+import fr.univ_orleans.iut45.controleur.PiecesManquantesControleur;
  
  
 public class Vue extends Application {
@@ -337,6 +338,40 @@ public void start(Stage primaryStage) {
             e.printStackTrace();
         }
     }
+
+
+    public void modeSupprimerDeCollection() {
+        setTitrePage("Espace Collectionneur  |  Retirer une boîte de ma collection");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "/fr/univ_orleans/iut45/vue/FXML/SupprimerDeCollection.fxml"));
+            VBox contenu = loader.load();
+    
+            SupprimerDeCollectionControleur ctrl = loader.getController();
+            ctrl.setVue(this);  
+    
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void modePiecesManquantes() {
+        setTitrePage("Espace Collectionneur  |  Pièces manquantes");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/PiecesManquantes.fxml"));
+            VBox contenu = loader.load();
+    
+            PiecesManquantesControleur ctrl = loader.getController();
+            ctrl.setVue(this);   
+    
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 }
 
