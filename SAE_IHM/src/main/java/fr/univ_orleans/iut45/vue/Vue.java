@@ -291,7 +291,32 @@ public void start(Stage primaryStage) {
         }
     }
 
+     
+    public void modeBoitesContenantPiece() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/BoitesContenantPiece.fxml"));
+            VBox contenu = loader.load();
+ 
+            BoitesContenantPieceControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void modeSupprimerPiece() {
+        setTitrePage("Administrateur  |  Supprimer une pièce");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/univ_orleans/iut45/vue/FXML/SupprimerPiece.fxml"));
+            VBox contenu = loader.load();
+            SupprimerPieceControleur ctrl = loader.getController();
+            ctrl.setVue(this);
+            this.panelCentral.setCenter(contenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
 
