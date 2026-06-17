@@ -12,6 +12,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -22,12 +24,12 @@ import java.util.List;
 
 public class RechercherBoiteParNomControleur {
 
-    @FXML private TextField  champNom;
-    @FXML private Label      labelMessage;
-    @FXML private VBox       menuDeroulant;
+    @FXML private TextField champNom;
+    @FXML private Label labelMessage;
+    @FXML private VBox menuDeroulant;
 
     @FXML private ScrollPane scrollResultats;
-    @FXML private GridPane   grilleResultats;
+    @FXML private GridPane grilleResultats;
 
     private Vue vue;
 
@@ -207,23 +209,33 @@ public class RechercherBoiteParNomControleur {
         Separator sep2 = new Separator(javafx.geometry.Orientation.VERTICAL);
         sep2.setStyle("-fx-background-color: #AAAACC;");
 
-        VBox colTheme = new VBox(4);
-        colTheme.setAlignment(Pos.CENTER);
-        HBox.setHgrow(colTheme, Priority.ALWAYS);
-        Label titreTheme = new Label("Thème");
-        titreTheme.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
-        Label valTheme = new Label(boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—");
-        valTheme.setStyle("-fx-text-fill: #333344; -fx-font-size: 15; -fx-font-weight: bold;");
-        colTheme.getChildren().addAll(titreTheme, valTheme);
+        VBox colImage = new VBox(4);
+        colImage.setAlignment(Pos.CENTER);
+        HBox.setHgrow(colImage, Priority.ALWAYS);
+       
+        Image imageLego = new Image("https://cdn.rebrickable.com/media/sets/" + boite.getNumBoite() + ".jpg");
+        ImageView imgvLego = new ImageView(imageLego);
+        imgvLego.setFitWidth(175);
+        imgvLego.setFitHeight(120);
+        colImage.getChildren().add(imgvLego);
 
-        corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colTheme);
+        corps.getChildren().addAll(colAnnee, sep1, colPieces, sep2, colImage);
 
         Separator sepBas = new Separator();
         sepBas.setStyle("-fx-background-color: #AAAACC;");
 
+
+
+
+
         HBox piedCarte = new HBox();
-        piedCarte.setAlignment(Pos.CENTER_RIGHT);
+        piedCarte.setAlignment(Pos.CENTER_LEFT);
         piedCarte.setStyle("-fx-padding: 12 18 12 18;");
+
+        Label titreTheme = new Label("Thème : ");
+        titreTheme.setStyle("-fx-text-fill: #555566; -fx-font-size: 11; -fx-font-weight: bold;");
+        Label valTheme = new Label(boite.getTheme() != null ? boite.getTheme().getNomTheme() : "—");
+        valTheme.setStyle("-fx-text-fill: #333344; -fx-font-size: 15; -fx-font-weight: bold;");
 
         Button btnDetail = new Button("Voir le détail →");
         btnDetail.setStyle(
@@ -237,7 +249,13 @@ public class RechercherBoiteParNomControleur {
             System.out.println("Voir détail de : " + numBoite);
             vue.modeDetail(numBoite);
         });
-        piedCarte.getChildren().add(btnDetail);
+
+        Region space = new Region();
+        HBox.setHgrow(space, Priority.ALWAYS);
+        piedCarte.getChildren().addAll(titreTheme, valTheme, space, btnDetail);
+
+
+
 
         carte.getChildren().addAll(entete, corps, sepBas, piedCarte);
         return carte;
