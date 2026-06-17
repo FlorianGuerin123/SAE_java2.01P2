@@ -8,11 +8,11 @@ import java.sql.Statement;
 public class ContenirBoiteBD {
     ConnexionMySQL laConnexion;
 	Statement st;
-	ContenirBoiteBD(ConnexionMySQL laConnexion){
+	public ContenirBoiteBD(ConnexionMySQL laConnexion){
 		this.laConnexion=laConnexion;
 	}
 
-    void ajouterBoiteDansBoite(String numBoiteContenante, String numBoiteContenue) throws SQLException {
+    public void ajouterBoiteDansBoite(String numBoiteContenante, String numBoiteContenue) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement("INSERT INTO CONTENIRB (idcont, numboite, quantiteb) VALUES (?, ?, 1)");
         ContenuBD contenuBD = new ContenuBD(laConnexion);
         int idContenante = contenuBD.getIdcontDUneBoite(numBoiteContenante);

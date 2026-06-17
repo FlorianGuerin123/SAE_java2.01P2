@@ -32,7 +32,8 @@ public class FigurineBD {
 
     public List<Figurine> getFigurinesDansBoite(String numBoite) throws SQLException {
         PreparedStatement ps = laConnexion.prepareStatement(
-            "select idfig, nomfig, nbparties from BOITE natural join CONTENU natural join CONTENIRF natural join FIGURINE where numboite = ?"
+            "select FIGURINE.idfig, FIGURINE.nomfig, FIGURINE.nbparties from BOITE natural join CONTENU join CONTENIRF on CONTENIRF.idcont = CONTENU.idcont join FIGURINE on FIGURINE.idfig= CONTENIRF.idfig where BOITE.numboite = ?"
+
         );
         ps.setString(1, numBoite);
         ResultSet rs = ps.executeQuery();
@@ -46,4 +47,14 @@ public class FigurineBD {
         }
         return figurines;
     }
+
+    public List<Figurine> getFigurinesParNom(String nom) throws SQLException {
+    PreparedStatement ps = laConnexion.prepareStatement("SELECT idfig, nomfig, nbparties FROM FIGURINE WHERE nomfig LIKE ? LIMIT 5");
+    ps.setString(1, "%" + nom + "%");
+    ResultSet rs = ps.executeQuery();
+    List<Figurine> res = new ArrayList<>();
+    while (rs.next())
+        res.add(new Figurine(rs.getString("idfig"), rs.getString("nomfig"), rs.getInt("nbparties")));
+    return res;
+}
 }

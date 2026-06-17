@@ -105,11 +105,8 @@ public class AdministrateurControleur {
  
     @FXML
     private void handleMajContenuBoite(ActionEvent event) {
-        System.out.println("Modifier le contenu d'une boîte cliqué");
-        vue.setTitrePage("Espace Administrateur  |  Modifier le contenu d'une boîte");
-        // TODO : charger la vue maj contenu boîte (équivalent partieAdmin.majContenuBoite())
         setActif(btnMajContenuBoite);
-        // TODO : charger la vue maj contenu boîte
+        vue.modeMajContenuBoite();
     }
  
     @FXML
