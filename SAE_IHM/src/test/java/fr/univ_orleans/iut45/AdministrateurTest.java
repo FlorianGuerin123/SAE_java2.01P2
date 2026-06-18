@@ -128,4 +128,129 @@ public class AdministrateurTest {
         assertTrue("JSON doit finir par ]", json.trim().endsWith("]"));
     }
 
+    @Test
+    public void chargerPersonnalisee() {
+        BoiteComposee b = new BoiteComposee("PC01", "ARelier", 2023, 200, theme, true, true, true);
+        b.ajouterPiece(new ContenuPiece(pieceA, 3, false));
+        b.ajouterFigurine(new ContenuFigurine(fig, 2));
+        col.ajouterBoite(b);
+        col.sauvegarder();
+        CollectionPersonnelle col2 = new CollectionPersonnelle(null);
+        col2.charger();
+        assertEquals("Doit contenir 1 boite après chargement", 1, col2.getBoites().size());
+        BoiteComposee loaded = col2.getBoites().get(0);
+        assertEquals("PC01", loaded.getNumBoite());
+        assertTrue(loaded.estPersonnalisee());
+        assertEquals(1, loaded.getPieces().size());
+        assertEquals("Brique", loaded.getPieces().get(0).getPiece().obtenirNomPiece());
+        assertEquals(3, loaded.getPieces().get(0).getQuantite());
+        assertEquals(1, loaded.getFigurines().size());
+        assertEquals("Luke", loaded.getFigurines().get(0).getFigurine().getNomFigurine());
+        assertEquals(2, loaded.getFigurines().get(0).getQuantite());
+    }
+
+    @Test
+    public void chargerDeuxPersonnalisees() {
+        BoiteComposee b1 = new BoiteComposee("C01", "Alpha", 2023, 100, theme, true, true, true);
+        b1.ajouterPiece(new ContenuPiece(pieceA, 1, false));
+        BoiteComposee b2 = new BoiteComposee("C02", "Beta", 2024, 200, theme, false, true, true);
+        b2.ajouterFigurine(new ContenuFigurine(fig, 1));
+        col.ajouterBoite(b1);
+        col.ajouterBoite(b2);
+        col.sauvegarder();
+        CollectionPersonnelle col2 = new CollectionPersonnelle(null);
+        col2.charger();
+        assertEquals("Doit contenir 2 boites", 2, col2.getBoites().size());
+        assertTrue(col2.contientBoite("C01"));
+        assertTrue(col2.contientBoite("C02"));
+    }
+
+    @Test
+    public void chargerFichierInexistant() {
+        new File(FICHIER).delete();
+        CollectionPersonnelle col2 = new CollectionPersonnelle(null);
+        col2.charger();
+        assertTrue("Collection doit rester vide", col2.getBoites().isEmpty());
+    }
+
+    @Test
+    public void lireEntierValide() {
+        System.setIn(new ByteArrayInputStream("42\n".getBytes()));
+        PartieAdmin admin = new PartieAdmin(null);
+        assertEquals("42 doit être parsé en 42", Integer.valueOf(42), admin.lireEntier("test: "));
+    }
+
+    @Test
+    public void lireEntierInvalide() {
+        System.setIn(new ByteArrayInputStream("abc\n".getBytes()));
+        PartieAdmin admin = new PartieAdmin(null);
+        assertNull("'abc' doit retourner null", admin.lireEntier("test: "));
+    }
+
+    @Test
+    public void lireEntierNegatif() {
+        System.setIn(new ByteArrayInputStream("-5\n".getBytes()));
+        PartieAdmin admin = new PartieAdmin(null);
+        assertEquals("Un entier négatif doit être accepté", Integer.valueOf(-5), admin.lireEntier("test: "));
+    }
+
+    @Test
+    public void lireEntierZero() {
+        System.setIn(new ByteArrayInputStream("0\n".getBytes()));
+        PartieAdmin admin = new PartieAdmin(null);
+        assertEquals(Integer.valueOf(0), admin.lireEntier("test: "));
+    }
+
+    @Test
+    public void lireEntierEspaces() {
+        System.setIn(new ByteArrayInputStream("  99  \n".getBytes()));
+        PartieAdmin admin = new PartieAdmin(null);
+        assertEquals("Les espaces autour doivent être ignorés (trim)",
+                Integer.valueOf(99), admin.lireEntier("test: "));
+    }
+
+    @Test
+    public void retirerBoiteSpecifique() {
+        BoiteComposee b1 = new BoiteComposee("R01", "A", 2020, 100, theme, false, true);
+        BoiteComposee b2 = new BoiteComposee("R02", "B", 2020, 100, theme, false, true);
+        BoiteComposee b3 = new BoiteComposee("R03", "C", 2020, 100, theme, false, true);
+        col.ajouterBoite(b1);
+        col.ajouterBoite(b2);
+        col.ajouterBoite(b3);
+        col.retirerBoite("R02");
+
+        assertEquals(2, col.getBoites().size());
+        assertFalse(col.contientBoite("R02"));
+        assertTrue(col.contientBoite("R01"));
+        assertTrue(col.contientBoite("R03"));
+    }
+
+    @Test
+    public void retirerBoiteUnique() {
+        BoiteComposee b = new BoiteComposee("UNIQ", "Seule", 2020, 50, theme, false, true);
+        col.ajouterBoite(b);
+        col.retirerBoite("UNIQ");
+        assertTrue("Collection doit être vide après retrait de l'unique boite", col.getBoites().isEmpty());
+    }
+
+    @Test
+    public void marquerCompleteIncomplete() {
+        BoiteComposee b = new BoiteComposee("MC01", "Test", 2023, 500, theme, false, true);
+        col.ajouterBoite(b);
+        assertFalse(b.estComplete());
+        col.marquerComplete("MC01", true);
+        assertTrue("Boite doit être complète", b.estComplete());
+        col.marquerComplete("MC01", false);
+        assertFalse("Boite doit être incomplète", b.estComplete());
+    }
+
+    @Test
+    public void ajouterDoublonRefuse() {
+        BoiteComposee b1 = new BoiteComposee("DUP", "A", 2020, 100, theme, false, true);
+        BoiteComposee b2 = new BoiteComposee("DUP", "B", 2020, 100, theme, false, true);
+        assertTrue("Premier ajout OK", col.ajouterBoite(b1));
+        assertFalse("Doublon refusé", col.ajouterBoite(b2));
+        assertEquals("Un seul élément dans la collection", 1, col.getBoites().size());
+    }
+
 }
