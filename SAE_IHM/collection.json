@@ -1,4 +1,3 @@
-
 [
   {
     "numBoite": "0016-1",
@@ -7,32 +6,6 @@
     "personnalisee": false,
     "piecesRetirees": [],
     "figurinesRetirees": []
-  },
-  {
-    "numBoite": "PERSO-1781097405596",
-    "complete": false,
-    "collection": true,
-    "personnalisee": true,
-    "nomBoite": "djizefe",
-    "annee": 2455,
-    "nbPieces": 0,
-    "idTheme": 45456,
-    "nomTheme": "fezfezf",
-    "pieces": [
-      {
-        "numPiece": "003381",
-        "nomPiece": "Sticker Sheet for Set 663-1",
-        "idCat": 58,
-        "nomCat": "Stickers",
-        "idCoul": 1,
-        "nomCoul": "Blue",
-        "rgb": "0055BF",
-        "transparent": false,
-        "quantite": 2,
-        "enSupplement": false
-      }
-    ],
-    "figurines": []
   },
   {
     "numBoite": "0014-1",

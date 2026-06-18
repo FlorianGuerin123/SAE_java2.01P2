@@ -5,12 +5,15 @@ import fr.univ_orleans.iut45.modele.CollectionPersonnelle;
 import fr.univ_orleans.iut45.vue.Vue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class SupprimerDeCollectionControleur {
@@ -120,8 +123,17 @@ public class SupprimerDeCollectionControleur {
         }
 
         String numBoite = boiteSelectionnee.getNumBoite();
-        collection.retirerBoite(numBoite);
-        collection.sauvegarder();
+        Optional<ButtonType> reponse = popUpConfirmation().showAndWait();
+            if (reponse.isPresent() && reponse.get().equals(ButtonType.YES)){
+                System.out.println("Ok !");
+                collection.retirerBoite(numBoite);
+                collection.sauvegarder();
+            }
+            else{
+                System.out.println("D'ac !");
+                
+            }
+        
 
         labelMessage.setText("La boîte " + numBoite + " a été retirée de votre collection !");
         labelMessage.setStyle("-fx-text-fill: #1A6B3C; -fx-font-weight: bold;");
@@ -129,4 +141,10 @@ public class SupprimerDeCollectionControleur {
         champRecherche.clear();
         cacherCarte();
     }
+    public Alert popUpConfirmation(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Vous allez supprimer une boite de la collection cette action sera irréversible", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Attention");
+        return alert;
+    }
+
 }
