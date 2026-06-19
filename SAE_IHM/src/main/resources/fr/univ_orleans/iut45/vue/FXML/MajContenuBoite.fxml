@@ -129,7 +129,7 @@
                 <VBox fx:id="sectionCouleur" spacing="4" visible="false" managed="false">
                     <Label text="Nom de la couleur"
                            style="-fx-font-size: 11; -fx-font-weight: bold; -fx-text-fill: #333344;" />
-                    <TextField fx:id="champCouleur" promptText="ex: Rouge"
+                    <TextField fx:id="champCouleur" promptText="ex: Blue"
                                prefWidth="140"
                                style="-fx-background-color: #F5F8FA; -fx-border-color: #AAAACC;
                                       -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4;
