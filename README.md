@@ -22,3 +22,8 @@ BRIQU'IUTO est une application JavaFX connectée à une base de données MySQL/M
 ```
  
 Ce script compile le projet avec Maven puis lance l'application JavaFX.
+
+Lien du dépot github : 
+```
+https://github.com/FlorianGuerin123/SAE_java2.01P2
+```
