@@ -47,7 +47,7 @@ public class MainMenuControleur {
     private void verifierAberrations() {
         
         if (codeSecret.endsWith("dvd")) {
-            final double[] vitesse = {4.0, 4.0};
+            final double[] vitesse = {2.0, 2.0};
             
             javafx.animation.AnimationTimer dvdTimer = new javafx.animation.AnimationTimer() {
                 @Override

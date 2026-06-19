@@ -5,11 +5,14 @@ import fr.univ_orleans.iut45.modele.Piece;
 import fr.univ_orleans.iut45.vue.Vue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import java.util.List;
+import java.util.Optional;
 
 public class SupprimerPieceControleur {
 
@@ -99,8 +102,15 @@ public class SupprimerPieceControleur {
         if (pieceSelectionnee != null) {
             try {
                 PieceBD pieceBD = new PieceBD(vue.getConnexionMySQL());
-                pieceBD.supprimerPiece(pieceSelectionnee.obtenirNumPiece());
-
+                 Optional<ButtonType> reponse = popUpConfirmation().showAndWait();
+                if (reponse.isPresent() && reponse.get().equals(ButtonType.YES)){
+                    System.out.println("Ok !");
+                    pieceBD.supprimerPiece(pieceSelectionnee.obtenirNumPiece());
+                }
+                else{
+                    System.out.println("D'ac !");
+                    
+                }
                 labelMessage.setText("La pièce " + pieceSelectionnee.obtenirNumPiece() + " a été supprimée avec succès !");
                 labelMessage.setStyle("-fx-text-fill: #1A6B3C; -fx-font-weight: bold;");
 
@@ -113,5 +123,10 @@ public class SupprimerPieceControleur {
                 e.printStackTrace();
             }
         }
+    }
+    public Alert popUpConfirmation(){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Vous allez supprimer une boite de la collection cette action sera irréversible", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Attention");
+        return alert;
     }
 }
