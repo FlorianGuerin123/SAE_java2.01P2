@@ -64,5 +64,13 @@
       }
     ],
     "figurines": []
+  },
+  {
+    "numBoite": "1972-1",
+    "complete": true,
+    "collection": true,
+    "personnalisee": false,
+    "piecesRetirees": [],
+    "figurinesRetirees": []
   }
 ]

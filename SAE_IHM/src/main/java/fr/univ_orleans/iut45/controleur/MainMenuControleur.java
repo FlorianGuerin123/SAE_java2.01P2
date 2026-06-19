@@ -102,7 +102,14 @@ public class MainMenuControleur {
 
     @FXML
     private void handleQuitter(ActionEvent event) {
+        
+        try {
+            vue.sauvegardeCollection();
+        } catch (Exception e) {
+            System.out.println("Echec de la sauvegarde");
+        }
         Platform.exit();
+        
     }
 
     @FXML

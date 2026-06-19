@@ -108,8 +108,10 @@ public void start(Stage primaryStage) {
             controleur.setVue(this);
             if (connexionMySQL.isConnecte()) {
                 panelCentral.setCenter(root);
-                this.collection = new CollectionPersonnelle(connexionMySQL);
-                collection.charger();
+                if (this.collection == null) {
+                    this.collection = new CollectionPersonnelle(connexionMySQL);
+                    collection.charger();
+                }
             }
             
         } catch (Exception e) {
@@ -427,6 +429,10 @@ public void start(Stage primaryStage) {
             return false;
         }
         return collection.ajouterBoite(boite);
+    }
+
+    public void sauvegardeCollection() throws SQLException {
+        collection.sauvegarder();
     }
 
     public void modeComposerBoitePerso() {
