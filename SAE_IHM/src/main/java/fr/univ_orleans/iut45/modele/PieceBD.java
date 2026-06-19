@@ -23,8 +23,7 @@ public class PieceBD {
         if (rs.next()) {
             idcat = rs.getInt("idcat");
         } else {
-            System.err.println("Erreur : la catégorie " + nomCat + " n'existe pas dans la base.");
-            return;
+            throw new SQLException("Aucune catégorie trouvée avec le nom " + nomCat);
         }
         PreparedStatement ps2 = laConnexion.prepareStatement("INSERT INTO PIECE (numpiece, nompiece, idcat) VALUES (?, ?, ?)");
         ps2.setString(1, numPiece);
@@ -37,9 +36,9 @@ public class PieceBD {
             // Clé primaire dupliquée
             String message = e.getMessage().toLowerCase();
             if (message.contains("duplicate entry")) {
-                System.err.println("Erreur : le numéro de pièce " + numPiece + " existe déjà.");
+                throw new SQLException("Erreur : le numéro de pièce " + numPiece + " existe déjà.");
             } else {
-                System.err.println("Violation de contrainte : " + e.getMessage());
+                throw new SQLException("Violation de contrainte : " + e.getMessage());
             }
         }
     }
@@ -62,7 +61,7 @@ public class PieceBD {
         ps.setString(1, nomPiece);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            int numPiece = rs.getInt("numPiece");
+            int numPiece = rs.getInt("numpiece");
             System.out.println("Le numéro de la pièce " + nomPiece + " est : " + numPiece);
             return numPiece;
         } else {
